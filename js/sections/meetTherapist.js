@@ -10,10 +10,10 @@ export function renderMeetTherapist() {
         <h2 class="display-sans">A steady presence for your journey</h2>
       </div>
       <div class="meet">
-        <img class="meet__photo" alt="Zachary Terry, LPC" src="assets/zachary-terry.png" />
+        <img class="meet__photo" alt="Zachary Terry, LPC" src="assets/brian_damien.png" />
         <div class="meet__content">
           <div class="meet__name-block">
-            <p class="meet__name">Zachary Terry</p>
+            <p class="meet__name">Brian Counts</p>
             <p class="meet__credential">LPC, Licensed Professional Counselor</p>
           </div>
           <div class="divider"></div>
@@ -30,15 +30,13 @@ export function renderMeetTherapist() {
               "We all go through experiences in life that shape us — both positively and negatively. I'm here to help
               you overcome some of the things you haven't been able to let go of."
             </p>
+            <!-- TODO -->
             <p class="body-text body-text--relaxed">
-              I live in Stillwater, OK, with my wife, our two beautiful dogs, and a baby girl on the way. Growing up, my
-              father served 26 years in the Army and National Guard. Because of this, I've lived in many different
-              locations throughout my life, and I've adopted the mantra, "home is where my stuff is." I witnessed the
-              incredible sacrifices my father and our family made to serve our nation, which inspired me to provide
-              services for those who sacrifice so much.
+              I live in Ludington, MI, with my wife, and my two year old son. More personalized text to follow.
             </p>
+            <!-- TODO -->
             <p class="body-text body-text--relaxed">
-              My path to counseling came through football at Abilene Christian University, where I learned firsthand
+              My path to counseling came through attending Abilene Christian University, where I learned firsthand
               that growth often comes from the hardest moments. My Christian faith is at the heart of who I am and how I
               show up for my clients — it grounds my work in compassion, grace, and a genuine desire to see people heal.
               I welcome clients from all walks of life and all belief systems, wherever you are on your journey.
