@@ -21,7 +21,7 @@ export function renderHeader() {
               <path d="${svgPaths.p299ab2c0}" stroke="#4A5D4E" stroke-linecap="round" stroke-width="2" />
             </svg>
           </span>
-          <span class="brand__name">Bridge to Wellness</span>
+          <span class="brand__name">The Healing Spot, LPC</span>
         </a>
         <nav class="nav" aria-label="Primary">
           ${NAV_LINKS.map((link) => `<a href="${routeHref(link.to)}" class="nav__link" data-path="${link.to}">${link.label}</a>`).join("")}
