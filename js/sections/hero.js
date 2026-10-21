@@ -23,7 +23,7 @@ export function renderHero() {
           </div>
         </div>
         <div class="hero__media">
-          <img class="hero__photo" src="assets/brian_damien.png" alt="Brian Counts, Licensed Professional Counselor" />
+          <img class="hero__photo" src="assets/brian_damien.jpg" alt="Brian Counts, Licensed Professional Counselor" />
           <div class="hero__fade" aria-hidden="true"></div>
         </div>
       </div>
