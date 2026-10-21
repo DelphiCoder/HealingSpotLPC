@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- GitHub Pages fallback: send unknown paths to index.html as "?/route".
+         Set pathSegmentsToKeep to 0 when the site is served from a domain root instead of /<repo>/. -->
+    <script>
+      (function () {
+        var pathSegmentsToKeep = 1;
+        var l = window.location;
+        l.replace(
+          l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "") +
+            l.pathname.split("/").slice(0, 1 + pathSegmentsToKeep).join("/") + "/?/" +
+            l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g, "~and~") +
+            (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+            l.hash
+        );
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>Bridge to Wellness Therapy | Zachary Terry, LPC | Stillwater, OK</title>
+    <meta name="description" content="Individual therapy in Stillwater, OK with Zachary Terry, LPC. Specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth sessions available. Book a free consultation today." />
+    <meta name="keywords" content="therapist Stillwater OK, counseling Stillwater Oklahoma, trauma therapy, PTSD treatment, EMDR therapy, depression counseling, men's therapy, individual therapy, telehealth Oklahoma, Zachary Terry LPC, Bridge to Wellness Therapy" />
+    <link rel="canonical" href="https://bridgetowellnesstherapy.com" />
+
+    <!-- Open Graph (social sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bridgetowellnesstherapy.com" />
+    <meta property="og:title" content="Bridge to Wellness Therapy | Zachary Terry, LPC" />
+    <meta property="og:description" content="Individual therapy in Stillwater, OK specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth. Book a free 15-minute consultation." />
+    <meta property="og:site_name" content="Bridge to Wellness Therapy" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Bridge to Wellness Therapy | Zachary Terry, LPC" />
+    <meta name="twitter:description" content="Individual therapy in Stillwater, OK specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth available." />
+
+    <!-- Local business schema (Google) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalBusiness",
+      "name": "Bridge to Wellness Therapy",
+      "description": "Individual therapy practice specializing in trauma, PTSD, depression, and men's issues. Serving Stillwater, OK and all of Oklahoma via telehealth.",
+      "url": "https://bridgetowellnesstherapy.com",
+      "telephone": "(405) 293-3099",
+      "email": "zacharyterry@bridgetowellnesstherapy.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1409 S Main St",
+        "addressLocality": "Stillwater",
+        "addressRegion": "OK",
+        "postalCode": "74074",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 36.1025,
+        "longitude": -97.0631
+      },
+      "openingHours": "By appointment only",
+      "priceRange": "$$",
+      "medicalSpecialty": "Psychiatry",
+      "employee": {
+        "@type": "Person",
+        "name": "Zachary Terry",
+        "jobTitle": "Licensed Professional Counselor",
+        "honorificSuffix": "LPC"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Oklahoma"
+      },
+      "sameAs": [
+        "https://substack.com/@zacharyterrylpc",
+        "https://www.youtube.com/channel/UCJz6hDV4G0N30FMfeEhVTgw"
+      ]
+    }
+    </script>
+
+    <!-- Restores the route passed through 404.html so deep links work on GitHub Pages. -->
+    <script>
+      (function () {
+        var l = window.location;
+        if (l.search[1] === "/") {
+          var route = l.search.slice(1).split("&").map(function (s) { return s.replace(/~and~/g, "&"); }).join("?");
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + route + l.hash);
+        }
+      })();
+    </script>
+
+    <link rel="stylesheet" href="fonts/fonts.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>This website needs JavaScript enabled to display its content.</noscript>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
