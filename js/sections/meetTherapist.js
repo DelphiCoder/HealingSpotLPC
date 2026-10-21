@@ -10,7 +10,7 @@ export function renderMeetTherapist() {
         <h2 class="display-sans">A steady presence for your journey</h2>
       </div>
       <div class="meet">
-        <img class="meet__photo" alt="Zachary Terry, LPC" src="assets/brian_damien.png" />
+        <img class="meet__photo" alt="Zachary Terry, LPC" src="assets/brian_damien.jpg" />
         <div class="meet__content">
           <div class="meet__name-block">
             <p class="meet__name">Brian Counts</p>
