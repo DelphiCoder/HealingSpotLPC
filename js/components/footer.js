@@ -24,10 +24,10 @@ export function renderFooter() {
         </div>
         <div class="footer__columns">
           <div class="footer__about">
-            <p class="footer__name">Bridge to Wellness Therapy</p>
+            <p class="footer__name">The Healing Spot Counseling</p>
             <p class="footer__blurb">
-              Individual therapy for trauma, depression, and men's issues — offered in person in Stillwater, OK and via
-              telehealth across Oklahoma. Zachary Terry, LPC.
+              Individual therapy for trauma, depression, and men's issues — offered in person in Ludington, MI and Austin, TX and via
+              telehealth across Michigan and Texas. Brian Counts, LPC.
             </p>
           </div>
           <div class="footer__links">
@@ -38,12 +38,12 @@ export function renderFooter() {
             <div class="footer__col">
               <p class="footer__heading">Hours</p>
               <p class="footer__text">By Appointment Only</p>
-              <p class="footer__text">(405) 293-3099</p>
+              <p class="footer__text">(231) 425-1102</p>
             </div>
           </div>
         </div>
         <div class="footer__bottom">
-          <p class="footer__copyright">© 2026 Bridge to Wellness Therapy LLP. All rights reserved.</p>
+          <p class="footer__copyright">© 2026 The Healing Spot Counseling PLLC. All rights reserved.</p>
           <div class="footer__legal">
             <span class="footer__legal-link">Privacy Policy</span>
             <span class="footer__legal-link">Terms of Service</span>
