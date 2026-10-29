@@ -50,6 +50,15 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 **Gap under crisis card reduced** (uncommitted)
 - `.crisis + .footer__bottom` has margin-top -40px. The space below the card drops from 64px to 24px.
 
+**Footer link columns made easier to read** (uncommitted)
+- `.footer__link` and `.footer__text`: 16px (was 14px), opacity 0.9 (was 0.8).
+- `.footer__heading` ("EXPLORE", "HOURS"): 13px, color `--mist-soft` (was terracotta on sage, low contrast), letter-spacing 1.5px.
+- `.footer__col` gap between links: 18px (was 16px).
+
+**Concern cards made easier to read** (uncommitted)
+- `.concern__short` (the grey line under each concern title): 16px, up from 13px, color `--ink-soft` (darker than `--muted`).
+- New line under the grid in `src/sections/Concerns.jsx`: "Not sure which of these applies? A free 15-minute consultation is a good place to start." (`.concern-note`, 17px). This copy is my wording, so review it.
+
 **Crisis card moved in footer** (uncommitted)
 - The "Emergency Support" card now sits below the link columns and above the bottom rule (`src/components/Footer.jsx`). Its styling is unchanged.
 

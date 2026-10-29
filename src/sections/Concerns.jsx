@@ -93,6 +93,9 @@ export default function Concerns() {
             );
           })}
         </div>
+        <p className="concern-note">
+          Not sure which of these applies? A free 15-minute consultation is a good place to start.
+        </p>
       </div>
     </section>
   );

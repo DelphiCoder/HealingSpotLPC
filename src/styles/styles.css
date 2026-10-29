@@ -1649,8 +1649,15 @@ ul {
 }
 
 .concern__short {
-  font-size: 13px;
-  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.concern-note {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
 }
 
 .concern.is-open .concern__short {
@@ -3520,22 +3527,22 @@ a.contact__line:hover {
 .footer__col {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .footer__heading {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 1px;
+  font-size: 13px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--mist-soft);
 }
 
 .footer__link,
 .footer__text {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--cream);
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .footer__link {
