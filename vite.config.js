@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     {
@@ -15,5 +15,7 @@ export default defineConfig({
       },
     },
   ],
-  base: "/",
-});
+  // Relative base for the production build so the site works from a subfolder such as
+  // https://<user>.github.io/HealingSpotLPC/. The dev server keeps the root base.
+  base: command === "build" ? "./" : "/",
+}));

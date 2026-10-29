@@ -47,6 +47,26 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ### 2026-10-28
 
+**GitHub Pages deploy workflow added** (uncommitted)
+- Cause: no build was being published. GitHub Pages was serving the source tree, where `index.html` loads `src/main.jsx`, which a browser can't run. The request for `/src/main.jsx` at the site root is consistent with that.
+- Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
+- Repo setting needed: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+- The `github-pages` environment may only allow deploys from the default branch. If the workflow is blocked on the feature branch, merge to `main` first.
+- Not yet run on GitHub.
+
+**Relative paths for GitHub Pages project site** (uncommitted)
+- `index.html`: module script is `./src/main.jsx` (was `/src/main.jsx`).
+- `vite.config.js`: `base` is `./` for `vite build` and `/` for the dev server.
+- `src/App.jsx`: router basename is resolved from `document.baseURI`, so it is `/HealingSpotLPC` on a project page and empty on a domain root.
+- `src/lib/asset.js`: `asset()` resolves against `document.baseURI` and returns a root-based path.
+- Verified: the build served from a `/HealingSpotLPC/` folder loads the home page with styles and images, and the About link routes to `/HealingSpotLPC/about`.
+
+**Pushed to origin** (2026-10-29)
+- Branch `vite-react-conversion` pushed to `https://github.com/DelphiCoder/HealingSpotLPC`. Commits: `f7f3436` (Vite + React conversion and copy changes), `589eaf5` (concern and footer readability).
+- Pull request: https://github.com/DelphiCoder/HealingSpotLPC/pull/new/vite-react-conversion
+- Entries below marked "(uncommitted)" are included in those commits, except this note.
+- Push required a GitHub account with write access to the repo. Account `DelphiCoder` got a 403 before access was granted.
+
 **Gap under crisis card reduced** (uncommitted)
 - `.crisis + .footer__bottom` has margin-top -40px. The space below the card drops from 64px to 24px.
 
