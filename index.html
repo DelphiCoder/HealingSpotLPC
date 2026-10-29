@@ -6,7 +6,7 @@
 
     <!-- Primary SEO -->
     <title>The Healing Spot</title>
-    <meta name="description" content="Individual therapy and counseling in both Michigan and Texas, with Brian Counts, LPC. Specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth sessions available. Book a free consultation today." />
+    <meta name="description" content="Individual therapy with Brian Counts, LPC, licensed in Michigan and Texas. Specializing in trauma, PTSD, depression, and men's issues. In-person sessions in Ludington, MI and telehealth in Michigan and Texas. Book a free consultation today." />
     <meta name="keywords" content="therapist Austin Texas, counseling Austin Texas, therapist Ludington Michigan, counseling Ludington Michigan, trauma therapy, PTSD treatment, EMDR therapy, depression counseling, men's therapy, individual therapy, telehealth Michigan, telehealth Texas, Brian Counts LPC, The Healing Spot, LPC" />
     <link rel="canonical" href="https://healingspotlpc.com" />
 
@@ -14,13 +14,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://healingspotlpc.com" />
     <meta property="og:title" content="The Healing Spot, LPC | Brian Counts, LPC" />
-    <meta property="og:description" content="Individual therapy in Ludington, MI and Austin, TX specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth. Book a free 15-minute consultation." />
+    <meta property="og:description" content="Individual therapy in Ludington, MI (in person or telehealth) and telehealth in Michigan and Texas, specializing in trauma, PTSD, depression, and men's issues. Book a free 15-minute consultation." />
     <meta property="og:site_name" content="The Healing Spot, LPC" />
 
     <!-- Twitter / X card -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="The Healing Spot | Brian Counts, LPC" />
-    <meta name="twitter:description" content="Individual therapy in Ludington, MI and Austin, TX specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth available." />
+    <meta name="twitter:description" content="Individual therapy in Ludington, MI (in person or telehealth) and telehealth in Michigan and Texas, specializing in trauma, PTSD, depression, and men's issues." />
 
     <!-- Local business schema (Google) -->
     <script type="application/ld+json">
@@ -28,7 +28,7 @@
       "@context": "https://schema.org",
       "@type": "MedicalBusiness",
       "name": "The Healing Spot",
-      "description": "Individual therapy practice specializing in trauma, PTSD, depression, and men's issues. Serving Ludington, MI and Austin, TX and all of Michigan and Texas via telehealth.",
+      "description": "Individual therapy practice specializing in trauma, PTSD, depression, and men's issues. In-person and telehealth in Ludington, MI; telehealth for clients in Michigan and Austin, TX.",
       "url": "https://healingspotlpc.com",
       "telephone": "(405) 293-3099",
       "email": "bcountslpc@gmail.com",
@@ -43,41 +43,26 @@
       "geo": {
         "@type": "GeoCoordinates",
         "latitude": 36.1025,
-        "longitude": -97.0631
+        "longitude": -86.4500
       },
       "openingHours": "By appointment only",
       "priceRange": "$$",
-      "medicalSpecialty": "Psychiatry",
       "employee": {
         "@type": "Person",
         "name": "Brian Counts",
         "jobTitle": "Licensed Professional Counselor",
         "honorificSuffix": "LPC"
       },
-      "areaServed": {
-        "@type": "State",
-        "name": "Michigan"
-      }
+      "areaServed": [
+        { "@type": "State", "name": "Michigan" },
+        { "@type": "State", "name": "Texas" }
+      ]
     }
     </script>
-
-    <!-- Restores the route passed through 404.html so deep links work on GitHub Pages. -->
-    <script>
-      (function () {
-        var l = window.location;
-        if (l.search[1] === "/") {
-          var route = l.search.slice(1).split("&").map(function (s) { return s.replace(/~and~/g, "&"); }).join("?");
-          window.history.replaceState(null, null, l.pathname.slice(0, -1) + route + l.hash);
-        }
-      })();
-    </script>
-
-    <link rel="stylesheet" href="fonts/fonts.css" />
-    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <div id="root"></div>
     <noscript>This website needs JavaScript enabled to display its content.</noscript>
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
