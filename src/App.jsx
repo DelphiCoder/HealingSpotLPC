@@ -9,10 +9,10 @@ import ResourcesPage from "./pages/ResourcesPage";
 import FaqPage from "./pages/FaqPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { SITE_ROOT } from "./lib/siteRoot";
 
-// Folder the site is served from, resolved against the current page: "" on a domain root,
-// "/HealingSpotLPC" on a GitHub project page. Works with the relative build base.
-const basename = new URL(import.meta.env.BASE_URL, document.baseURI).pathname.replace(/\/$/, "");
+// Folder the site is served from: "" on a domain root, "/HealingSpotLPC" on a GitHub project page.
+const basename = new URL(SITE_ROOT, window.location.href).pathname.replace(/\/$/, "");
 
 // Jumps to the hash target when there is one, otherwise back to the top on a new page.
 function ScrollManager() {

@@ -1,3 +1,5 @@
-// Resolves a file in /public against the site's base path, as a root-based path
+import { SITE_ROOT } from "./siteRoot";
+
+// Resolves a file in /public against the site root, as a root-based path
 // (for example "/HealingSpotLPC/assets/x.jpg") so it works at any route depth.
-export const asset = (path) => new URL(`${import.meta.env.BASE_URL}${path}`, document.baseURI).pathname;
+export const asset = (path) => new URL(path, new URL(SITE_ROOT, window.location.href)).pathname;

@@ -47,6 +47,13 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ### 2026-10-28
 
+**Asset and router URLs fixed for project site** (uncommitted)
+- Problem: `asset()` and the router basename were resolved from `document.baseURI`, which depends on the page address. Images were requested from `/assets/...` on the domain root.
+- New `src/lib/siteRoot.js`: `SITE_ROOT` is `../` from the bundle's own URL in production (site root), and `/` in dev. It doesn't depend on the page address.
+- `src/lib/asset.js` and `src/App.jsx` (router basename) use `SITE_ROOT`.
+- Verified in a browser at `/HealingSpotLPC/about` (with the 404 fallback): hero image loads from `/HealingSpotLPC/assets/...` and nav links are under `/HealingSpotLPC/`.
+- Known limit: a URL with no trailing slash (`/HealingSpotLPC`) can't load the relative script paths. GitHub Pages normally redirects to the slash version.
+
 **GitHub Pages deploy workflow added** (uncommitted)
 - Cause: no build was being published. GitHub Pages was serving the source tree, where `index.html` loads `src/main.jsx`, which a browser can't run. The request for `/src/main.jsx` at the site root is consistent with that.
 - Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
