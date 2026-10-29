@@ -47,6 +47,13 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ### 2026-10-28
 
+**GitHub Pages deploy workflow added** (uncommitted)
+- Cause: no build was being published. GitHub Pages was serving the source tree, where `index.html` loads `src/main.jsx`, which a browser can't run. The request for `/src/main.jsx` at the site root is consistent with that.
+- Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
+- Repo setting needed: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+- The `github-pages` environment may only allow deploys from the default branch. If the workflow is blocked on the feature branch, merge to `main` first.
+- Not yet run on GitHub.
+
 **Relative paths for GitHub Pages project site** (uncommitted)
 - `index.html`: module script is `./src/main.jsx` (was `/src/main.jsx`).
 - `vite.config.js`: `base` is `./` for `vite build` and `/` for the dev server.
