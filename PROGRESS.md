@@ -52,7 +52,7 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 - Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
 - Repo setting needed: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 - The `github-pages` environment may only allow deploys from the default branch. If the workflow is blocked on the feature branch, merge to `main` first.
-- Not yet run on GitHub.
+- Deploy ran and the GitHub Pages site loads (confirmed 2026-10-29). The branch was allowed to deploy through the github-pages environment rules.
 
 **Relative paths for GitHub Pages project site** (uncommitted)
 - `index.html`: module script is `./src/main.jsx` (was `/src/main.jsx`).
