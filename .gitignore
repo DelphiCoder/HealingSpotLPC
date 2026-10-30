@@ -35,3 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /dist
+
+# local working notes and specs (not part of the repo)
+/_specs/

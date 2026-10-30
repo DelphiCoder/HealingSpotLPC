@@ -3485,8 +3485,9 @@ a.contact__line:hover {
 .footer__blurb {
   font-size: 18px;
   line-height: 1.7;
-  color: var(--cream);
-  opacity: 0.9;
+  /* Text is set to 90% cream with a color, not opacity, so the hover popup inside
+     this paragraph is not made translucent. */
+  color: var(--cream-soft);
 }
 
 @media (min-width: 1024px) {

@@ -53,6 +53,7 @@
   --crisis-bg: rgba(69, 10, 10, 0.6);
 
   /* ---------- Light-on-dark lines and hover states ---------- */
+  --cream-soft: rgba(250, 248, 245, 0.9);
   --on-dark-hover: rgba(255, 255, 255, 0.1);
   --on-dark-line: rgba(255, 255, 255, 0.4);
   --on-dark-divider: rgba(255, 255, 255, 0.2);

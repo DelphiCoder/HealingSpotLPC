@@ -47,6 +47,19 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ### 2026-10-30
 
+**Footer license popup made opaque** (uncommitted)
+- Cause: `.footer__blurb` had `opacity: 0.9`. Opacity applies to all children, so the hover popup inside the paragraph was also 90% opaque.
+- Fix: the 90% is now a text color, `--cream-soft: rgba(250, 248, 245, 0.9)` in `design-tokens.css`, and `.footer__blurb` no longer sets `opacity`. The popup background is solid.
+- Checked in the dev server: the hovered popup background is opaque (`rgb(255, 253, 248)`) and the paragraph opacity is 1.
+
+**Contact page: office card and address removed** (uncommitted)
+- `src/sections/Contact.jsx`: removed the Warren Alexander Group office card (photo, name, address, Get Directions link) and the pin row with the Stillwater address. The contact lines are now the phone number and Brian's email only.
+- Removed the `asset` import, which only the office card used.
+- Still in the repo, now unused: the `.office-card*`, `.contact__address`, `.contact__office`, and `.contact__line--address` rules in `styles.css`, and `public/assets/office.png`. Removing them is a separate step.
+
+**`_specs/` excluded from the repo** (uncommitted)
+- `.gitignore`: added `/_specs/`. None of its files were tracked by git, so nothing needs to be removed from history. The folder stays on disk for local use. The Style Guide page and the logo copies in `_specs/` are local only; the site uses the copies in `public/`.
+
 **Removed unused Zachary Terry photo** (uncommitted)
 - `public/assets/zachary-terry.png` is deleted. No code referenced it. The Layout section of this file no longer lists it.
 - Still open: `src/data/constants.js` (`SIMPLEPRACTICE_URL`) and `src/sections/Endorsements.jsx` (a Psychology Today link) still point to Zachary Terry's pages. These are links, not the image, and were not changed.
@@ -226,11 +239,12 @@ Ordered roughly by priority.
 
 1. **Commit the conversion and the copy changes.** Nothing from 2026-10-28 is committed yet.
 2. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
-3. **Zachary Terry content still on the site:**
-   - `src/sections/Endorsements.jsx`: four testimonials, Oklahoma license `#11680`, Psychology Today links.
-   - `src/sections/Contact.jsx`: Stillwater, OK office card, address, photo `public/assets/office.png`, Google Maps link.
-   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` points to `zachary-terry.clientsecure.me`.
-   - `public/assets/zachary-terry.png`: unused by code, can be removed.
+3. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
+   - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
+   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` (line 4) points to `zachary-terry.clientsecure.me`.
+   - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 5.
+   - `src/styles/styles.css` line 2: the file header comment says "Bridge to Wellness". Comment only.
+   - `public/assets/zachary-terry.png`: already removed.
 4. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
 5. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
 6. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
