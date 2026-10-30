@@ -48,7 +48,7 @@ export default function Process() {
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true">
             <path
               d="M12 21C12 21 4 13.5 4 8.5C4 6.01 5.79 4 8 4C9.5 4 10.8 4.8 11.5 6C12.2 4.8 13.5 4 15 4C17.21 4 19 6.01 19 8.5C19 13.5 12 21 12 21Z"
-              stroke="#faf8f5"
+              style={{ stroke: "var(--cream)" }}
               strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"

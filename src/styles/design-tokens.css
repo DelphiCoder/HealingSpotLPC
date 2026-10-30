@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Design tokens: every color used on the site.
+   Change a value here and it updates everywhere it is referenced.
+   Components reference these as var(--token-name); do not hard-code hex
+   or rgba values in styles.css or the JSX files.
+   ========================================================================== */
+
+:root {
+  /* ---------- Brand palette ---------- */
+  --cream: #faf8f5;
+  --sand: #f4f1ec;
+  --sand-deep: #ede8e1;
+  --white: #ffffff;
+  --sage: #4a5d4e;
+  --sage-dark: #3a4d3e;
+  --sage-deep: #2d3d30;
+  --ink: #2d2e2d;
+  --ink-soft: #4e514e;
+  --muted: #6b6e6b;
+  --line: #e0dbd5;
+  --terracotta: #c68b75;
+  --terracotta-hover: #b57a64;
+  --mist: #a0b09a;
+  --mist-soft: #c0ccc0;
+  --brown: #8a7560;
+
+  /* ---------- Derived palette tints ---------- */
+  --sage-tint: rgba(74, 93, 78, 0.1);
+  --sage-focus: rgba(74, 93, 78, 0.4);
+  --sage-soft: #f0f4f1;
+  --sage-mist: #e8ece9;
+  --sage-ink: #1e2e21;
+  --sage-line: #3d5040;
+  --terracotta-deep-hover: #b57a65;
+  --terracotta-soft: #fdf6f3;
+  --line-strong: #d6cfc4;
+  --field-border: #c0bbb4;
+
+  /* ---------- Buttons: video platform brand colors ---------- */
+  --youtube: #ff0000;
+  --youtube-hover: #cc0000;
+
+  /* ---------- Text states ---------- */
+  --placeholder: #9a9d9a;
+  --placeholder-light: #b0b4b0;
+  --icon-muted: #9a9e9a;
+  --error: #dc2626;
+  --error-bright: #ef4444;
+
+  /* ---------- Crisis notice (dark red) ---------- */
+  --crisis-red: #f87171;
+  --crisis-border: rgba(248, 113, 113, 0.5);
+  --crisis-bg: rgba(69, 10, 10, 0.6);
+
+  /* ---------- Light-on-dark lines and hover states ---------- */
+  --on-dark-hover: rgba(255, 255, 255, 0.1);
+  --on-dark-line: rgba(255, 255, 255, 0.4);
+  --on-dark-divider: rgba(255, 255, 255, 0.2);
+  --on-dark-rule: rgba(255, 255, 255, 0.15);
+
+  /* ---------- Popups ---------- */
+  --popup-bg: #fffdf8;
+  --popup-ink: #2b2b2b;
+
+  /* ---------- Shadows and overlays ---------- */
+  --shadow-header: rgba(0, 0, 0, 0.06);
+  --shadow-overlay: rgba(0, 0, 0, 0.25);
+  --shadow-popup: rgba(0, 0, 0, 0.3);
+  --scrim: rgba(0, 0, 0, 0.4);
+
+  color-scheme: light;
+}

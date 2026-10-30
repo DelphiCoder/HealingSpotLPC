@@ -5,7 +5,7 @@ import { BOOKING_URL } from "../data/constants";
 const FAQ_GROUPS = [
   {
     label: "Getting Started",
-    color: "#c68b75",
+    color: "var(--terracotta)",
     faqs: [
       {
         q: "I've never been to therapy before. What should I expect?",
@@ -19,7 +19,7 @@ const FAQ_GROUPS = [
   },
   {
     label: "Sessions & Logistics",
-    color: "#4a5d4e",
+    color: "var(--sage)",
     faqs: [
       {
         q: "Do you offer telehealth or in-person sessions?",
@@ -37,7 +37,7 @@ const FAQ_GROUPS = [
   },
   {
     label: "Fees & Insurance",
-    color: "#8a7560",
+    color: "var(--brown)",
     faqs: [
       {
         q: "Do you take insurance?",

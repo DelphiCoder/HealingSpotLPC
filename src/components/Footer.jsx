@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { asset } from "../lib/asset";
 
 const FOOTER_LINKS = [
   { label: "Home", to: "/" },
@@ -18,8 +19,25 @@ export default function Footer() {
           <div className="footer__about">
             <p className="footer__name">The Healing Spot Counseling</p>
             <p className="footer__blurb">
-              Individual and couples therapy for trauma, depression, and anxiety, offered in person in Ludington, MI and via
-              telehealth across Michigan and Texas. Brian Counts, LPC.
+              Individual and couples therapy for trauma, depression, and anxiety, counseling offered via telehealth
+              throughout Michigan and Texas. I'm licensed in both{" "}
+              <span className="license-tip">
+                <a href="https://aca-prod.accela.com/MILARA/GeneralProperty/LicenseeDetail.aspx?LicenseeNumber=6401226146" target="_blank" rel="noopener noreferrer" className="footer__license-link">Michigan</a>
+                <span className="license-tip__popup" role="tooltip">
+                  <img className="license-tip__seal" src={asset("logos/MichiganGlobal-logo.svg")} alt="Michigan Global logo" />
+                  <span className="license-tip__text">Michigan LPC License No. 6401226146</span>
+                </span>
+              </span>
+              {" "}and{" "}
+              <span className="license-tip">
+                <a href="https://bhec.texas.gov/tbhec/verify-a-license/" target="_blank" rel="noopener noreferrer" className="footer__license-link">Texas</a>
+                <span className="license-tip__popup" role="tooltip">
+                  <img className="license-tip__seal" src={asset("logos/Seal_of_Texas.svg")} alt="Seal of the State of Texas" />
+                  <span className="license-tip__text">Texas LPC License No. 89420</span>
+                </span>
+              </span>{" "}
+              and I'm here to help you.
+              <br />-&nbsp;Brian&nbsp;Counts,&nbsp;LPC.
             </p>
           </div>
           <div className="footer__links">

@@ -4,7 +4,7 @@ import { asset } from "../lib/asset";
 const PILLARS = [
   { title: "Evidence-Based", sub: "EMDR, CBT, and ACT approaches." },
   { title: "Trauma-Informed", sub: "Rooted in lived experience." },
-  { title: "Person-Centered", sub: "Honoring your unique journey." },
+  { title: "Goal-Oriented", sub: "Practical goals, measurable progress." },
 ];
 
 export default function Philosophy() {
@@ -27,11 +27,6 @@ export default function Philosophy() {
           going. Sometimes we can find a better routine and save you a lot of pain, and other times the best path is to go
           straight through. Even if you have to go straight through while in pain, you know where you are going and won't
           end up lost. I believe that I can help you find where you want to go and together find the best way to get there.
-        </p>
-        <p className="body-text body-text--loose">
-          Growing up in a military family, I learned early that sacrifice doesn't always come with recognition — and that
-          the weight of service can follow you home. That understanding shapes how I show up for every client: with
-          patience, honesty, and a deep respect for what you've already carried.
         </p>
         <div className="pillars">
           {PILLARS.map((pillar) => (

@@ -7,7 +7,7 @@ function IconBadge({ path, className = "" }) {
   return (
     <span className={`contact__icon ${className}`} aria-hidden="true">
       <svg viewBox="0 0 16 16" fill="none">
-        <path d={path} stroke="#C68B75" strokeLinecap="round" strokeWidth="2" />
+        <path d={path} style={{ stroke: "var(--terracotta)" }} strokeLinecap="round" strokeWidth="2" />
       </svg>
     </span>
   );

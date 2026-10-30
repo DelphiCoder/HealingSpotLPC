@@ -57,7 +57,7 @@ export default function MeetTherapist() {
             <Link className="text-link text-link--icon" to="/about#philosophy">
               Learn more about my approach
               <svg width="14" height="14" fill="none" viewBox="0 0 14 14" aria-hidden="true">
-                <path d={svgPaths.p2b607f80} stroke="#4A5D4E" strokeLinecap="round" strokeWidth="2" />
+                <path d={svgPaths.p2b607f80} style={{ stroke: "var(--sage)" }} strokeLinecap="round" strokeWidth="2" />
               </svg>
             </Link>
           </div>

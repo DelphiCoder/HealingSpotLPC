@@ -43,7 +43,7 @@ export default function ContactForm() {
           <svg width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true">
             <path
               d="M4 10l4 4 8-8"
-              stroke="#faf8f5"
+              style={{ stroke: "var(--cream)" }}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -23,7 +23,7 @@ export default function PracticeAreaDrawer({ label, onClose }) {
             aria-label="Close"
           >
             <svg width="14" height="14" fill="none" viewBox="0 0 14 14" aria-hidden="true">
-              <path d="M1 1l12 12M13 1L1 13" stroke="#4a5d4e" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M1 1l12 12M13 1L1 13" style={{ stroke: "var(--sage)" }} strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </button>
         </div>

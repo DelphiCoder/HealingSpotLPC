@@ -37,13 +37,70 @@ src/data/                  constants.js (URLs, phone, email, plan lists), forms.
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
 src/lib/asset.js           asset(path): prefixes /public paths with BASE_URL
 src/fonts/, src/styles/    Font files + fonts.css, styles.css
-public/assets/             Images (hero_brian_counts_reduced.jpg, office.png, zachary-terry.png)
+public/assets/             Images (hero_brian_counts_reduced.jpg, office.png)
 public/logos/              Insurer logos (hidden automatically if missing)
 ```
 
 Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/contact`, anything else → NotFoundPage.
 
 ## Change History
+
+### 2026-10-30
+
+**Removed unused Zachary Terry photo** (uncommitted)
+- `public/assets/zachary-terry.png` is deleted. No code referenced it. The Layout section of this file no longer lists it.
+- Still open: `src/data/constants.js` (`SIMPLEPRACTICE_URL`) and `src/sections/Endorsements.jsx` (a Psychology Today link) still point to Zachary Terry's pages. These are links, not the image, and were not changed.
+
+**Header brand mark replaced with textless logo** (uncommitted)
+- `src/components/Header.jsx`: the `brand__mark` span now holds an `<img>` pointing to `logos/Healing_spot_logo_sans_text.svg` (via `asset()`), replacing the inline sprout path. The `svgPaths` import was removed from this file because it was no longer used here.
+- `src/styles/styles.css`: `.brand__mark img` uses the same absolute 100% sizing as the old svg rule.
+- Checked in the dev server at `/about`: the logo appears beside the site name. The production build passes.
+- Not checked: mobile header width, and the subfolder path on GitHub Pages.
+- Enlarged the header logo: `.brand__mark` is now 44px (was 24px), with `margin: -10px 0` so its height footprint stays 24px. The header height is unchanged at 81px (measured). The site name moves 20px right to clear the larger logo.
+- Open: check the mobile header, where the wider logo and the name may take more room.
+
+**Favicon set from textless logo at runtime** (uncommitted)
+- New `src/lib/favicon.js`: `setFavicon()` removes any existing icon links and adds `<link rel="icon" type="image/svg+xml">` pointing to `logos/Healing_spot_logo_sans_text.svg`, resolved with `asset()` so it follows the site root.
+- `src/main.jsx` calls `setFavicon()` before render.
+- Reason: a static icon link in `index.html` is unreliable on localhost, subdomains, and project subfolders.
+- Checked in the dev server: the link is created with `/logos/Healing_spot_logo_sans_text.svg`, and the file returns 200 as `image/svg+xml`. The production build passes.
+- Not checked: the icon in the browser tab (screenshots don't capture it), and the deployed subfolder path on GitHub Pages.
+- The SVG has a sprout animation. Browsers may or may not play it in a tab icon; the reduced-motion setting turns it off.
+
+**Style guide page added** (uncommitted)
+- New `_specs/Style_Guide.html`: standalone page covering typography (three families, type scale table), color (every token from `design-tokens.css`, shown as live swatches), buttons and states, labels and tags, form fields, spacing, radius and shadow, components (concern card, crisis notice, footer, license popup), and the two state logos.
+- It loads `src/fonts/fonts.css` and `src/styles/design-tokens.css` directly, so swatches and fonts follow the site when token values change.
+- Checked in the dev server at `/_specs/Style_Guide.html`: fonts and colors render; the color section was reviewed. Other sections were not reviewed.
+
+**Design tokens added for all colors** (uncommitted)
+- New `src/styles/design-tokens.css`: every color on the site is defined once here on `:root`. This includes the brand palette (existing names kept, such as `--sage`, `--terracotta`, `--cream`), plus named tokens for the colors that were hard-coded before (tints, crisis red, popup colors, shadows, overlays, on-dark lines, placeholder and error text, YouTube red).
+- `src/main.jsx` imports `design-tokens.css` before `styles.css`.
+- `src/styles/styles.css`: the color variables were removed from its `:root` (font variables remain). Every hex and rgba literal was replaced with a `var(--token)`. No literal colors remain in the stylesheet.
+- JSX: SVG stroke colors in `Header`, `MeetTherapist`, `Contact`, `ContactForm`, `Process`, `ClientPortal`, `PracticeAreaDrawer`, and `InsuranceGlossary` now use `style={{ stroke: "var(--…)" }}`. FAQ group accent colors in `Faq.jsx` use tokens.
+- No color values were changed. Each literal maps to a token with the same value. Near-duplicate values (such as `#9a9e9a` and `#9a9d9a`) remain separate tokens.
+- Checked: production build passes. The FAQ page renders its accent colors correctly in the dev server.
+- Not checked: the other pages after this change.
+
+**Resources page layout fixed** (uncommitted)
+- Cause: `src/sections/Resources.jsx` used the `section-plain` class, which has no padding or max-width. The label and text sat flush against the header, screen edges, and footer.
+- Fix: changed the section to `section section--cream section--resources`, the same base class the other sections use.
+- Verified at 1280px in the dev server: label, text, and footer spacing look correct.
+- Not verified: phone width. The browser window would not resize to 390px.
+- Open: the Resources page still has only the intro paragraph; no resource list has been added.
+
+**Header menu order changed** (uncommitted)
+- `src/components/Header.jsx`: moved "Resources" to after "Contact" in `NAV_LINKS`. The menu now reads About, Services, Fees & Insurance, FAQ, Contact, Resources.
+
+**My Philosophy military-family paragraph removed** (uncommitted)
+- `src/sections/Philosophy.jsx`: deleted the paragraph that began "Growing up in a military family..." on the About page. The GPS paragraph above it and the pillar cards are unchanged.
+
+**My Philosophy card title changed** (uncommitted)
+- `src/sections/Philosophy.jsx`: the first card title changed from "Person-Centered" to "Goal-Oriented" (it appears on the About page). The card's subtitle changed from "Honoring your unique journey." to "Practical goals, measurable progress." to match the new title.
+
+**Footer intro text updated** (uncommitted)
+- `src/components/Footer.jsx`: replaced the intro blurb. It now says counseling is offered via telehealth throughout Michigan and Texas, states licensure in both states, and signs off "- Brian Counts, LPC." "Michigan" and "Texas" in "I'm licensed in both Michigan and Texas" are links (new class `footer__license-link` in `src/styles/styles.css`, underlined, opens in a new tab). Michigan goes to the MI LARA licensee record; Texas goes to the TBHEC license verification page. The "throughout Michigan and Texas" phrase is not linked. Hovering "Michigan" shows a popup (`.license-tip` in `Footer.jsx`, styles in `styles.css`) with the Michigan Global logo (`public/logos/MichiganGlobal-logo.svg`) and "Michigan LPC License No. 6401226146". The popup also opens on keyboard focus. Hovering "Texas" shows the same kind of popup with the Texas seal (`public/logos/Seal_of_Texas.svg`) and "Texas LPC License No. 89420". The sign-off starts on its own line (`<br />`). The dash, name, and credential are joined with non-breaking spaces (`&nbsp;`) so they wrap as one unit.
+- The footer renders on every page, so the change appears on the homepage and all other pages.
+- Open: the in-person Ludington wording was removed from this blurb. The Hero (`Brian Counts · LPC · Ludington, MI`) and the FAQ still mention Ludington.
 
 ### 2026-10-28
 

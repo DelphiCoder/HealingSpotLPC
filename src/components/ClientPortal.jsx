@@ -14,7 +14,7 @@ export default function ClientPortal({ onClose }) {
           </div>
           <button type="button" className="icon-button icon-button--outline" data-close aria-label="Close">
             <svg width="12" height="12" fill="none" viewBox="0 0 12 12" aria-hidden="true">
-              <path d="M1 1l10 10M11 1L1 11" stroke="#4a5d4e" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M1 1l10 10M11 1L1 11" style={{ stroke: "var(--sage)" }} strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </button>
         </div>

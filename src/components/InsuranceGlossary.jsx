@@ -44,7 +44,7 @@ export default function InsuranceGlossary({ onClose }) {
           </div>
           <button type="button" className="icon-button icon-button--muted" data-close aria-label="Close">
             <svg width="14" height="14" fill="none" viewBox="0 0 18 18" aria-hidden="true">
-              <path d="M4 4L14 14M4 14L14 4" stroke="#2d2e2d" strokeWidth="2" strokeLinecap="round" />
+              <path d="M4 4L14 14M4 14L14 4" style={{ stroke: "var(--ink)" }} strokeWidth="2" strokeLinecap="round" />
             </svg>
           </button>
         </div>
