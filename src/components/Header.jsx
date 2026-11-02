@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { BOOKING_URL } from "../data/constants";
-import { svgPaths } from "../data/svgPaths";
+import { asset } from "../lib/asset";
 import ClientPortal from "./ClientPortal";
 
 export const NAV_LINKS = [
   { label: "About", to: "/about" },
   { label: "Services", to: "/services" },
   { label: "Fees & Insurance", to: "/fees" },
-  { label: "Resources", to: "/resources" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
+  { label: "Resources", to: "/resources" },
 ];
 
 export default function Header() {
@@ -42,9 +42,7 @@ export default function Header() {
       <div className="header__bar">
         <Link to="/" className="brand">
           <span className="brand__mark">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d={svgPaths.p299ab2c0} stroke="#4A5D4E" strokeLinecap="round" strokeWidth="2" />
-            </svg>
+            <img src={asset("logos/Healing_spot_logo_sans_text.svg")} alt="" aria-hidden="true" />
           </span>
           <span className="brand__name">The Healing Spot, LPC</span>
         </Link>

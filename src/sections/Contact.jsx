@@ -1,13 +1,12 @@
 import ContactForm from "../components/ContactForm";
 import { BOOKING_URL, EMAIL, PHONE } from "../data/constants";
 import { svgPaths } from "../data/svgPaths";
-import { asset } from "../lib/asset";
 
 function IconBadge({ path, className = "" }) {
   return (
     <span className={`contact__icon ${className}`} aria-hidden="true">
       <svg viewBox="0 0 16 16" fill="none">
-        <path d={path} stroke="#C68B75" strokeLinecap="round" strokeWidth="2" />
+        <path d={path} style={{ stroke: "var(--terracotta)" }} strokeLinecap="round" strokeWidth="2" />
       </svg>
     </span>
   );
@@ -35,34 +34,6 @@ export default function Contact() {
             <IconBadge path={svgPaths.p10d0c00} />
             <span className="contact__value">{EMAIL}</span>
           </a>
-          <div className="contact__line contact__line--address">
-            <IconBadge path={svgPaths.p8b99100} className="contact__icon--top" />
-            <div className="stack stack--xs">
-              <span className="contact__office">The Warren Alexander Group</span>
-              <span className="contact__address">1409 S Main St, Stillwater, OK 74074</span>
-            </div>
-          </div>
-        </div>
-        <div className="office-card">
-          <img
-            className="office-card__photo"
-            src={asset("assets/office.png")}
-            alt="The Warren Alexander Group — 1409 S Main St, Stillwater, OK"
-          />
-          <div className="office-card__bar">
-            <div className="stack stack--xs">
-              <span className="office-card__name">The Warren Alexander Group</span>
-              <span className="office-card__address">1409 S Main St · Stillwater, OK 74074</span>
-            </div>
-            <a
-              className="text-link text-link--small"
-              href="https://maps.google.com/?q=1409+S+Main+St+Stillwater+OK+74074"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Get Directions →
-            </a>
-          </div>
         </div>
         <a
           className="btn btn--solid btn--pill-bold btn--self-start"

@@ -1,0 +1,91 @@
+/* Theme tester: fixed neutral colors on purpose, so it reads the same
+   under every palette. Testing only; not part of the site design. */
+
+.theme-tester__tab,
+.theme-tester {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: 10000;
+  font: 13px/1.4 ui-sans-serif, system-ui, sans-serif;
+  color: #111;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  color-scheme: light;
+}
+
+.theme-tester__tab {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.theme-tester {
+  width: 240px;
+  padding: 10px 12px;
+}
+
+.theme-tester__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.theme-tester__close {
+  border: 0;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+}
+
+.theme-tester__group {
+  margin: 0 0 8px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.theme-tester__group legend {
+  padding: 0 4px;
+  font-weight: 600;
+}
+
+.theme-tester__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+.theme-tester__modes {
+  display: flex;
+  gap: 4px;
+}
+
+.theme-tester__mode {
+  flex: 1;
+  padding: 4px 0;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #f4f4f4;
+  color: #111;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.theme-tester__mode.is-active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.theme-tester__note {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #555;
+}

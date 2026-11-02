@@ -37,7 +37,7 @@ src/data/                  constants.js (URLs, phone, email, plan lists), forms.
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
 src/lib/asset.js           asset(path): prefixes /public paths with BASE_URL
 src/fonts/, src/styles/    Font files + fonts.css, styles.css
-public/assets/             Images (hero_brian_counts_reduced.jpg, office.png, zachary-terry.png)
+public/assets/             Images (hero_brian_counts_reduced.jpg, office.png)
 public/logos/              Insurer logos (hidden automatically if missing)
 ```
 
@@ -45,14 +45,130 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ## Change History
 
+### 2026-11-02
+
+**Third palette: "Branding Three"** (uncommitted)
+- New `src/styles/palettes/brand-three.css`, id `brand-three`, label "Branding Three". It uses all of Brand's colors (light and dark). In light mode only, the header background is `#5E7C83` and the hero background is `#2C454F`. Dark mode is identical to Brand.
+- `brand.css`: every block now applies to both `brand` and `brand-three` (`:root:is(...)`). A change there affects both palettes.
+- New tokens, defined in every palette: `--header-bg`, `--header-ink`, `--header-accent`, `--header-line`, `--header-fill`, `--header-fill-hover`, `--hero-bg`. In Original and Brand they point to the existing page and primary colors, so those palettes look unchanged.
+- `styles.css`: `.header` swaps `--ink`, `--sage-text`, `--line`, `--sage`, and `--sage-dark` for the header tokens, so all header text, links, and buttons follow them. `.header` and `.mobile-menu` backgrounds use `--header-bg`. `.hero` and `.hero__fade` use `--hero-bg`.
+- In Branding Three light mode, the header text is white, and the "Book a Consultation" button is `#2C454F` (the hero color), hover `#1e333b`. The header border is `#4f6b72`. These three values are my picks.
+- `src/lib/theme.js`: added to `PALETTES`. `design-tokens.css`: imports it and lists the new tokens.
+- Checked in the dev server: header and hero colors in light mode (computed values match), dark mode identical to Brand, Client Portal pop-up keeps page colors. The production build passes.
+- Not checked: the mobile menu with the dark header, or phone width.
+
+**Branding Three: footer color pinned** (uncommitted)
+- New token `--footer-bg`, used by `.footer` in `styles.css`. Original and Brand set it to `var(--sage)` (no visible change). `brand-three.css` sets it to `#4a6e7e` in light mode. This was already the footer color (Brand's primary), so nothing looks different today, but the footer no longer moves if Brand's primary changes. Dark mode unchanged.
+- The production build passes. Not re-checked in the browser, since the rendered color is unchanged.
+
+### 2026-11-01
+
+**Brand palette added, original palette saved, test-only palette switcher** (uncommitted)
+- Palettes now live in `src/styles/palettes/`, one file each, scoped to `:root[data-palette="<id>"]`:
+  - `original.css`: the sage and terracotta colors exactly as before. Light only.
+  - `brand.css`: teal and slate from `_specs/brand_design-tokens.css`, with light and dark values. Values with no brand token are marked "derived" in the file.
+- The site now uses **brand** by default (`index.html` sets `data-palette="brand"` on `<html>`).
+- Dark mode (brand only) follows the visitor's OS setting. Visitors have no on-page light/dark control yet.
+- `src/styles/design-tokens.css`: now imports the palette files, lists the tokens every palette must define, and keeps only the tokens shared by all palettes (YouTube, crisis, on-dark lines).
+- Token split in `src/styles/styles.css` and JSX strokes, so dark mode works. Each old use maps to a new token with the same original value, so the original palette looks unchanged:
+  - `background: var(--cream)` → `--page`; `background: var(--white)` → `--surface`
+  - text/border `--cream` on fills and bands → `--on-fill`; text `--white` → `--on-fill-strong`
+  - text, outline, and hover-border `--sage` → `--sage-text` (`.concern.is-open` border stays `--sage`)
+  - `--cream` and `--white` are no longer defined.
+- `.insurer__logo` gets `--logo-ground`/`--logo-pad` (transparent/0 in light, a white chip in dark) so the dark logo artwork stays visible.
+- New `src/lib/theme.js` (palette list, default, storage) and `src/components/ThemeTester.jsx` + `ThemeTester.css` (floating panel, bottom left: palette radio buttons and Auto/Light/Dark). It shows in the dev server, or on the live site after visiting any page with `?themes` (turned off with `?themes=off`). Choices are saved in that browser only and ignored when the tester is off. Visitors never see it.
+- To add a palette: new file in `src/styles/palettes/`, `@import` it in `design-tokens.css`, add it to `PALETTES` in `theme.js`.
+- `styles.css` header comment changed from "Bridge to Wellness" to "The Healing Spot".
+- Checked in the dev server: home page in brand light, brand dark, and original; Fees page insurer logos in brand dark. The production build passes. Every token used is defined in both palettes (checked by script).
+- Not checked: other pages in dark mode, modals and drawers in dark mode, phone width.
+- Choices to review: in dark mode, the sage bands (hero, CTA, footer) and buttons keep the light primary `#4a6e7e` with white text instead of the spec's dark primary `#7aa3b0` with dark text, and gold stays `#b8935a` so white button text stays as readable as in light. The CTA band's white button becomes a dark button in dark mode. Third FAQ group color is the logo leaf green.
+- `_specs/Style_Guide.html` still references `--cream` and `--white`, so those swatches will be blank until it is updated.
+
+### 2026-10-30
+
+**Footer license popup made opaque** (uncommitted)
+- Cause: `.footer__blurb` had `opacity: 0.9`. Opacity applies to all children, so the hover popup inside the paragraph was also 90% opaque.
+- Fix: the 90% is now a text color, `--cream-soft: rgba(250, 248, 245, 0.9)` in `design-tokens.css`, and `.footer__blurb` no longer sets `opacity`. The popup background is solid.
+- Checked in the dev server: the hovered popup background is opaque (`rgb(255, 253, 248)`) and the paragraph opacity is 1.
+
+**Contact page: office card and address removed** (uncommitted)
+- `src/sections/Contact.jsx`: removed the Warren Alexander Group office card (photo, name, address, Get Directions link) and the pin row with the Stillwater address. The contact lines are now the phone number and Brian's email only.
+- Removed the `asset` import, which only the office card used.
+- Still in the repo, now unused: the `.office-card*`, `.contact__address`, `.contact__office`, and `.contact__line--address` rules in `styles.css`, and `public/assets/office.png`. Removing them is a separate step.
+
+**`_specs/` excluded from the repo** (uncommitted)
+- `.gitignore`: added `/_specs/`. None of its files were tracked by git, so nothing needs to be removed from history. The folder stays on disk for local use. The Style Guide page and the logo copies in `_specs/` are local only; the site uses the copies in `public/`.
+
+**Removed unused Zachary Terry photo** (uncommitted)
+- `public/assets/zachary-terry.png` is deleted. No code referenced it. The Layout section of this file no longer lists it.
+- Still open: `src/data/constants.js` (`SIMPLEPRACTICE_URL`) and `src/sections/Endorsements.jsx` (a Psychology Today link) still point to Zachary Terry's pages. These are links, not the image, and were not changed.
+
+**Header brand mark replaced with textless logo** (uncommitted)
+- `src/components/Header.jsx`: the `brand__mark` span now holds an `<img>` pointing to `logos/Healing_spot_logo_sans_text.svg` (via `asset()`), replacing the inline sprout path. The `svgPaths` import was removed from this file because it was no longer used here.
+- `src/styles/styles.css`: `.brand__mark img` uses the same absolute 100% sizing as the old svg rule.
+- Checked in the dev server at `/about`: the logo appears beside the site name. The production build passes.
+- Not checked: mobile header width, and the subfolder path on GitHub Pages.
+- Enlarged the header logo: `.brand__mark` is now 44px (was 24px), with `margin: -10px 0` so its height footprint stays 24px. The header height is unchanged at 81px (measured). The site name moves 20px right to clear the larger logo.
+- Open: check the mobile header, where the wider logo and the name may take more room.
+
+**Favicon set from textless logo at runtime** (uncommitted)
+- New `src/lib/favicon.js`: `setFavicon()` removes any existing icon links and adds `<link rel="icon" type="image/svg+xml">` pointing to `logos/Healing_spot_logo_sans_text.svg`, resolved with `asset()` so it follows the site root.
+- `src/main.jsx` calls `setFavicon()` before render.
+- Reason: a static icon link in `index.html` is unreliable on localhost, subdomains, and project subfolders.
+- Checked in the dev server: the link is created with `/logos/Healing_spot_logo_sans_text.svg`, and the file returns 200 as `image/svg+xml`. The production build passes.
+- Not checked: the icon in the browser tab (screenshots don't capture it), and the deployed subfolder path on GitHub Pages.
+- The SVG has a sprout animation. Browsers may or may not play it in a tab icon; the reduced-motion setting turns it off.
+
+**Style guide page added** (uncommitted)
+- New `_specs/Style_Guide.html`: standalone page covering typography (three families, type scale table), color (every token from `design-tokens.css`, shown as live swatches), buttons and states, labels and tags, form fields, spacing, radius and shadow, components (concern card, crisis notice, footer, license popup), and the two state logos.
+- It loads `src/fonts/fonts.css` and `src/styles/design-tokens.css` directly, so swatches and fonts follow the site when token values change.
+- Checked in the dev server at `/_specs/Style_Guide.html`: fonts and colors render; the color section was reviewed. Other sections were not reviewed.
+
+**Design tokens added for all colors** (uncommitted)
+- New `src/styles/design-tokens.css`: every color on the site is defined once here on `:root`. This includes the brand palette (existing names kept, such as `--sage`, `--terracotta`, `--cream`), plus named tokens for the colors that were hard-coded before (tints, crisis red, popup colors, shadows, overlays, on-dark lines, placeholder and error text, YouTube red).
+- `src/main.jsx` imports `design-tokens.css` before `styles.css`.
+- `src/styles/styles.css`: the color variables were removed from its `:root` (font variables remain). Every hex and rgba literal was replaced with a `var(--token)`. No literal colors remain in the stylesheet.
+- JSX: SVG stroke colors in `Header`, `MeetTherapist`, `Contact`, `ContactForm`, `Process`, `ClientPortal`, `PracticeAreaDrawer`, and `InsuranceGlossary` now use `style={{ stroke: "var(--…)" }}`. FAQ group accent colors in `Faq.jsx` use tokens.
+- No color values were changed. Each literal maps to a token with the same value. Near-duplicate values (such as `#9a9e9a` and `#9a9d9a`) remain separate tokens.
+- Checked: production build passes. The FAQ page renders its accent colors correctly in the dev server.
+- Not checked: the other pages after this change.
+
+**Resources page layout fixed** (uncommitted)
+- Cause: `src/sections/Resources.jsx` used the `section-plain` class, which has no padding or max-width. The label and text sat flush against the header, screen edges, and footer.
+- Fix: changed the section to `section section--cream section--resources`, the same base class the other sections use.
+- Verified at 1280px in the dev server: label, text, and footer spacing look correct.
+- Not verified: phone width. The browser window would not resize to 390px.
+- Open: the Resources page still has only the intro paragraph; no resource list has been added.
+
+**Header menu order changed** (uncommitted)
+- `src/components/Header.jsx`: moved "Resources" to after "Contact" in `NAV_LINKS`. The menu now reads About, Services, Fees & Insurance, FAQ, Contact, Resources.
+
+**My Philosophy military-family paragraph removed** (uncommitted)
+- `src/sections/Philosophy.jsx`: deleted the paragraph that began "Growing up in a military family..." on the About page. The GPS paragraph above it and the pillar cards are unchanged.
+
+**My Philosophy card title changed** (uncommitted)
+- `src/sections/Philosophy.jsx`: the first card title changed from "Person-Centered" to "Goal-Oriented" (it appears on the About page). The card's subtitle changed from "Honoring your unique journey." to "Practical goals, measurable progress." to match the new title.
+
+**Footer intro text updated** (uncommitted)
+- `src/components/Footer.jsx`: replaced the intro blurb. It now says counseling is offered via telehealth throughout Michigan and Texas, states licensure in both states, and signs off "- Brian Counts, LPC." "Michigan" and "Texas" in "I'm licensed in both Michigan and Texas" are links (new class `footer__license-link` in `src/styles/styles.css`, underlined, opens in a new tab). Michigan goes to the MI LARA licensee record; Texas goes to the TBHEC license verification page. The "throughout Michigan and Texas" phrase is not linked. Hovering "Michigan" shows a popup (`.license-tip` in `Footer.jsx`, styles in `styles.css`) with the Michigan Global logo (`public/logos/MichiganGlobal-logo.svg`) and "Michigan LPC License No. 6401226146". The popup also opens on keyboard focus. Hovering "Texas" shows the same kind of popup with the Texas seal (`public/logos/Seal_of_Texas.svg`) and "Texas LPC License No. 89420". The sign-off starts on its own line (`<br />`). The dash, name, and credential are joined with non-breaking spaces (`&nbsp;`) so they wrap as one unit.
+- The footer renders on every page, so the change appears on the homepage and all other pages.
+- Open: the in-person Ludington wording was removed from this blurb. The Hero (`Brian Counts · LPC · Ludington, MI`) and the FAQ still mention Ludington.
+
 ### 2026-10-28
+
+**Asset and router URLs fixed for project site** (uncommitted)
+- Problem: `asset()` and the router basename were resolved from `document.baseURI`, which depends on the page address. Images were requested from `/assets/...` on the domain root.
+- New `src/lib/siteRoot.js`: `SITE_ROOT` is `../` from the bundle's own URL in production (site root), and `/` in dev. It doesn't depend on the page address.
+- `src/lib/asset.js` and `src/App.jsx` (router basename) use `SITE_ROOT`.
+- Verified in a browser at `/HealingSpotLPC/about` (with the 404 fallback): hero image loads from `/HealingSpotLPC/assets/...` and nav links are under `/HealingSpotLPC/`.
+- Known limit: a URL with no trailing slash (`/HealingSpotLPC`) can't load the relative script paths. GitHub Pages normally redirects to the slash version.
 
 **GitHub Pages deploy workflow added** (uncommitted)
 - Cause: no build was being published. GitHub Pages was serving the source tree, where `index.html` loads `src/main.jsx`, which a browser can't run. The request for `/src/main.jsx` at the site root is consistent with that.
 - Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
 - Repo setting needed: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 - The `github-pages` environment may only allow deploys from the default branch. If the workflow is blocked on the feature branch, merge to `main` first.
-- Not yet run on GitHub.
+- Deploy ran and the GitHub Pages site loads (confirmed 2026-10-29). The branch was allowed to deploy through the github-pages environment rules.
 
 **Relative paths for GitHub Pages project site** (uncommitted)
 - `index.html`: module script is `./src/main.jsx` (was `/src/main.jsx`).
@@ -162,11 +278,12 @@ Ordered roughly by priority.
 
 1. **Commit the conversion and the copy changes.** Nothing from 2026-10-28 is committed yet.
 2. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
-3. **Zachary Terry content still on the site:**
-   - `src/sections/Endorsements.jsx`: four testimonials, Oklahoma license `#11680`, Psychology Today links.
-   - `src/sections/Contact.jsx`: Stillwater, OK office card, address, photo `public/assets/office.png`, Google Maps link.
-   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` points to `zachary-terry.clientsecure.me`.
-   - `public/assets/zachary-terry.png`: unused by code, can be removed.
+3. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
+   - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
+   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` (line 4) points to `zachary-terry.clientsecure.me`.
+   - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 5.
+   - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
+   - `public/assets/zachary-terry.png`: already removed.
 4. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
 5. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
 6. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
@@ -174,6 +291,7 @@ Ordered roughly by priority.
 8. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
 10. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 11. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
+12. **Palette decision:** pick a final palette. Then remove `ThemeTester.jsx`/`.css`, its use in `main.jsx`, and unused palette files. Check all pages, modals, and drawers in dark mode. Decide whether visitors get an on-page light/dark toggle (today dark mode only follows the OS).
 
 ## Decisions
 

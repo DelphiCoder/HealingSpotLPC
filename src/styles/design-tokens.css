@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Design tokens: every color used on the site.
+
+   Palette colors live in src/styles/palettes/, one file per palette. The
+   active palette is chosen by the data-palette attribute on <html> (set in
+   index.html and by src/lib/theme.js). Light/dark is chosen by data-theme
+   on <html>, or follows the OS when data-theme is absent.
+
+   Every palette file must define these tokens:
+     Surfaces      --page --surface --sand --sand-deep
+     Text          --ink --ink-soft --muted --sage-text
+     Primary fill  --sage --sage-dark --sage-deep --sage-ink --sage-line
+     Accents       --terracotta --terracotta-hover --terracotta-deep-hover
+                   --brown --mist --mist-soft
+     Tints         --sage-tint --sage-focus --sage-soft --sage-mist
+                   --terracotta-soft
+     Lines         --line --line-strong --field-border
+     On fills      --on-fill --on-fill-strong --cream-soft
+                   (text on --sage / --terracotta fills and dark bands)
+     Text states   --placeholder --placeholder-light --icon-muted
+                   --error --error-bright
+     Popups        --popup-bg --popup-ink
+     Header, hero  --header-bg --header-ink --header-accent --header-line
+                   --header-fill --header-fill-hover --hero-bg --footer-bg
+                   (inside .header these replace --ink, --sage-text, --line,
+                   --sage, --sage-dark; see styles.css)
+     Logos         --logo-ground --logo-pad
+     Shadows       --shadow-header --shadow-overlay --shadow-popup --scrim
+
+   The names are historical (they come from the original sage and
+   terracotta palette); in another palette --sage is simply the primary
+   color and --terracotta the warm accent.
+
+   This file holds tokens that are the same in every palette. Components
+   reference tokens as var(--token-name); do not hard-code hex or rgba
+   values in styles.css or the JSX files.
+   ========================================================================== */
+
+@import "./palettes/original.css";
+@import "./palettes/brand.css";
+@import "./palettes/brand-three.css";
+
+:root {
+  /* ---------- Buttons: video platform brand colors ---------- */
+  --youtube: #ff0000;
+  --youtube-hover: #cc0000;
+
+  /* ---------- Crisis notice (dark red, sits on the footer band) ---------- */
+  --crisis-red: #f87171;
+  --crisis-border: rgba(248, 113, 113, 0.5);
+  --crisis-bg: rgba(69, 10, 10, 0.6);
+
+  /* ---------- Light-on-dark lines and hover states ---------- */
+  --on-dark-hover: rgba(255, 255, 255, 0.1);
+  --on-dark-line: rgba(255, 255, 255, 0.4);
+  --on-dark-divider: rgba(255, 255, 255, 0.2);
+  --on-dark-rule: rgba(255, 255, 255, 0.15);
+}

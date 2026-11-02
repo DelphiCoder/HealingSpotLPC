@@ -2,7 +2,7 @@ import SectionLabel from "../components/SectionLabel";
 
 export default function Resources() {
   return (
-    <section id="resources" className="section-plain section--resources">
+    <section id="resources" className="section section--cream section--resources">
       <div className="stack stack--lg">
         <SectionLabel label="Resources" />
         <p className="body-text body-text--library">
