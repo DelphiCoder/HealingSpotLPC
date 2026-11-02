@@ -25,27 +25,43 @@ npm run preview   # serve dist/ locally
 ```
 index.html                 Vite entry: head meta, SEO, JSON-LD schema
 vite.config.js             React plugin, base "/", copies index.html to 404.html after build
-src/main.jsx               React root, imports fonts.css and styles.css
+README.md                  Repo readme (includes the ?themes tester instructions)
+src/main.jsx               React root: fonts, tokens, styles, favicon, theme init, ThemeTester
 src/App.jsx                BrowserRouter + routes + ScrollManager
 src/components/            Layout, Header, Footer, Modal, SectionLabel, ClientPortal,
-                           InsuranceGlossary, PracticeAreaDrawer, ContactForm
+                           InsuranceGlossary, PracticeAreaDrawer, ContactForm,
+                           ThemeTester (testing only)
 src/sections/              Hero, Concerns, Contact, Endorsements, Faq, FeesInsurance,
                            MeetTherapist, Philosophy, Process, Resources, Services
 src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage, ResourcesPage,
                            FaqPage, ContactPage, NotFoundPage (one per route)
 src/data/                  constants.js (URLs, phone, email, plan lists), forms.js
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
-src/lib/asset.js           asset(path): prefixes /public paths with BASE_URL
-src/fonts/, src/styles/    Font files + fonts.css, styles.css
-public/assets/             Images (hero_brian_counts_reduced.jpg, office.png)
-public/logos/              Insurer logos (hidden automatically if missing)
+src/lib/                   asset.js (public paths from the site root), siteRoot.js,
+                           favicon.js, theme.js (palette list, default, tester switch)
+src/fonts/                 Font files + fonts.css
+src/styles/                styles.css, design-tokens.css (shared tokens + palette imports)
+src/styles/palettes/       original.css, brand.css, brand-three.css
+.github/workflows/         deploy-pages.yml (build and deploy to GitHub Pages on push to main)
+public/assets/             Images (hero_brian_counts_reduced.jpg)
+public/logos/              Insurer logos (hidden automatically if missing), site logo, state seals
 ```
 
 Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/contact`, anything else → NotFoundPage.
 
 ## Change History
 
+Everything below is committed and on `main`. "(uncommitted)" tags on older entries are historical.
+
 ### 2026-11-02
+
+**Merged to `main`, feature branch removed**
+- Theme work committed as `868b8ea` ("Three Color Theme Tests") and pushed.
+- Pull request #3 merged the branch into `main` on GitHub (merge commit `d8aaf11`). Earlier work went in through PRs #1 and #2. Also on `main`, edited on GitHub: `README.md` added, with instructions for the `?themes` tester (`3b1d6f0`, `5d99fde`).
+- Local `main` fast-forwarded to `origin/main`. The feature branch was deleted locally and on origin. `main` is now the only branch.
+- `.github/workflows/deploy-pages.yml`: the push trigger now lists only `main` (the deleted branch was removed). Deploys run on every push to `main`. (uncommitted)
+- This log: branch references removed, Layout section updated (README, theme files, palettes, workflow; removed `office.png`, which is no longer in `public/assets/`), and Open Item "Commit the conversion" removed.
+- Live site: the theme tester only shows after opening a page with `?themes` in the address (see 2026-11-01).
 
 **Third palette: "Branding Three"** (uncommitted)
 - New `src/styles/palettes/brand-three.css`, id `brand-three`, label "Branding Three". It uses all of Brand's colors (light and dark). In light mode only, the header background is `#5E7C83` and the hero background is `#2C454F`. Dark mode is identical to Brand.
@@ -165,7 +181,7 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 **GitHub Pages deploy workflow added** (uncommitted)
 - Cause: no build was being published. GitHub Pages was serving the source tree, where `index.html` loads `src/main.jsx`, which a browser can't run. The request for `/src/main.jsx` at the site root is consistent with that.
-- Added `.github/workflows/deploy-pages.yml`: on push to `main` or `vite-react-conversion`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
+- Added `.github/workflows/deploy-pages.yml`: on push to `main`, it runs `npm ci` and `npm run build`, then deploys `dist/` with actions/deploy-pages.
 - Repo setting needed: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 - The `github-pages` environment may only allow deploys from the default branch. If the workflow is blocked on the feature branch, merge to `main` first.
 - Deploy ran and the GitHub Pages site loads (confirmed 2026-10-29). The branch was allowed to deploy through the github-pages environment rules.
@@ -178,8 +194,8 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 - Verified: the build served from a `/HealingSpotLPC/` folder loads the home page with styles and images, and the About link routes to `/HealingSpotLPC/about`.
 
 **Pushed to origin** (2026-10-29)
-- Branch `vite-react-conversion` pushed to `https://github.com/DelphiCoder/HealingSpotLPC`. Commits: `f7f3436` (Vite + React conversion and copy changes), `589eaf5` (concern and footer readability).
-- Pull request: https://github.com/DelphiCoder/HealingSpotLPC/pull/new/vite-react-conversion
+- The Vite conversion work was pushed to `https://github.com/DelphiCoder/HealingSpotLPC`. Commits: `f7f3436` (Vite + React conversion and copy changes), `589eaf5` (concern and footer readability).
+- It went in as a separate branch through pull request #1 (later work through #2 and #3; see 2026-11-02). The branch has since been deleted.
 - Entries below marked "(uncommitted)" are included in those commits, except this note.
 - Push required a GitHub account with write access to the repo. Account `DelphiCoder` got a 403 before access was granted.
 
@@ -276,22 +292,21 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 Ordered roughly by priority.
 
-1. **Commit the conversion and the copy changes.** Nothing from 2026-10-28 is committed yet.
-2. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
-3. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
+1. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
+2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
    - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` (line 4) points to `zachary-terry.clientsecure.me`.
-   - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 5.
+   - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 4.
    - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
    - `public/assets/zachary-terry.png`: already removed.
-4. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
-5. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
-6. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
-7. **Philosophy image:** replace the crucible photo with a GPS image when one is available (discrepancy 3).
-8. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
-10. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
-11. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
-12. **Palette decision:** pick a final palette. Then remove `ThemeTester.jsx`/`.css`, its use in `main.jsx`, and unused palette files. Check all pages, modals, and drawers in dark mode. Decide whether visitors get an on-page light/dark toggle (today dark mode only follows the OS).
+3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
+4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
+5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
+6. **Philosophy image:** replace the crucible photo with a GPS image when one is available (discrepancy 3).
+7. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
+8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
+9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
+10. **Palette decision:** pick a final palette. Then remove `ThemeTester.jsx`/`.css`, its use in `main.jsx`, and unused palette files. Check all pages, modals, and drawers in dark mode. Decide whether visitors get an on-page light/dark toggle (today dark mode only follows the OS).
 
 ## Decisions
 
