@@ -1,0 +1,84 @@
+/* ==========================================================================
+   Palette: "original" — the sage and terracotta colors the site launched
+   with (saved 2026-11-01, before the brand palette). Light only: this
+   palette has no dark values, so it stays light when dark mode is on.
+   ========================================================================== */
+
+:root[data-palette="original"] {
+  /* Surfaces */
+  --page: #faf8f5; /* was --cream */
+  --surface: #ffffff; /* was --white */
+  --sand: #f4f1ec;
+  --sand-deep: #ede8e1;
+
+  /* Text */
+  --ink: #2d2e2d;
+  --ink-soft: #4e514e;
+  --muted: #6b6e6b;
+  --sage-text: #4a5d4e;
+
+  /* Primary fill */
+  --sage: #4a5d4e;
+  --sage-dark: #3a4d3e;
+  --sage-deep: #2d3d30;
+  --sage-ink: #1e2e21;
+  --sage-line: #3d5040;
+
+  /* Accents */
+  --terracotta: #c68b75;
+  --terracotta-hover: #b57a64;
+  --terracotta-deep-hover: #b57a65;
+  --brown: #8a7560;
+  --mist: #a0b09a;
+  --mist-soft: #c0ccc0;
+
+  /* Tints */
+  --sage-tint: rgba(74, 93, 78, 0.1);
+  --sage-focus: rgba(74, 93, 78, 0.4);
+  --sage-soft: #f0f4f1;
+  --sage-mist: #e8ece9;
+  --terracotta-soft: #fdf6f3;
+
+  /* Lines */
+  --line: #e0dbd5;
+  --line-strong: #d6cfc4;
+  --field-border: #c0bbb4;
+
+  /* On fills and dark bands */
+  --on-fill: #faf8f5; /* was --cream used as text */
+  --on-fill-strong: #ffffff; /* was --white used as text */
+  --cream-soft: rgba(250, 248, 245, 0.9);
+
+  /* Text states */
+  --placeholder: #9a9d9a;
+  --placeholder-light: #b0b4b0;
+  --icon-muted: #9a9e9a;
+  --error: #dc2626;
+  --error-bright: #ef4444;
+
+  /* Popups */
+  --popup-bg: #fffdf8;
+  --popup-ink: #2b2b2b;
+
+  /* Header and hero: same as the page and primary fill */
+  --header-bg: var(--page);
+  --header-ink: var(--ink);
+  --header-accent: var(--sage-text);
+  --header-line: var(--line);
+  --header-fill: var(--sage);
+  --header-fill-hover: var(--sage-dark);
+  --hero-bg: var(--sage);
+  --footer-bg: var(--sage);
+
+  /* Logos */
+  --logo-ground: transparent;
+  --logo-pad: 0;
+
+  /* Shadows and overlays */
+  --shadow-header: rgba(0, 0, 0, 0.06);
+  --shadow-overlay: rgba(0, 0, 0, 0.25);
+  --shadow-popup: rgba(0, 0, 0, 0.3);
+  --scrim: rgba(0, 0, 0, 0.4);
+
+  color-scheme: light;
+}

@@ -45,6 +45,45 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ## Change History
 
+### 2026-11-02
+
+**Third palette: "Branding Three"** (uncommitted)
+- New `src/styles/palettes/brand-three.css`, id `brand-three`, label "Branding Three". It uses all of Brand's colors (light and dark). In light mode only, the header background is `#5E7C83` and the hero background is `#2C454F`. Dark mode is identical to Brand.
+- `brand.css`: every block now applies to both `brand` and `brand-three` (`:root:is(...)`). A change there affects both palettes.
+- New tokens, defined in every palette: `--header-bg`, `--header-ink`, `--header-accent`, `--header-line`, `--header-fill`, `--header-fill-hover`, `--hero-bg`. In Original and Brand they point to the existing page and primary colors, so those palettes look unchanged.
+- `styles.css`: `.header` swaps `--ink`, `--sage-text`, `--line`, `--sage`, and `--sage-dark` for the header tokens, so all header text, links, and buttons follow them. `.header` and `.mobile-menu` backgrounds use `--header-bg`. `.hero` and `.hero__fade` use `--hero-bg`.
+- In Branding Three light mode, the header text is white, and the "Book a Consultation" button is `#2C454F` (the hero color), hover `#1e333b`. The header border is `#4f6b72`. These three values are my picks.
+- `src/lib/theme.js`: added to `PALETTES`. `design-tokens.css`: imports it and lists the new tokens.
+- Checked in the dev server: header and hero colors in light mode (computed values match), dark mode identical to Brand, Client Portal pop-up keeps page colors. The production build passes.
+- Not checked: the mobile menu with the dark header, or phone width.
+
+**Branding Three: footer color pinned** (uncommitted)
+- New token `--footer-bg`, used by `.footer` in `styles.css`. Original and Brand set it to `var(--sage)` (no visible change). `brand-three.css` sets it to `#4a6e7e` in light mode. This was already the footer color (Brand's primary), so nothing looks different today, but the footer no longer moves if Brand's primary changes. Dark mode unchanged.
+- The production build passes. Not re-checked in the browser, since the rendered color is unchanged.
+
+### 2026-11-01
+
+**Brand palette added, original palette saved, test-only palette switcher** (uncommitted)
+- Palettes now live in `src/styles/palettes/`, one file each, scoped to `:root[data-palette="<id>"]`:
+  - `original.css`: the sage and terracotta colors exactly as before. Light only.
+  - `brand.css`: teal and slate from `_specs/brand_design-tokens.css`, with light and dark values. Values with no brand token are marked "derived" in the file.
+- The site now uses **brand** by default (`index.html` sets `data-palette="brand"` on `<html>`).
+- Dark mode (brand only) follows the visitor's OS setting. Visitors have no on-page light/dark control yet.
+- `src/styles/design-tokens.css`: now imports the palette files, lists the tokens every palette must define, and keeps only the tokens shared by all palettes (YouTube, crisis, on-dark lines).
+- Token split in `src/styles/styles.css` and JSX strokes, so dark mode works. Each old use maps to a new token with the same original value, so the original palette looks unchanged:
+  - `background: var(--cream)` → `--page`; `background: var(--white)` → `--surface`
+  - text/border `--cream` on fills and bands → `--on-fill`; text `--white` → `--on-fill-strong`
+  - text, outline, and hover-border `--sage` → `--sage-text` (`.concern.is-open` border stays `--sage`)
+  - `--cream` and `--white` are no longer defined.
+- `.insurer__logo` gets `--logo-ground`/`--logo-pad` (transparent/0 in light, a white chip in dark) so the dark logo artwork stays visible.
+- New `src/lib/theme.js` (palette list, default, storage) and `src/components/ThemeTester.jsx` + `ThemeTester.css` (floating panel, bottom left: palette radio buttons and Auto/Light/Dark). It shows in the dev server, or on the live site after visiting any page with `?themes` (turned off with `?themes=off`). Choices are saved in that browser only and ignored when the tester is off. Visitors never see it.
+- To add a palette: new file in `src/styles/palettes/`, `@import` it in `design-tokens.css`, add it to `PALETTES` in `theme.js`.
+- `styles.css` header comment changed from "Bridge to Wellness" to "The Healing Spot".
+- Checked in the dev server: home page in brand light, brand dark, and original; Fees page insurer logos in brand dark. The production build passes. Every token used is defined in both palettes (checked by script).
+- Not checked: other pages in dark mode, modals and drawers in dark mode, phone width.
+- Choices to review: in dark mode, the sage bands (hero, CTA, footer) and buttons keep the light primary `#4a6e7e` with white text instead of the spec's dark primary `#7aa3b0` with dark text, and gold stays `#b8935a` so white button text stays as readable as in light. The CTA band's white button becomes a dark button in dark mode. Third FAQ group color is the logo leaf green.
+- `_specs/Style_Guide.html` still references `--cream` and `--white`, so those swatches will be blank until it is updated.
+
 ### 2026-10-30
 
 **Footer license popup made opaque** (uncommitted)
@@ -243,7 +282,7 @@ Ordered roughly by priority.
    - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` (line 4) points to `zachary-terry.clientsecure.me`.
    - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 5.
-   - `src/styles/styles.css` line 2: the file header comment says "Bridge to Wellness". Comment only.
+   - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
    - `public/assets/zachary-terry.png`: already removed.
 4. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
 5. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
@@ -252,6 +291,7 @@ Ordered roughly by priority.
 8. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
 10. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 11. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
+12. **Palette decision:** pick a final palette. Then remove `ThemeTester.jsx`/`.css`, its use in `main.jsx`, and unused palette files. Check all pages, modals, and drawers in dark mode. Decide whether visitors get an on-page light/dark toggle (today dark mode only follows the OS).
 
 ## Decisions
 

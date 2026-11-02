@@ -1,0 +1,247 @@
+/* ==========================================================================
+   Palette: "brand" — teal and slate, from _specs/brand_design-tokens.css
+   (Healing Home Group site colors plus the Healing Spot logo).
+
+   Each value notes the brand token it comes from. Values marked "derived"
+   have no brand token; they are picked from the same teal/slate family.
+
+   Light/dark:
+     no data-theme      -> follows the OS preference
+     data-theme="light" -> forced light
+     data-theme="dark"  -> forced dark
+   The two dark blocks below must stay identical.
+
+   "Branding Three" (brand-three.css) shares every block in this file and
+   overrides only its header, hero, and footer in light mode. A change here applies
+   to both palettes.
+   ========================================================================== */
+
+/* ---------- Logo colors (fixed, same in both modes; reference only) ---------- */
+:root:is([data-palette="brand"], [data-palette="brand-three"]) {
+  --logo-yellow: #f7c631;
+  --logo-blue: #64ccdd;
+  --logo-blue-light: #c0eaf1;
+  --logo-black: #000000;
+  --logo-leaf: #569541;
+  --logo-leaf-light: #73b544;
+  --logo-root: #d9d1be;
+}
+
+/* ---------- Light ---------- */
+:root:is([data-palette="brand"], [data-palette="brand-three"]) {
+  /* Surfaces */
+  --page: #f7f8f9; /* --color-surface (site --cream) */
+  --surface: #ffffff; /* --color-bg (site --white) */
+  --sand: #edf1f3; /* --color-surface-alt */
+  --sand-deep: #e8f0f3; /* --color-surface-tint */
+
+  /* Text */
+  --ink: #1e2a30; /* --color-text-strong */
+  --ink-soft: #3a4a52; /* --color-text */
+  --muted: #6b7d86; /* --color-text-muted */
+  --sage-text: #4a6e7e; /* --color-primary */
+
+  /* Primary fill */
+  --sage: #4a6e7e; /* --color-primary */
+  --sage-dark: #3d5e6d; /* --color-primary-hover */
+  --sage-deep: #34505c; /* derived: darker primary for dark panels */
+  --sage-ink: #1e2a30; /* --color-text-strong */
+  --sage-line: #5a8090; /* --color-primary-mid */
+
+  /* Accents */
+  --terracotta: #b8935a; /* --color-gold */
+  --terracotta-hover: #a6814a; /* derived: darker gold */
+  --terracotta-deep-hover: #a6814a; /* derived: darker gold */
+  --brown: #569541; /* --logo-leaf (third FAQ group color) */
+  --mist: #b4cdd6; /* derived: light teal, readable on primary */
+  --mist-soft: #d4e4ea; /* derived: lighter teal, readable on primary */
+
+  /* Tints */
+  --sage-tint: rgba(74, 110, 126, 0.1); /* --color-primary at 10% */
+  --sage-focus: rgba(74, 110, 126, 0.4); /* --color-primary at 40% */
+  --sage-soft: #e8f0f3; /* --color-surface-tint */
+  --sage-mist: #edf1f3; /* --color-surface-alt */
+  --terracotta-soft: #faf5ec; /* derived: gold tint */
+
+  /* Lines */
+  --line: #d4dde2; /* --color-border */
+  --line-strong: #c3cfd5; /* derived */
+  --field-border: #aebdc4; /* derived */
+
+  /* On fills and dark bands */
+  --on-fill: #ffffff; /* --color-on-primary */
+  --on-fill-strong: #ffffff; /* --color-on-primary */
+  --cream-soft: rgba(255, 255, 255, 0.9);
+
+  /* Text states */
+  --placeholder: #8a9aa2; /* derived */
+  --placeholder-light: #a9b6bc; /* derived */
+  --icon-muted: #8a9aa2; /* derived */
+  --error: #dc2626;
+  --error-bright: #ef4444;
+
+  /* Popups */
+  --popup-bg: #ffffff; /* --color-bg */
+  --popup-ink: #1e2a30; /* --color-text-strong */
+
+  /* Header and hero: same as the page and primary fill */
+  --header-bg: var(--page);
+  --header-ink: var(--ink);
+  --header-accent: var(--sage-text);
+  --header-line: var(--line);
+  --header-fill: var(--sage);
+  --header-fill-hover: var(--sage-dark);
+  --hero-bg: var(--sage);
+  --footer-bg: var(--sage);
+
+  /* Logos */
+  --logo-ground: transparent;
+  --logo-pad: 0;
+
+  /* Shadows and overlays */
+  --shadow-header: rgba(0, 0, 0, 0.06);
+  --shadow-overlay: rgba(0, 0, 0, 0.25);
+  --shadow-popup: rgba(0, 0, 0, 0.3);
+  --scrim: rgba(0, 0, 0, 0.4);
+
+  color-scheme: light;
+}
+
+/* ---------- Dark: forced ---------- */
+:root:is([data-palette="brand"], [data-palette="brand-three"])[data-theme="dark"] {
+  --page: #121a1e; /* --color-bg (dark) */
+  --surface: #1a252b; /* --color-surface (dark) */
+  --sand: #223139; /* --color-surface-alt (dark) */
+  --sand-deep: #1f3038; /* --color-surface-tint (dark) */
+
+  --ink: #f7f8f9; /* --color-text-strong (dark) */
+  --ink-soft: #d4dde2; /* --color-text (dark) */
+  --muted: #9aaab2; /* --color-text-muted (dark) */
+  --sage-text: #7aa3b0; /* --color-primary (dark) */
+
+  /* Fills and bands keep the light primary so white text stays readable. */
+  --sage: #4a6e7e;
+  --sage-dark: #5a8090; /* --color-primary-mid: hover goes lighter on dark */
+  --sage-deep: #1a252b; /* --color-surface (dark) */
+  --sage-ink: #121a1e; /* --color-bg (dark) */
+  --sage-line: #2e3f47; /* --color-border (dark) */
+
+  --terracotta: #b8935a; /* kept: white text stays as readable as in light */
+  --terracotta-hover: #d4b48a; /* --color-gold (dark) */
+  --terracotta-deep-hover: #d4b48a;
+  --brown: #73b544; /* --logo-leaf-light */
+  --mist: #9aaab2; /* --color-text-muted (dark) */
+  --mist-soft: #d4dde2; /* --color-text (dark) */
+
+  --sage-tint: rgba(122, 163, 176, 0.15);
+  --sage-focus: rgba(126, 190, 197, 0.5); /* --color-focus (dark) */
+  --sage-soft: #1f3038;
+  --sage-mist: #223139;
+  --terracotta-soft: #2a2820; /* derived: dark gold tint */
+
+  --line: #2e3f47; /* --color-border (dark) */
+  --line-strong: #3a4d56; /* derived */
+  --field-border: #4a5d66; /* derived */
+
+  --on-fill: #ffffff;
+  --on-fill-strong: #ffffff;
+  --cream-soft: rgba(255, 255, 255, 0.9);
+
+  --placeholder: #6b7d86;
+  --placeholder-light: #5a6b73;
+  --icon-muted: #6b7d86;
+  --error: #f87171;
+  --error-bright: #ef4444;
+
+  --popup-bg: #ffffff; /* stays light: the license popup holds dark logos */
+  --popup-ink: #1e2a30;
+
+  --header-bg: var(--page);
+  --header-ink: var(--ink);
+  --header-accent: var(--sage-text);
+  --header-line: var(--line);
+  --header-fill: var(--sage);
+  --header-fill-hover: var(--sage-dark);
+  --hero-bg: var(--sage);
+  --footer-bg: var(--sage);
+
+  --logo-ground: #ffffff; /* --logo-ground */
+  --logo-pad: 4px 8px;
+
+  --shadow-header: rgba(0, 0, 0, 0.4);
+  --shadow-overlay: rgba(0, 0, 0, 0.5);
+  --shadow-popup: rgba(0, 0, 0, 0.6);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+/* ---------- Dark: follows the OS when no override is set ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:is([data-palette="brand"], [data-palette="brand-three"]):not([data-theme]) {
+    --page: #121a1e;
+    --surface: #1a252b;
+    --sand: #223139;
+    --sand-deep: #1f3038;
+
+    --ink: #f7f8f9;
+    --ink-soft: #d4dde2;
+    --muted: #9aaab2;
+    --sage-text: #7aa3b0;
+
+    --sage: #4a6e7e;
+    --sage-dark: #5a8090;
+    --sage-deep: #1a252b;
+    --sage-ink: #121a1e;
+    --sage-line: #2e3f47;
+
+    --terracotta: #b8935a;
+    --terracotta-hover: #d4b48a;
+    --terracotta-deep-hover: #d4b48a;
+    --brown: #73b544;
+    --mist: #9aaab2;
+    --mist-soft: #d4dde2;
+
+    --sage-tint: rgba(122, 163, 176, 0.15);
+    --sage-focus: rgba(126, 190, 197, 0.5);
+    --sage-soft: #1f3038;
+    --sage-mist: #223139;
+    --terracotta-soft: #2a2820;
+
+    --line: #2e3f47;
+    --line-strong: #3a4d56;
+    --field-border: #4a5d66;
+
+    --on-fill: #ffffff;
+    --on-fill-strong: #ffffff;
+    --cream-soft: rgba(255, 255, 255, 0.9);
+
+    --placeholder: #6b7d86;
+    --placeholder-light: #5a6b73;
+    --icon-muted: #6b7d86;
+    --error: #f87171;
+    --error-bright: #ef4444;
+
+    --popup-bg: #ffffff;
+    --popup-ink: #1e2a30;
+
+    --header-bg: var(--page);
+    --header-ink: var(--ink);
+    --header-accent: var(--sage-text);
+    --header-line: var(--line);
+    --header-fill: var(--sage);
+    --header-fill-hover: var(--sage-dark);
+    --hero-bg: var(--sage);
+    --footer-bg: var(--sage);
+
+    --logo-ground: #ffffff;
+    --logo-pad: 4px 8px;
+
+    --shadow-header: rgba(0, 0, 0, 0.4);
+    --shadow-overlay: rgba(0, 0, 0, 0.5);
+    --shadow-popup: rgba(0, 0, 0, 0.6);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    color-scheme: dark;
+  }
+}

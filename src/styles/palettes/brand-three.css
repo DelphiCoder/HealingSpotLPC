@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Palette: "brand-three" (Branding Three).
+
+   Same as "brand" (brand.css supplies every color, light and dark, for both
+   palettes). This file overrides only the header, hero, and footer in
+   light mode.
+   Dark mode is identical to "brand": the dark blocks in brand.css have
+   higher specificity and reset these tokens.
+
+   Must be imported after brand.css.
+   ========================================================================== */
+
+:root[data-palette="brand-three"] {
+  /* Header: dark teal bar, so its text and buttons switch to light. */
+  --header-bg: #5e7c83;
+  --header-ink: #ffffff;
+  --header-accent: #ffffff; /* site name, active link, outline button */
+  --header-line: #4f6b72; /* derived: darker than the header */
+  --header-fill: #2c454f; /* "Book a Consultation" button: matches the hero */
+  --header-fill-hover: #1e333b; /* derived: darker hero color */
+
+  /* Hero */
+  --hero-bg: #2c454f;
+
+  /* Footer */
+  --footer-bg: #4a6e7e;
+}
