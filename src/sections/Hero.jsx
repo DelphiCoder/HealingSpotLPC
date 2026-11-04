@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SectionLabel from "../components/SectionLabel";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 import { asset } from "../lib/asset";
 
 export default function Hero() {
@@ -11,14 +11,14 @@ export default function Hero() {
           <SectionLabel label="Welcome" light />
           <h1 className="hero__title">If you feel overwhelmed or uncertain about your life. This is a place that can help.</h1>
           <p className="hero__lede">
-            Maybe there are moments in the past or hard times right now that make moving forward seem impossible. If this
-            sounds like you, it doesn't have to be that way, and I would like to help. No matter if you feel ashamed, lost,
-            or just frustrated, you don't have to take on these feelings alone, and I am here when you are ready.
+            Maybe there are moments in your past, or hard times right now, that make moving forward seem impossible. If this
+            sounds like you, it doesn't have to be that way, and I would like to help. Whether you feel lost, ashamed,
+            trapped, or just frustrated, you don't have to take on these feelings alone. I am here when you are ready.
           </p>
           <div className="hero__ctas">
-            <a className="btn btn--terracotta btn--hero" href={BOOKING_URL}>
+            <BookingButton className="btn btn--terracotta btn--hero">
               Book a Free Consultation
-            </a>
+            </BookingButton>
             <Link className="btn btn--ghost-light btn--hero" to="/about">
               My Approach
             </Link>

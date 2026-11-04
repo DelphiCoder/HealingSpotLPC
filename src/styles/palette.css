@@ -1,23 +1,27 @@
 /* ==========================================================================
-   Palette: "brand" — teal and slate, from _specs/brand_design-tokens.css
-   (Healing Home Group site colors plus the Healing Spot logo).
+   Site colors: the "Branding Three" palette (chosen 2026-11-04).
+
+   Teal and slate from _specs/brand_design-tokens.css (Healing Home Group site
+   colors plus the Healing Spot logo), with Branding Three's own header
+   (#5E7C83), hero (#2C454F), and footer (#4A6E7E) in light mode.
 
    Each value notes the brand token it comes from. Values marked "derived"
    have no brand token; they are picked from the same teal/slate family.
 
-   Light/dark:
-     no data-theme      -> follows the OS preference
-     data-theme="light" -> forced light
-     data-theme="dark"  -> forced dark
-   The two dark blocks below must stay identical.
+   Light/dark: the header's color-mode button (ColorModeToggle.jsx) sets
+   data-theme on <html>:
+     no data-theme      -> "Device": follows the OS / browser setting
+     data-theme="light" -> light
+     data-theme="dark"  -> dark
+   In dark mode the header, hero, and footer go back to the page and
+   primary colors.
 
-   "Branding Three" (brand-three.css) shares every block in this file and
-   overrides only its header, hero, and footer in light mode. A change here applies
-   to both palettes.
+   The variable names are historical (from the original sage and terracotta
+   palette): --sage is the primary teal, --terracotta the gold accent.
    ========================================================================== */
 
 /* ---------- Logo colors (fixed, same in both modes; reference only) ---------- */
-:root:is([data-palette="brand"], [data-palette="brand-three"]) {
+:root {
   --logo-yellow: #f7c631;
   --logo-blue: #64ccdd;
   --logo-blue-light: #c0eaf1;
@@ -28,7 +32,7 @@
 }
 
 /* ---------- Light ---------- */
-:root:is([data-palette="brand"], [data-palette="brand-three"]) {
+:root {
   /* Surfaces */
   --page: #f7f8f9; /* --color-surface (site --cream) */
   --surface: #ffffff; /* --color-bg (site --white) */
@@ -84,15 +88,16 @@
   --popup-bg: #ffffff; /* --color-bg */
   --popup-ink: #1e2a30; /* --color-text-strong */
 
-  /* Header and hero: same as the page and primary fill */
-  --header-bg: var(--page);
-  --header-ink: var(--ink);
-  --header-accent: var(--sage-text);
-  --header-line: var(--line);
-  --header-fill: var(--sage);
-  --header-fill-hover: var(--sage-dark);
-  --hero-bg: var(--sage);
-  --footer-bg: var(--sage);
+  /* Header, hero, footer (the Branding Three choices). The header is a dark
+     teal bar, so its text and buttons are light; see .header in styles.css. */
+  --header-bg: #5e7c83;
+  --header-ink: #ffffff;
+  --header-accent: #ffffff; /* site name, active link, outline button */
+  --header-line: #4f6b72; /* derived: darker than the header */
+  --header-fill: #2c454f; /* "Book a Consultation" button: matches the hero */
+  --header-fill-hover: #1e333b; /* derived: darker hero color */
+  --hero-bg: #2c454f;
+  --footer-bg: #4a6e7e; /* --color-primary */
 
   /* Logos */
   --logo-ground: transparent;
@@ -107,8 +112,8 @@
   color-scheme: light;
 }
 
-/* ---------- Dark: forced ---------- */
-:root:is([data-palette="brand"], [data-palette="brand-three"])[data-theme="dark"] {
+/* ---------- Dark: chosen with the header's color-mode button ---------- */
+:root[data-theme="dark"] {
   --page: #121a1e; /* --color-bg (dark) */
   --surface: #1a252b; /* --color-surface (dark) */
   --sand: #223139; /* --color-surface-alt (dark) */
@@ -176,41 +181,44 @@
   color-scheme: dark;
 }
 
-/* ---------- Dark: follows the OS when no override is set ---------- */
+/* ---------- Dark: "Device" mode follows the OS / browser setting ----------
+   Applies when the visitor hasn't picked Light (data-theme="light").
+   Must stay identical to the block above. */
 @media (prefers-color-scheme: dark) {
-  :root:is([data-palette="brand"], [data-palette="brand-three"]):not([data-theme]) {
-    --page: #121a1e;
-    --surface: #1a252b;
-    --sand: #223139;
-    --sand-deep: #1f3038;
+  :root:not([data-theme="light"]) {
+    --page: #121a1e; /* --color-bg (dark) */
+    --surface: #1a252b; /* --color-surface (dark) */
+    --sand: #223139; /* --color-surface-alt (dark) */
+    --sand-deep: #1f3038; /* --color-surface-tint (dark) */
 
-    --ink: #f7f8f9;
-    --ink-soft: #d4dde2;
-    --muted: #9aaab2;
-    --sage-text: #7aa3b0;
+    --ink: #f7f8f9; /* --color-text-strong (dark) */
+    --ink-soft: #d4dde2; /* --color-text (dark) */
+    --muted: #9aaab2; /* --color-text-muted (dark) */
+    --sage-text: #7aa3b0; /* --color-primary (dark) */
 
+    /* Fills and bands keep the light primary so white text stays readable. */
     --sage: #4a6e7e;
-    --sage-dark: #5a8090;
-    --sage-deep: #1a252b;
-    --sage-ink: #121a1e;
-    --sage-line: #2e3f47;
+    --sage-dark: #5a8090; /* --color-primary-mid: hover goes lighter on dark */
+    --sage-deep: #1a252b; /* --color-surface (dark) */
+    --sage-ink: #121a1e; /* --color-bg (dark) */
+    --sage-line: #2e3f47; /* --color-border (dark) */
 
-    --terracotta: #b8935a;
-    --terracotta-hover: #d4b48a;
+    --terracotta: #b8935a; /* kept: white text stays as readable as in light */
+    --terracotta-hover: #d4b48a; /* --color-gold (dark) */
     --terracotta-deep-hover: #d4b48a;
-    --brown: #73b544;
-    --mist: #9aaab2;
-    --mist-soft: #d4dde2;
+    --brown: #73b544; /* --logo-leaf-light */
+    --mist: #9aaab2; /* --color-text-muted (dark) */
+    --mist-soft: #d4dde2; /* --color-text (dark) */
 
     --sage-tint: rgba(122, 163, 176, 0.15);
-    --sage-focus: rgba(126, 190, 197, 0.5);
+    --sage-focus: rgba(126, 190, 197, 0.5); /* --color-focus (dark) */
     --sage-soft: #1f3038;
     --sage-mist: #223139;
-    --terracotta-soft: #2a2820;
+    --terracotta-soft: #2a2820; /* derived: dark gold tint */
 
-    --line: #2e3f47;
-    --line-strong: #3a4d56;
-    --field-border: #4a5d66;
+    --line: #2e3f47; /* --color-border (dark) */
+    --line-strong: #3a4d56; /* derived */
+    --field-border: #4a5d66; /* derived */
 
     --on-fill: #ffffff;
     --on-fill-strong: #ffffff;
@@ -222,7 +230,7 @@
     --error: #f87171;
     --error-bright: #ef4444;
 
-    --popup-bg: #ffffff;
+    --popup-bg: #ffffff; /* stays light: the license popup holds dark logos */
     --popup-ink: #1e2a30;
 
     --header-bg: var(--page);
@@ -234,7 +242,7 @@
     --hero-bg: var(--sage);
     --footer-bg: var(--sage);
 
-    --logo-ground: #ffffff;
+    --logo-ground: #ffffff; /* --logo-ground */
     --logo-pad: 4px 8px;
 
     --shadow-header: rgba(0, 0, 0, 0.4);

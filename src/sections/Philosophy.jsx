@@ -10,10 +10,13 @@ const PILLARS = [
 export default function Philosophy() {
   return (
     <section id="philosophy" className="section section--sand section--philosophy philosophy">
+      {/* compass-web.jpg: made from compass.jpg with _specs/make-web-image.ps1 -CenterY 1200 */}
       <img
         className="philosophy__image"
-        src="https://images.unsplash.com/photo-1683183004672-e9feaf0bf718?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxtb2x0ZW4lMjBtZXRhbCUyMHBvdXJpbmclMjJjcnVjaWJsZSUyMGZvdW5kcnklMjJnbG93fGVufDF8fHx8MTc4ODgzOTE0NXww&ixlib=rb-4.1.0&q=80&w=1080"
-        alt="Glowing crucible — a metaphor for transformation"
+        src={asset("assets/compass-web.jpg")}
+        width="1200"
+        height="1119"
+        alt="A hand holding a compass above a road — a metaphor for finding your direction"
       />
       <div className="stack stack--lg philosophy__content">
         <SectionLabel label="My Philosophy" />

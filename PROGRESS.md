@@ -25,25 +25,25 @@ npm run preview   # serve dist/ locally
 ```
 index.html                 Vite entry: head meta, SEO, JSON-LD schema
 vite.config.js             React plugin, base "/", copies index.html to 404.html after build
-README.md                  Repo readme (includes the ?themes tester instructions)
-src/main.jsx               React root: fonts, tokens, styles, favicon, theme init, ThemeTester
+README.md                  Short repo readme (live link, run commands, points here)
+src/main.jsx               React root: fonts, tokens, styles, favicon
 src/App.jsx                BrowserRouter + routes + ScrollManager
 src/components/            Layout, Header, Footer, Modal, SectionLabel, ClientPortal,
                            InsuranceGlossary, PracticeAreaDrawer, ContactForm,
-                           ThemeTester (testing only)
+                           BookingButton + BookingNotice (booking time-zone pop-up)
 src/sections/              Hero, Concerns, Contact, Endorsements, Faq, FeesInsurance,
                            MeetTherapist, Philosophy, Process, Resources, Services
 src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage, ResourcesPage,
                            FaqPage, ContactPage, NotFoundPage (one per route)
-src/data/                  constants.js (URLs, phone, email, plan lists), forms.js
+src/data/                  constants.js (booking and Headway URLs, phone, email), forms.js
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
 src/lib/                   asset.js (public paths from the site root), siteRoot.js,
-                           favicon.js, theme.js (palette list, default, tester switch)
+                           favicon.js
 src/fonts/                 Font files + fonts.css
-src/styles/                styles.css, design-tokens.css (shared tokens + palette imports)
-src/styles/palettes/       original.css, brand.css, brand-three.css
+src/styles/                styles.css; design-tokens.css (token list, shared tokens, imports
+                           palette.css); palette.css (Branding Three colors, light + dark)
 .github/workflows/         deploy-pages.yml (build and deploy to GitHub Pages on push to main)
-public/assets/             Images (hero_brian_counts_reduced.jpg)
+public/assets/             Images (hero_brian_counts_reduced.jpg, compass-web.jpg)
 public/logos/              Insurer logos (hidden automatically if missing), site logo, state seals
 ```
 
@@ -51,7 +51,103 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/cont
 
 ## Change History
 
-Everything below is committed and on `main`. "(uncommitted)" tags on older entries are historical.
+Entries from 2026-11-02 and earlier are committed and on `main`. "(uncommitted)" tags on those older entries are historical.
+
+### 2026-11-04
+
+**Color-mode button in the header (Device / Light / Dark)** (uncommitted)
+- New `src/components/ColorModeToggle.jsx`: a round 36px icon button at the far right of the header. Each click cycles Device → Light → Dark → Device. The icon shows the current mode: monitor (Device), sun (Light), moon (Dark); inline SVGs, 2px round strokes in `currentColor`. `aria-label` and tooltip read e.g. "Color mode: Light. Switch to Dark."
+- Device removes `data-theme` from `<html>` (colors follow the OS / browser setting); Light and Dark set `data-theme` and save it in the browser (`localStorage` key `hs-color-mode`; Device removes the key).
+- `index.html`: small inline script in `<head>` applies a saved Light/Dark before the page draws, so returning visitors don't see a flash of the other mode. It is also in the built `404.html`.
+- `src/styles/palette.css`: added a `:root[data-theme="dark"]` block (same values as the device-dark block), and the device-dark media query now skips `data-theme="light"`. Header comment documents the three states.
+- `Header.jsx`: new `.header__end` wrapper holds the desktop buttons, the color-mode button, and the phone menu button, so on phones the color-mode button sits beside the menu button instead of floating mid-bar.
+- `styles.css`: `.header__end` (gap 8px, 16px from 1024px) and `.color-mode` (outline in `--line`, icon in `--sage-text`; inside the header these are the header colors, so it is white on the teal header in light mode).
+- Checked in the dev server (browser set to dark): Device shows dark colors; Light shows the light page and teal header (`#5E7C83`) even with the OS in dark; Dark shows dark; back to Device clears the saved key. A saved Light choice survives a reload. All three icons render in the header. The production build passes.
+- Not checked: phone width, and the 1024–1279px desktop range, where the header was already tight with six links and two buttons.
+
+**Branding Three is the site's palette; theme tester removed** (uncommitted)
+- Brian chose Branding Three. Before removing the tester, saved a standalone demo for later study (local only, `_specs/` is git-ignored):
+  - `_specs/theme_tester_demo.html`: open in a browser. A mock of the site (header, hero, cards, footer) with the real tester in the bottom-left corner. Uses the tester's CSS unchanged, the same behavior rewritten in plain JavaScript, and the three palettes' colors. Checked in the browser: the panel opens, and Branding Three + Light gives header `#5E7C83` and hero `#2C454F`.
+  - `_specs/theme_tester_demo.md`: explains the demo (how to view it, what is real and what is simplified, how the tester worked) and contains the full HTML source.
+- New `src/styles/palette.css`: Brand's colors with Branding Three's header, hero, and footer written into the light block, on plain `:root` selectors. Dark mode is one `@media (prefers-color-scheme: dark)` block; the forced-dark block was dropped because nothing can set it now.
+- `design-tokens.css`: imports `palette.css` only; header comment updated.
+- Deleted: `src/components/ThemeTester.jsx`, `src/components/ThemeTester.css`, `src/lib/theme.js`, and `src/styles/palettes/` (`original.css`, `brand.css`, `brand-three.css`). All are in git history at `HEAD`.
+- `src/main.jsx`: removed the `initTheme()` call and the `<ThemeTester />` render. `index.html`: removed `data-palette="brand"` from `<html>`.
+- `README.md`: its only content was the `?themes` tester link, which no longer works. Replaced with a short description, the live link, run commands, and a pointer to this file.
+- Verified the colors are unchanged: in the dev server (browser in dark mode), all 74 color tokens match Branding Three as computed before the change. Light mode, which can't be forced in the browser anymore: the 58 light values in `palette.css` match the committed `brand.css` light block plus `brand-three.css`. No tester renders, and `<html>` has no `data-palette`/`data-theme`. The production build passes.
+- Visitors who used `?themes` before still have a tester flag saved in their browser; it does nothing now.
+- `_specs/how-theme-selector-works.md` describes the removed tester; kept as history.
+
+**Pop-up buttons now terracotta** (uncommitted)
+- "Go to Portal →" (`ClientPortal.jsx`) and "Go to Calendar →" (`BookingNotice.jsx`): class changed from `btn btn--solid btn--small` to `btn btn--terracotta btn--small`. Background is `var(--terracotta)`, text `var(--on-fill)`, hover `var(--terracotta-hover)`. `btn--small` comes later in `styles.css`, so it still sets the padding (10px 20px) over `btn--terracotta`'s 14px 28px.
+- Checked in the dev server (Brand palette, light mode): both buttons are `rgb(184, 147, 90)` (`#b8935a`, Brand's `--terracotta`) with white text and 10px 20px padding. The production build passes.
+
+**Philosophy image: compass chosen** (uncommitted)
+- Brian chose the compass photo. `src/sections/Philosophy.jsx`: removed the `PHOTOS` switch; the `<img>` now uses `assets/compass-web.jpg` directly (1200×1119, `-CenterY 1200`), alt "A hand holding a compass above a road — a metaphor for finding your direction".
+- Moved out of `public/assets/` into `_specs/images/` (git-ignored, kept locally, nothing deleted): `gps1.jpg`, `gps1-web.jpg`, `car_gps.jpg`, `car_gps-web.jpg`, `compass.jpg`, `crucible.jpg`. They were unused but would have been published, since the build copies all of `public/`.
+- `public/assets/` now holds only `hero_brian_counts_reduced.jpg` and `compass-web.jpg`; the build publishes only those two images (checked in `dist/assets`). The production build passes.
+- `_specs/make-web-image.ps1` header updated: originals live in `_specs/images/`, and only the chosen copy goes in `public/assets/`.
+- To commit: `public/assets/compass-web.jpg` is new and untracked.
+
+**Philosophy image: car GPS photo on trial** (uncommitted)
+- New `public/assets/car_gps-web.jpg`: from `car_gps.jpg` (1920×2880, 545 KB) with `_specs/make-web-image.ps1 -CenterY 1290` (crop y=395–2185), 1200×1119, 102 KB. Shows the dashboard navigation screen and its button row, with the volume knob and the red hazard button below. A first try at `-CenterY 1180` cut the hazard triangle in half at the bottom edge.
+- `Philosophy.jsx`: added `carGps` to `PHOTOS` (alt text: "A car dashboard screen showing a navigation map at night — a metaphor for therapy as a GPS"). **`PHOTO` is now `PHOTOS.carGps`.** The compass entry and `compass-web.jpg` are unchanged (`-CenterY 1200`).
+- Script header in `make-web-image.ps1` lists the settings for all three photos.
+- Checked in the dev server at desktop width, light and dark mode: loads `/assets/car_gps-web.jpg` at 515×480. The production build passes.
+
+**Philosophy image: compass photo on trial; reusable image script** (uncommitted)
+- New `_specs/make-web-image.ps1` (local only, git-ignored): the crop-and-resize steps used for `gps1-web.jpg`, as a reusable script. Crops a full-width band in the display box's shape (default 515×480) centered on `-CenterY`, resizes to 1200px wide, saves JPEG quality 80 as `<name>-web.jpg`. Usage and past settings are in its header.
+- New `public/assets/compass-web.jpg`: from `compass.jpg` (1920×2400, 484 KB), crop y=305–2095, resized to 1200×1119, 76 KB. Shows the road with its center line, the hand, and the compass.
+- `src/sections/Philosophy.jsx`: both photos are listed in a `PHOTOS` object (src and alt text each). `const PHOTO = PHOTOS.compass;` picks the one shown; change it to `PHOTOS.gps` to switch back. **The compass photo is currently live in the code.** Compass alt text: "A hand holding a compass above a road — a metaphor for finding your direction".
+- Checked in the dev server at desktop width, light and dark mode: loads `/assets/compass-web.jpg` at 515×480. In dark mode the dark photo sits close to the page background; in light mode it stands out. The production build passes.
+- Untracked in `public/assets/`: `gps1-web.jpg` and `compass-web.jpg` (commit whichever is used), and the originals `gps1.jpg`, `compass.jpg`, `crucible.jpg` (unused; would be published if left in `public/`).
+
+**Philosophy image: web-sized copy** (uncommitted)
+- New `public/assets/gps1-web.jpg`: made from `gps1.jpg` (1920×2880, 443 KB) by cropping a full-width band from y=350 to y=2140 (1920×1790, the same shape as the 515×480 desktop box, centered on the phone and the toy bunny), then resizing to 1200×1119 at JPEG quality 80. Result: 127 KB. 1200px wide is about twice the desktop display width, so it stays sharp on high-resolution screens. Made with the .NET `System.Drawing` classes in Windows PowerShell; no image tools are installed.
+- `src/sections/Philosophy.jsx`: uses `gps1-web.jpg`, with `width="1200" height="1119"` on the `<img>` so the browser reserves the space before it loads.
+- `styles.css`: removed the `object-position: 50% 42%` added earlier today; the subject is now centered in the image, so the default center crop frames it.
+- `gps1.jpg` (original) is unchanged and still in `public/assets/`.
+- Checked in the dev server at desktop width: loads `/assets/gps1-web.jpg` (1200×1119) into the 515×480 box with the same framing as before. The production build passes.
+- Not checked: phone width.
+
+**Philosophy image: crucible replaced with GPS photo** (uncommitted)
+- `src/sections/Philosophy.jsx` (About page, "My Philosophy"): the image now loads `public/assets/gps1.jpg` through `asset()` instead of the Unsplash crucible URL. Alt text: "A phone showing a GPS route, mounted on a car dashboard — a metaphor for therapy as a GPS". Closes spec discrepancy 3.
+- `styles.css` `.philosophy__image`: added `object-position: 50% 42%`. The photo is a tall portrait (1920×2880) cropped to fill the box, and this keeps the phone and the toy bunny in frame.
+- `public/assets/gps1.jpg` is new and untracked; it needs to be added to the commit.
+- Checked in the dev server at desktop width: the image loads from `/assets/gps1.jpg` at 515×480 with the phone and bunny centered. The production build passes.
+- Not checked: phone width, where the box is a wide 320px-tall strip, so the crop shows a narrower band of the photo.
+
+**Home CTA band padding halved** (uncommitted)
+- `.cta-band` ("Ready to take the first step?") top and bottom padding: 48px on mobile (was 96px), 64px from 768px up (was 128px). Side padding unchanged (20px / 80px).
+- Not checked in the browser.
+
+**Booking pop-up with a time-zone note** (uncommitted)
+- Every "Book a Consultation" / "Book a Free Consultation" button now opens a pop-up first, styled like the Client Portal pop-up (it reuses the `.portal*` classes). Text: "To schedule a consultation, click "Go to Calendar" below." and "Be aware that your browser will try to "guess" your time zone. If it guesses wrong because of your privacy settings, you may need to change it manually or adjust your settings." Its "Go to Calendar →" button opens `BOOKING_URL` in a new tab and closes the pop-up.
+- Small wording edits to Brian's draft: "guesses wrongly," became "guesses wrong" (comma removed). Eyebrow "Book a Consultation" and heading "Schedule a Consultation" are my wording; review them.
+- New `src/components/BookingNotice.jsx` (the pop-up) and `src/components/BookingButton.jsx` (the button: same classes and text as before, opens the pop-up on a normal click; middle-click or Ctrl+click still opens the calendar directly).
+- All 12 booking links now use `BookingButton`: `Header.jsx` ×2, `Hero.jsx`, `HomePage.jsx`, `Concerns.jsx`, `MeetTherapist.jsx`, `Services.jsx` ×3, `Faq.jsx`, `Contact.jsx`, `PracticeAreaDrawer.jsx`. Only the two new components import `BOOKING_URL` now.
+- `src/components/Modal.jsx`: clicks inside a modal no longer pass up to the component that opened it. Without this, closing the booking pop-up opened from the practice-area drawer also closed the drawer, and clicks in it could toggle a concern card.
+- Checked in the dev server (light mode): header button opens the pop-up and the page stays put; a real click on "Go to Calendar" opened the Google Calendar booking page in a new tab and closed the pop-up; from the Services practice-area drawer, closing the pop-up leaves the drawer open; from an open concern card, closing the pop-up (backdrop click) leaves the card open. The production build passes.
+- Not checked: dark mode, phone width, the mobile-menu button.
+- Added a third line: "Your browser currently shows **<zone>**." (zone in bold). `browserTimeZoneName()` in `BookingNotice.jsx` reads it with `Intl.DateTimeFormat("en-US")` each time the pop-up opens: the generic name first ("Central Time"), then the long name ("Central Standard Time") in browsers without generic names, then the IANA id ("America/Chicago"). Browsers whose privacy settings hide the zone usually report UTC, which shows as "Coordinated Universal Time". Checked in the dev server: shows "Central Time" in a browser set to America/Chicago.
+
+**Booking buttons open in a new tab** (uncommitted)
+- Six "Book a Consultation" / "Book a Free Consultation" links (`BOOKING_URL`, the Google Calendar booking page) replaced the site in the same tab. They now have `target="_blank" rel="noopener noreferrer"`: `Header.jsx` (desktop header and mobile menu), `Hero.jsx`, `HomePage.jsx` (CTA band), `Concerns.jsx` (inside each opened concern card), `MeetTherapist.jsx` (About page).
+- The other six booking links (`Services.jsx` ×3, `Faq.jsx`, `Contact.jsx`, `PracticeAreaDrawer.jsx`) already opened a new tab, for 12 in total. Every `BOOKING_URL` link now does. (Superseded the same day by the booking pop-up above.)
+- The production build passes. Not clicked through in the browser.
+
+**Client Portal pop-up: one Headway link for everyone** (uncommitted)
+- All clients now use Brian's Headway page, whatever their insurance.
+- `src/components/ClientPortal.jsx`: removed both insurance button groups ("Billed through SimplePractice" and "Billed through Headway") and the "Paying out of pocket?" footer text. The pop-up now shows Brian's text: "To schedule a telehealth appointment, click "Go to Portal" below." and "It will open my secure Headway client page in a new tab, so you can come back here anytime. Questions? Feel free to reach out to me." The "Go to Portal →" button (`HEADWAY_URL`, opens in a new tab) is unchanged.
+- Heading changed from "Who is your insurance through?" to "Schedule a Telehealth Appointment", and the "Select your plan below…" intro line was removed. The heading is my wording; review it.
+- `src/data/constants.js`: removed `SIMPLEPRACTICE_URL` (Zachary Terry's `clientsecure.me` portal), `SIMPLEPRACTICE_PLANS`, and `HEADWAY_PLANS`. Nothing else used them. The Fees page insurer list is separate and unchanged.
+- `src/styles/styles.css`: removed the now-unused `.portal__intro`, `.portal__group`, `.portal__grid`, `.portal__plan*`, and `.portal__footer-*` rules. Added `.portal__body` (15px text). The footer button is now right-aligned.
+- Checked in the dev server (light mode): the pop-up shows the new heading and text, no plan buttons remain, and the button goes to `care.headway.co/providers/brian-counts` in a new tab. The production build passes.
+- Not checked: dark mode, phone width.
+
+**Home page copy edits by Brian** (uncommitted)
+- `src/sections/Hero.jsx`: hero paragraph reworded ("in your past, or hard times right now,"; "Whether you feel lost, ashamed, trapped, or just frustrated"; "I am here when you are ready." is now its own sentence).
+- `src/pages/HomePage.jsx`: CTA band text replaced with "Feeling lost or unsure of your next step is a very human experience, and you don't have to figure it out on your own. Together, we'll find your direction and decide where you want to go."
 
 ### 2026-11-02
 
@@ -62,6 +158,10 @@ Everything below is committed and on `main`. "(uncommitted)" tags on older entri
 - `.github/workflows/deploy-pages.yml`: the push trigger now lists only `main` (the deleted branch was removed). Deploys run on every push to `main`. (uncommitted)
 - This log: branch references removed, Layout section updated (README, theme files, palettes, workflow; removed `office.png`, which is no longer in `public/assets/`), and Open Item "Commit the conversion" removed.
 - Live site: the theme tester only shows after opening a page with `?themes` in the address (see 2026-11-01).
+
+**Theme selector explainer** (local only)
+- New `_specs/how-theme-selector-works.md`: covers when the tester panel shows, the `data-palette` and `data-theme` attributes, what visitors see, which files do what, and how to add a palette or remove the tester. It is in `_specs/`, which git ignores, so it is not committed.
+- New `_specs/available_commands.md` (also local only): Claude Code slash commands seen in this session, with a note that typing `/` or running `/help` shows the full list.
 
 **Third palette: "Branding Three"** (uncommitted)
 - New `src/styles/palettes/brand-three.css`, id `brand-three`, label "Branding Three". It uses all of Brand's colors (light and dark). In light mode only, the header background is `#5E7C83` and the hero background is `#2C454F`. Dark mode is identical to Brand.
@@ -295,18 +395,18 @@ Ordered roughly by priority.
 1. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
 2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
    - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
-   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` (line 4) points to `zachary-terry.clientsecure.me`.
+   - `src/data/constants.js`: `SIMPLEPRACTICE_URL` removed 2026-11-04.
    - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 4.
    - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
    - `public/assets/zachary-terry.png`: already removed.
-3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown; Brian's own client-portal link.
+3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown. (Client-portal link resolved 2026-11-04: Headway for everyone.)
 4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
-6. **Philosophy image:** replace the crucible photo with a GPS image when one is available (discrepancy 3).
+6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
 7. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
 8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
-10. **Palette decision:** pick a final palette. Then remove `ThemeTester.jsx`/`.css`, its use in `main.jsx`, and unused palette files. Check all pages, modals, and drawers in dark mode. Decide whether visitors get an on-page light/dark toggle (today dark mode only follows the OS).
+10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode, and check the header with the new button at phone width and at 1024–1279px.
 
 ## Decisions
 

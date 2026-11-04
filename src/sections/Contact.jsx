@@ -1,5 +1,6 @@
 import ContactForm from "../components/ContactForm";
-import { BOOKING_URL, EMAIL, PHONE } from "../data/constants";
+import BookingButton from "../components/BookingButton";
+import { EMAIL, PHONE } from "../data/constants";
 import { svgPaths } from "../data/svgPaths";
 
 function IconBadge({ path, className = "" }) {
@@ -35,14 +36,9 @@ export default function Contact() {
             <span className="contact__value">{EMAIL}</span>
           </a>
         </div>
-        <a
-          className="btn btn--solid btn--pill-bold btn--self-start"
-          href={BOOKING_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <BookingButton className="btn btn--solid btn--pill-bold btn--self-start">
           Book Free Consultation
-        </a>
+        </BookingButton>
       </div>
       <div className="contact__form">
         <ContactForm />

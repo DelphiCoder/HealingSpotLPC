@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Hero from "../sections/Hero";
 import Concerns from "../sections/Concerns";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 
 export default function HomePage() {
   return (
@@ -13,14 +13,13 @@ export default function HomePage() {
           <div className="cta-band__copy">
             <p className="cta-band__title">Ready to take the first step?</p>
             <p className="cta-band__text">
-              It is normal to be lost or not know where you are going. Let's figure that out together and set a
-              destination.
+              Feeling lost or unsure of your next step is a very human experience, and you don't have to figure it out on your own. Together, we'll find your direction and decide where you want to go.
             </p>
           </div>
           <div className="cta-band__actions">
-            <a className="btn btn--white" href={BOOKING_URL}>
+            <BookingButton className="btn btn--white">
               Book a Free Consultation
-            </a>
+            </BookingButton>
             <Link className="btn btn--ghost-light" to="/services">
               View Services
             </Link>

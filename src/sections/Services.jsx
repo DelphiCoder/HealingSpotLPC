@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import SectionLabel from "../components/SectionLabel";
 import PracticeAreaDrawer from "../components/PracticeAreaDrawer";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 
 const FOCUS_AREAS = [
   {
@@ -112,14 +112,9 @@ export default function Services() {
               ))}
             </div>
           </div>
-          <a
-            className="btn btn--terracotta btn--pill-bold btn--self-end"
-            href={BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <BookingButton className="btn btn--terracotta btn--pill-bold btn--self-end">
             Book a Consultation
-          </a>
+          </BookingButton>
         </div>
       </div>
 
@@ -143,9 +138,9 @@ export default function Services() {
             <button type="button" className="btn btn--terracotta" onClick={() => setAreaLabel("Suicidal Ideation")}>
               Read More
             </button>
-            <a className="btn btn--outline-terracotta" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+            <BookingButton className="btn btn--outline-terracotta">
               Book a Consultation
-            </a>
+            </BookingButton>
           </div>
         </div>
       </div>
@@ -163,9 +158,9 @@ export default function Services() {
           <button type="button" className="btn btn--outline btn--small" onClick={() => setAreaLabel("Couples Counseling")}>
             Learn More
           </button>
-          <a className="btn btn--solid btn--small" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+          <BookingButton className="btn btn--solid btn--small">
             Book a Consultation
-          </a>
+          </BookingButton>
         </div>
       </div>
 

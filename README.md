@@ -1,3 +1,15 @@
-## To see the themes selector in the bottom left:
+# The Healing Spot, LPC
 
-[see the theme selector](https://delphicoder.github.io/HealingSpotLPC/?themes)
+Website for Brian Counts, LPC: counseling via telehealth in Michigan and Texas.
+
+Live site: https://delphicoder.github.io/HealingSpotLPC/
+
+Built with Vite and React. Pushing to `main` builds and deploys the site to GitHub Pages.
+
+```
+npm install
+npm run dev       # local dev server
+npm run build     # production build to dist/
+```
+
+The project overview, file layout, change history, and open items are in [PROGRESS.md](PROGRESS.md).

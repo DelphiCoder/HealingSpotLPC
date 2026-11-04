@@ -1,8 +1,17 @@
 <!doctype html>
-<html lang="en" data-palette="brand">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Color mode: apply a saved Light/Dark choice before the page draws, so it
+         doesn't flash the other mode. Set by the header button (ColorModeToggle.jsx). -->
+    <script>
+      try {
+        var mode = localStorage.getItem("hs-color-mode");
+        if (mode === "light" || mode === "dark") document.documentElement.setAttribute("data-theme", mode);
+      } catch (e) {}
+    </script>
 
     <!-- Primary SEO -->
     <title>The Healing Spot</title>

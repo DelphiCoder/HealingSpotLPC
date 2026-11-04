@@ -23,6 +23,10 @@ export default function Modal({ className = "", lockScroll = false, closeOnEscap
   }, [closeOnEscape, onClose]);
 
   const handleClick = (event) => {
+    // React passes clicks from a portal up to the component that opened it.
+    // Stop them here, so a modal opened inside another modal (or inside a
+    // clickable card) doesn't close or toggle what is behind it.
+    event.stopPropagation();
     if (event.target.closest("[data-close]")) onClose();
   };
 

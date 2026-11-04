@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SectionLabel from "../components/SectionLabel";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 
 const FAQ_GROUPS = [
   {
@@ -119,14 +119,9 @@ export default function Faq() {
               The consultation call is the best place to get real answers for your specific situation.
             </p>
           </div>
-          <a
-            className="btn btn--solid btn--pill-bold btn--self-center"
-            href={BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <BookingButton className="btn btn--solid btn--pill-bold btn--self-center">
             Book a Free Consultation
-          </a>
+          </BookingButton>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "./BookingButton";
 import { PRACTICE_AREAS } from "../data/practiceAreas";
 import Modal from "./Modal";
 
@@ -49,9 +49,9 @@ export default function PracticeAreaDrawer({ label, onClose }) {
           </div>
         </div>
         <div className="drawer__footer">
-          <a className="btn btn--solid btn--wide" href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+          <BookingButton className="btn btn--solid btn--wide">
             Book a Free Consultation
-          </a>
+          </BookingButton>
           <button type="button" className="btn btn--outline btn--wide" data-close>
             Back to Site
           </button>

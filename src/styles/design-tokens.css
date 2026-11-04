@@ -1,12 +1,10 @@
 /* ==========================================================================
    Design tokens: every color used on the site.
 
-   Palette colors live in src/styles/palettes/, one file per palette. The
-   active palette is chosen by the data-palette attribute on <html> (set in
-   index.html and by src/lib/theme.js). Light/dark is chosen by data-theme
-   on <html>, or follows the OS when data-theme is absent.
+   The site's colors (light and dark) live in palette.css, imported below.
+   Dark mode follows the visitor's OS or browser setting.
 
-   Every palette file must define these tokens:
+   palette.css defines these tokens (keep the list in step with it):
      Surfaces      --page --surface --sand --sand-deep
      Text          --ink --ink-soft --muted --sage-text
      Primary fill  --sage --sage-dark --sage-deep --sage-ink --sage-line
@@ -28,17 +26,15 @@
      Shadows       --shadow-header --shadow-overlay --shadow-popup --scrim
 
    The names are historical (they come from the original sage and
-   terracotta palette); in another palette --sage is simply the primary
-   color and --terracotta the warm accent.
+   terracotta palette): --sage is the primary teal and --terracotta the
+   gold accent.
 
-   This file holds tokens that are the same in every palette. Components
-   reference tokens as var(--token-name); do not hard-code hex or rgba
-   values in styles.css or the JSX files.
+   This file holds the tokens that are the same in light and dark mode.
+   Components reference tokens as var(--token-name); do not hard-code hex
+   or rgba values in styles.css or the JSX files.
    ========================================================================== */
 
-@import "./palettes/original.css";
-@import "./palettes/brand.css";
-@import "./palettes/brand-three.css";
+@import "./palette.css";
 
 :root {
   /* ---------- Buttons: video platform brand colors ---------- */

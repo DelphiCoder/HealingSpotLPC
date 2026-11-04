@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "./BookingButton";
 import { asset } from "../lib/asset";
 import ClientPortal from "./ClientPortal";
+import ColorModeToggle from "./ColorModeToggle";
 
 export const NAV_LINKS = [
   { label: "About", to: "/about" },
@@ -53,32 +54,36 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
-        <div className="header__actions">
-          <button type="button" className="btn btn--outline" onClick={openPortal}>
-            Client Portal
+        {/* Right side: desktop buttons, color-mode toggle, and (on phones) the menu button. */}
+        <div className="header__end">
+          <div className="header__actions">
+            <button type="button" className="btn btn--outline" onClick={openPortal}>
+              Client Portal
+            </button>
+            <BookingButton className="btn btn--solid">
+              Book a Consultation
+            </BookingButton>
+          </div>
+          <ColorModeToggle />
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? (
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            )}
           </button>
-          <a href={BOOKING_URL} className="btn btn--solid">
-            Book a Consultation
-          </a>
         </div>
-        <button
-          type="button"
-          className="menu-toggle"
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? (
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          )}
-        </button>
       </div>
       <div className="mobile-menu" id="mobile-menu" hidden={!menuOpen}>
         {NAV_LINKS.map((link) => (
@@ -90,9 +95,9 @@ export default function Header() {
           <button type="button" className="btn btn--outline btn--block" onClick={openPortal}>
             Client Portal
           </button>
-          <a href={BOOKING_URL} className="btn btn--solid btn--block">
+          <BookingButton className="btn btn--solid btn--block">
             Book a Consultation
-          </a>
+          </BookingButton>
         </div>
       </div>
       {portalOpen && <ClientPortal onClose={() => setPortalOpen(false)} />}

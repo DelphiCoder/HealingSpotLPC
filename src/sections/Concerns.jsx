@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SectionLabel from "../components/SectionLabel";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 import { svgPaths } from "../data/svgPaths";
 
 const CONCERNS = [
@@ -85,9 +85,9 @@ export default function Concerns() {
                   <div className="concern__divider"></div>
                   <p className="concern__body">{concern.detail}</p>
                   <span className="concern__tag">{concern.tag}</span>
-                  <a className="btn btn--terracotta btn--pill-small" href={BOOKING_URL}>
+                  <BookingButton className="btn btn--terracotta btn--pill-small">
                     Book a Consultation
-                  </a>
+                  </BookingButton>
                 </div>
               </div>
             );

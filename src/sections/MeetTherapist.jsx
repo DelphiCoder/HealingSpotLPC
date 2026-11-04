@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SectionLabel from "../components/SectionLabel";
-import { BOOKING_URL } from "../data/constants";
+import BookingButton from "../components/BookingButton";
 import { svgPaths } from "../data/svgPaths";
 import { asset } from "../lib/asset";
 
@@ -51,9 +51,9 @@ export default function MeetTherapist() {
             </p>
           </div>
           <div className="meet__actions">
-            <a className="btn btn--solid btn--pill-bold" href={BOOKING_URL}>
+            <BookingButton className="btn btn--solid btn--pill-bold">
               Book a Free Consultation
-            </a>
+            </BookingButton>
             <Link className="text-link text-link--icon" to="/about#philosophy">
               Learn more about my approach
               <svg width="14" height="14" fill="none" viewBox="0 0 14 14" aria-hidden="true">
