@@ -176,10 +176,19 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   height: 72px;
-  padding: 0 20px;
+  padding: 0 16px;
   max-width: 1440px;
   margin: 0 auto;
+}
+
+/* Small phones (under 400px): the brand, the color-mode button, and the menu
+   button only just fit, so the bar padding, logo, and name are smaller there. */
+@media (min-width: 400px) {
+  .header__bar {
+    padding: 0 20px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -198,12 +207,20 @@ ul {
 
 .brand__mark {
   position: relative;
-  /* Drawn at 44px. The negative top and bottom margins keep its height footprint at 24px,
-     so the header bar height does not change. The name moves 20px right to clear it. */
-  width: 44px;
-  height: 44px;
-  margin: -10px 0;
+  /* Drawn at 44px (36px on small phones). The negative top and bottom margins keep its
+     height footprint at 24px, so the header bar height does not change. */
+  width: 36px;
+  height: 36px;
+  margin: -6px 0;
   flex-shrink: 0;
+}
+
+@media (min-width: 400px) {
+  .brand__mark {
+    width: 44px;
+    height: 44px;
+    margin: -10px 0;
+  }
 }
 
 .brand__mark img {
@@ -223,9 +240,16 @@ ul {
 .brand__name {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 22px;
+  font-size: 18px;
   letter-spacing: -0.5px;
+  white-space: nowrap;
   color: var(--sage-text);
+}
+
+@media (min-width: 400px) {
+  .brand__name {
+    font-size: 22px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -237,12 +261,19 @@ ul {
 .nav {
   display: none;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
+}
+
+@media (min-width: 1440px) {
+  .nav {
+    gap: 32px;
+  }
 }
 
 .nav__link {
   font-size: 14px;
   font-weight: 500;
+  white-space: nowrap;
   color: var(--ink);
   transition: color 0.2s ease;
 }
@@ -265,8 +296,14 @@ ul {
 
 .menu-toggle {
   display: block;
-  padding: 8px;
+  padding: 6px;
   color: var(--ink);
+}
+
+@media (min-width: 400px) {
+  .menu-toggle {
+    padding: 8px;
+  }
 }
 
 /* Right side of the header bar: keeps the color-mode button beside the
@@ -278,9 +315,13 @@ ul {
   flex-shrink: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1180px) {
   .header__end {
     gap: 16px;
+  }
+
+  .header__actions .btn {
+    white-space: nowrap;
   }
 }
 
@@ -305,7 +346,16 @@ ul {
   background: var(--on-dark-hover);
 }
 
-@media (min-width: 1024px) {
+/* Full desktop header (links and both buttons) from 1180px. With the usual
+   80px side padding it needs about 1,260px, so from 1180px to 1279px the bar
+   padding drops to 40px. Below 1180px the menu button is used. */
+@media (min-width: 1180px) and (max-width: 1279.98px) {
+  .header__bar {
+    padding: 0 40px;
+  }
+}
+
+@media (min-width: 1180px) {
   .nav,
   .header__actions {
     display: flex;
@@ -342,7 +392,7 @@ ul {
   padding-top: 8px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1180px) {
   .mobile-menu {
     display: none !important;
   }

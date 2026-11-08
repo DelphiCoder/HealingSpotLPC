@@ -55,12 +55,25 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
+**Header fixed at narrow widths** (uncommitted)
+- Checked in Chrome on `/about`, every 16px from 320 to 1600px (measured in iframes, because the window could not be resized).
+- Problem found at 1024–1260px: the full desktop header (brand, five links, two buttons, color-mode button) turned on at 1024px but needs about 1,260px. "Fees & Insurance" wrapped to two lines, the links touched the brand and the buttons, and up to about 1120px the buttons ran past the right edge.
+- Problem found at 320–400px: the brand name plus the color-mode and menu buttons were wider than the screen, so the page scrolled sideways.
+- `src/styles/styles.css` (Header section):
+  - The full desktop header (links and buttons) now starts at 1180px instead of 1024px. Below 1180px the menu button is used. (First set to 1280px, then changed to 1180px on request.)
+  - From 1180px to 1279px the header bar's side padding is 40px instead of 80px, so the full header fits. At 1180px there is about 20px between the brand, the links, and the buttons. From 1280px the padding is 80px again (about 30px gaps at 1280px).
+  - Nav link gap is 24px, 32px from 1440px. Nav links and header buttons use `white-space: nowrap`.
+  - Under 400px: bar padding 16px (was 20px), logo 36px (was 44px), brand name 18px (was 22px), menu button padding 6px. From 400px up these are unchanged.
+  - `.header__bar` has an 8px minimum gap, and `.brand__name` uses `white-space: nowrap`.
+- Result: no overlap, wrapping, or overflow in the header from 320 to 1600px. Note: the left/right side gaps jump from about 70px at 1279px to 30px at 1280px, when the padding returns to 80px.
+- Found, not fixed: the footer's hidden license tooltips (`.license-tip__popup`, 220px wide, centered on "Michigan"/"Texas") still take up layout space when hidden. On some widths (320–400, 560, 752px) they stick out past the right edge, so the page scrolls sideways a little.
+
 **Line endings: added `.gitattributes`** (committed in `0fba5d1`)
 - New `.gitattributes`: `* text=auto eol=lf` stores and checks out text files with LF on every machine, so it no longer depends on each machine's `core.autocrlf`. Images, PDFs, and fonts are marked `binary`.
 - Before this, most files were stored with LF, but `src/styles/styles.css` was stored with CRLF, and Git printed "LF will be replaced by CRLF" warnings.
 - The same commit ran `git add --renormalize .`, which converted `src/styles/styles.css` to LF in the repo. No other files changed.
 
-**`_specs/suggestions.md` untracked** (uncommitted)
+**`_specs/suggestions.md` untracked** (committed in `e0d23cc`)
 - It had been tracked since commit `5f173d0`, even though `/_specs/` is in `.gitignore`. Removed from the index with `git rm --cached`. The local file is kept and stays ignored. Earlier commits on GitHub still contain it.
 
 **Resources page and menu item removed** (committed in `b51e226`)
@@ -80,7 +93,7 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 - `Header.jsx`: new `.header__end` wrapper holds the desktop buttons, the color-mode button, and the phone menu button, so on phones the color-mode button sits beside the menu button instead of floating mid-bar.
 - `styles.css`: `.header__end` (gap 8px, 16px from 1024px) and `.color-mode` (outline in `--line`, icon in `--sage-text`; inside the header these are the header colors, so it is white on the teal header in light mode).
 - Checked in the dev server (browser set to dark): Device shows dark colors; Light shows the light page and teal header (`#5E7C83`) even with the OS in dark; Dark shows dark; back to Device clears the saved key. A saved Light choice survives a reload. All three icons render in the header. The production build passes.
-- Not checked: phone width, and the 1024–1279px desktop range, where the header was already tight with six links and two buttons.
+- Not checked: phone width, and the 1024–1279px desktop range, where the header was already tight with six links and two buttons. (Header fixed 2026-11-08.)
 
 **Branding Three is the site's palette; theme tester removed** (uncommitted)
 - Brian chose Branding Three. Before removing the tester, saved a standalone demo for later study (local only, `_specs/` is git-ignored):
@@ -409,7 +422,7 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 Ordered roughly by priority.
 
-1. **Browser check** of the built app: every route, the header at narrow widths (five nav items now), modals, accordions, contact form.
+1. **Browser check** of the built app: every route, modals, accordions, contact form. (Header widths checked 2026-11-08.)
 2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
    - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` removed 2026-11-04.
@@ -423,7 +436,8 @@ Ordered roughly by priority.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
 8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
-10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode, and check the header with the new button at phone width and at 1024–1279px.
+10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
+11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
 
 ## Decisions
 
