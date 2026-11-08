@@ -55,11 +55,13 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Line endings: added `.gitattributes`** (uncommitted)
+**Line endings: added `.gitattributes`** (committed in `0fba5d1`)
 - New `.gitattributes`: `* text=auto eol=lf` stores and checks out text files with LF on every machine, so it no longer depends on each machine's `core.autocrlf`. Images, PDFs, and fonts are marked `binary`.
 - Before this, most files were stored with LF, but `src/styles/styles.css` was stored with CRLF, and Git printed "LF will be replaced by CRLF" warnings.
-- Needs a one-time `git add --renormalize .` commit. That mostly converts `styles.css` to LF.
-- Found while checking: `_specs/suggestions.md` is tracked in Git (from commit `5f173d0`) even though `/_specs/` is in `.gitignore`. Renormalizing does not change it (it is already stored with LF). It is still open whether to untrack it.
+- The same commit ran `git add --renormalize .`, which converted `src/styles/styles.css` to LF in the repo. No other files changed.
+
+**`_specs/suggestions.md` untracked** (uncommitted)
+- It had been tracked since commit `5f173d0`, even though `/_specs/` is in `.gitignore`. Removed from the index with `git rm --cached`. The local file is kept and stays ignored. Earlier commits on GitHub still contain it.
 
 **Resources page and menu item removed** (committed in `b51e226`)
 - Deleted `src/pages/ResourcesPage.jsx` and `src/sections/Resources.jsx`.
