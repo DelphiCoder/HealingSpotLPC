@@ -22,10 +22,6 @@ const INSURERS = [
   { name: "BCBS", logo: "bcbs.png" },
   { name: "Cigna / Evernorth", logo: "cigna.png" },
   { name: "Carelon Behavioral Health", logo: "carelon.png" },
-  { name: "Optum", logo: "optum-com-logo.png" },
-  { name: "Quest Behavioral Health", logo: "quest.png" },
-  { name: "UMR", logo: "umr.png" },
-  { name: "UnitedHealthcare", logo: "uhc.png" },
   { name: "WebTPA", logo: "webtpa.png" },
   { name: "Ascension SmartHealth", logo: "ascension.png" },
 ];

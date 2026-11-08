@@ -41,7 +41,7 @@ const FAQ_GROUPS = [
     faqs: [
       {
         q: "Do you take insurance?",
-        a: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, Cigna, and United Healthcare. If you have a different plan, I can provide a superbill for potential out-of-network reimbursement. Use the Insurance & Rates button at the top of the page for more detail.",
+        a: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, Cigna / Evernorth, Carelon Behavioral Health, WebTPA, and Ascension SmartHealth. See the Fees & Insurance page for more detail.",
       },
       {
         q: "Do you offer a sliding scale?",

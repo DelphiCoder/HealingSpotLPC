@@ -55,19 +55,37 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**About page: less space between My Philosophy and The Process** (uncommitted)
+**Fees page: four insurers removed** (uncommitted)
+- `src/sections/FeesInsurance.jsx`: removed Optum, Quest Behavioral Health, UMR, and UnitedHealthcare from the In-Network Insurance grid. Six remain: Aetna, BCBS, Cigna / Evernorth, Carelon Behavioral Health, WebTPA, Ascension SmartHealth.
+- UnitedHealthcare and superbill no longer appear anywhere in `src`, `index.html`, or `public`.
+- Deleted `public/logos/optum-com-logo.png` (no longer used).
+- `src/styles/styles.css`: removed the 5-column rule for `.insurer-grid` at 1024px. The grid is now 2 per row on phones and 3 per row from 640px, so six insurers fill even rows (2/2/2, then 3/3).
+- `src/sections/Faq.jsx` ("Do you take insurance?"): now lists all six in-network insurers and says "See the Fees & Insurance page for more detail." instead of pointing to a nonexistent "Insurance & Rates button".
+- Checked in Chrome on `/fees` at 375, 700, and 1300px, and `/faq`.
+
+**About page: Re-Evaluation every 10 weeks, 60-minute intake** (uncommitted)
+- `src/sections/Process.jsx`: the Re-Evaluation step now says "Every 10 weeks" instead of "Every 12 weeks". No other "12 weeks" text on the site.
+- `src/sections/Process.jsx`: the Intake & Mapping step now says "A deep, 60-minute diagnostic intake" instead of 75-minute. No other "75-minute" text on the site.
+
+**Superbill removed (not offered)** (uncommitted)
+- `src/components/InsuranceGlossary.jsx`: removed the "Superbill" term from the "Understanding Your Insurance" pop-up on the Fees & Insurance page. Six terms remain.
+- `src/sections/Faq.jsx` ("Do you take insurance?"): removed "United Healthcare" from the in-network list and the sentence offering a superbill. Answer now reads: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, and Cigna. Use the Insurance & Rates button at the top of the page for more detail."
+- Search for `superbill` / `super bill` across `src`, `index.html`, and `public`: no other matches.
+- Not changed, to confirm: the Fees & Insurance page insurer grid (`src/sections/FeesInsurance.jsx` line 28) still lists UnitedHealthcare. The FAQ answer still refers to an "Insurance & Rates button at the top of the page", but no such button exists (it is a section label on the Fees page).
+
+**About page: less space between My Philosophy and The Process** (committed in `f57ab10`)
 - `src/styles/styles.css`: `.section--philosophy` bottom padding and `.section--process` top padding are now half the usual section padding (40px each on phones, 56px each from 768px). The gap between the two sections went from 160px to 80px on phones and from 224px to 112px from 768px.
 - Both classes are used only on the About page. Other sections keep the usual padding.
 - Verified in Chrome at 375, 800, and 1300px.
 
-**About page: Clinical Endorsements section removed** (uncommitted)
+**About page: Clinical Endorsements section removed** (committed in `f57ab10`)
 - Brian is still collecting his own endorsements. The whole section was Zachary Terry's: four Psychology Today testimonials naming "Zachary"/"Zach", the "Zachary has received 4 professional endorsements" text, his Psychology Today profile link, and a credentials row (LPC, Oklahoma License #11680, 4+ years, MS · Abilene Christian University).
 - Deleted `src/sections/Endorsements.jsx`. `src/pages/AboutPage.jsx` now ends with the Process section.
 - `src/styles/styles.css`: removed the endorsements CSS (`.section--endorsements`, `.endorsements__*`, `.credentials`, `.credential*`, `.endorsement*`).
 - To rebuild the section later, the old version is in Git: `git show 5ebe744:src/sections/Endorsements.jsx` (the CSS is in the same commit).
 - Verified: build succeeds, and `/about` in Chrome has no "Zach" or "Endorsement" text. Process section flows into the footer.
 
-**Contact form problems found (not fixed)** (uncommitted)
+**Contact form problems found (not fixed)** (committed in `f57ab10`)
 - No code changed. Added Open Item 12. Waiting on the choice of form provider.
 
 **Header fixed at narrow widths** (committed in `5ebe744`)
@@ -454,6 +472,7 @@ Ordered roughly by priority.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
 12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; and the error text gives the Oklahoma phone `(405) 293-3099` (see item 4). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
+13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, and UMR removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 
 ## Decisions
 

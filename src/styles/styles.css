@@ -2665,13 +2665,6 @@ ul {
   }
 }
 
-@media (min-width: 1024px) {
-  .insurer-grid {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-  }
-}
-
 .insurer {
   display: flex;
   flex-direction: column;

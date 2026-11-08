@@ -19,10 +19,6 @@ const TERMS = [
     body: "In-network means your therapist has a contract with your insurance company, typically resulting in lower costs. Out-of-network means no contract exists — you may still receive partial reimbursement depending on your plan's OON benefits.",
   },
   {
-    title: "Superbill",
-    body: "A superbill is a detailed receipt provided by your therapist that you can submit to your insurance company for out-of-network reimbursement. It includes diagnosis codes, service codes, and session details your insurer needs to process the claim.",
-  },
-  {
     title: "Out-of-Pocket Maximum",
     body: "This is the most you'll have to pay for covered services in a plan year. Once you reach this limit, your insurance covers 100% of covered services for the rest of the year — including therapy sessions.",
   },

@@ -9,7 +9,7 @@ const STEPS = [
   {
     num: "02",
     title: "Intake & Mapping",
-    desc: "A deep, 75-minute diagnostic intake where we map out your nervous system baseline, relational history, and set collaborative goals.",
+    desc: "A deep, 60-minute diagnostic intake where we map out your nervous system baseline, relational history, and set collaborative goals.",
   },
   {
     num: "03",
@@ -19,7 +19,7 @@ const STEPS = [
   {
     num: "04",
     title: "Re-Evaluation",
-    desc: "Every 12 weeks, we check in on your metrics and feeling states to ensure therapy continues to feel alive, dynamic, and effective.",
+    desc: "Every 10 weeks, we check in on your metrics and feeling states to ensure therapy continues to feel alive, dynamic, and effective.",
   },
 ];
 
