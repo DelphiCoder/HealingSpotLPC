@@ -55,7 +55,22 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Header fixed at narrow widths** (uncommitted)
+**About page: less space between My Philosophy and The Process** (uncommitted)
+- `src/styles/styles.css`: `.section--philosophy` bottom padding and `.section--process` top padding are now half the usual section padding (40px each on phones, 56px each from 768px). The gap between the two sections went from 160px to 80px on phones and from 224px to 112px from 768px.
+- Both classes are used only on the About page. Other sections keep the usual padding.
+- Verified in Chrome at 375, 800, and 1300px.
+
+**About page: Clinical Endorsements section removed** (uncommitted)
+- Brian is still collecting his own endorsements. The whole section was Zachary Terry's: four Psychology Today testimonials naming "Zachary"/"Zach", the "Zachary has received 4 professional endorsements" text, his Psychology Today profile link, and a credentials row (LPC, Oklahoma License #11680, 4+ years, MS · Abilene Christian University).
+- Deleted `src/sections/Endorsements.jsx`. `src/pages/AboutPage.jsx` now ends with the Process section.
+- `src/styles/styles.css`: removed the endorsements CSS (`.section--endorsements`, `.endorsements__*`, `.credentials`, `.credential*`, `.endorsement*`).
+- To rebuild the section later, the old version is in Git: `git show 5ebe744:src/sections/Endorsements.jsx` (the CSS is in the same commit).
+- Verified: build succeeds, and `/about` in Chrome has no "Zach" or "Endorsement" text. Process section flows into the footer.
+
+**Contact form problems found (not fixed)** (uncommitted)
+- No code changed. Added Open Item 12. Waiting on the choice of form provider.
+
+**Header fixed at narrow widths** (committed in `5ebe744`)
 - Checked in Chrome on `/about`, every 16px from 320 to 1600px (measured in iframes, because the window could not be resized).
 - Problem found at 1024–1260px: the full desktop header (brand, five links, two buttons, color-mode button) turned on at 1024px but needs about 1,260px. "Fees & Insurance" wrapped to two lines, the links touched the brand and the buttons, and up to about 1120px the buttons ran past the right edge.
 - Problem found at 320–400px: the brand name plus the color-mode and menu buttons were wider than the screen, so the page scrolled sideways.
@@ -424,13 +439,13 @@ Ordered roughly by priority.
 
 1. **Browser check** of the built app: every route, modals, accordions, contact form. (Header widths checked 2026-11-08.)
 2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
-   - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
+   - `src/sections/Endorsements.jsx`: removed 2026-11-08 (whole Clinical Endorsements section). Add Brian's own endorsements when he has them.
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` removed 2026-11-04.
    - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 4.
    - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
    - `public/assets/zachary-terry.png`: already removed.
 3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown. (Client-portal link resolved 2026-11-04: Headway for everyone.)
-4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
+4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text, the schema, and the Insurance Glossary pop-up on the Fees page (`src/components/InsuranceGlossary.jsx` line 70, a `tel:4052933099` link; found 2026-11-08). Confirm which is Brian's and make it consistent.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
 6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
@@ -438,6 +453,7 @@ Ordered roughly by priority.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
+12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; and the error text gives the Oklahoma phone `(405) 293-3099` (see item 4). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
 
 ## Decisions
 

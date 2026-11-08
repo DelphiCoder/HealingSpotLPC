@@ -1576,6 +1576,26 @@ ul {
   gap: 64px;
 }
 
+/* About page: half the usual space between My Philosophy and The Process
+   (80px instead of 160px on phones, 112px instead of 224px from 768px). */
+.section--philosophy {
+  padding-bottom: 40px;
+}
+
+.section--process {
+  padding-top: 40px;
+}
+
+@media (min-width: 768px) {
+  .section--philosophy {
+    padding-bottom: 56px;
+  }
+
+  .section--process {
+    padding-top: 56px;
+  }
+}
+
 .section--contact {
   flex-direction: column;
   align-items: flex-start;
@@ -1810,7 +1830,7 @@ ul {
   }
 }
 
-/* ---------- About: meet, philosophy, process, endorsements ---------- */
+/* ---------- About: meet, philosophy, process ---------- */
 .section--meet {
   gap: 56px;
 }
@@ -2089,143 +2109,6 @@ ul {
   line-height: 1.7;
   color: var(--on-fill);
   opacity: 0.85;
-}
-
-.section--endorsements {
-  gap: 56px;
-}
-
-.endorsements__intro {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .endorsements__intro {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-}
-
-.endorsements__heading {
-  max-width: 600px;
-}
-
-.endorsements__aside {
-  max-width: 400px;
-}
-
-.credentials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  width: 100%;
-}
-
-.credential {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 160px;
-  padding: 16px 20px;
-  border-radius: 12px;
-  background: var(--sand);
-}
-
-.credential__label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--terracotta);
-}
-
-.credential__value {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 18px;
-  color: var(--ink);
-}
-
-.endorsement-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .endorsement-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.endorsement {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--sand);
-}
-
-.endorsement__quote {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 18px;
-  line-height: 1.6;
-  color: var(--ink);
-}
-
-.endorsement__rule {
-  height: 1px;
-  background: var(--line);
-}
-
-.endorsement__author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.endorsement__avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--sage-mist);
-}
-
-.endorsement__avatar span {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 18px;
-  color: var(--sage-text);
-}
-
-.endorsement__name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--sage-text);
-}
-
-.endorsement__name:hover {
-  text-decoration: underline;
-}
-
-.endorsement__credential {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  color: var(--terracotta);
 }
 
 /* ---------- Services ---------- */
