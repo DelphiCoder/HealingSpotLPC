@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ServicesPage from "./pages/ServicesPage";
 import FeesPage from "./pages/FeesPage";
-import ResourcesPage from "./pages/ResourcesPage";
 import FaqPage from "./pages/FaqPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -41,7 +40,6 @@ export default function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="services" element={<ServicesPage />} />
           <Route path="fees" element={<FeesPage />} />
-          <Route path="resources" element={<ResourcesPage />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />

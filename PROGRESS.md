@@ -32,8 +32,8 @@ src/components/            Layout, Header, Footer, Modal, SectionLabel, ClientPo
                            InsuranceGlossary, PracticeAreaDrawer, ContactForm,
                            BookingButton + BookingNotice (booking time-zone pop-up)
 src/sections/              Hero, Concerns, Contact, Endorsements, Faq, FeesInsurance,
-                           MeetTherapist, Philosophy, Process, Resources, Services
-src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage, ResourcesPage,
+                           MeetTherapist, Philosophy, Process, Services
+src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage,
                            FaqPage, ContactPage, NotFoundPage (one per route)
 src/data/                  constants.js (booking and Headway URLs, phone, email), forms.js
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
@@ -47,11 +47,20 @@ public/assets/             Images (hero_brian_counts_reduced.jpg, compass-web.jp
 public/logos/              Insurer logos (hidden automatically if missing), site logo, state seals
 ```
 
-Routes: `/` (home), `/about`, `/services`, `/fees`, `/resources`, `/faq`, `/contact`, anything else → NotFoundPage.
+Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, anything else → NotFoundPage.
 
 ## Change History
 
-Entries from 2026-11-02 and earlier are committed and on `main`. "(uncommitted)" tags on those older entries are historical.
+Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushed and deployed). "(uncommitted)" tags on these entries are historical.
+
+### 2026-11-08
+
+**Resources page and menu item removed** (uncommitted)
+- Deleted `src/pages/ResourcesPage.jsx` and `src/sections/Resources.jsx`.
+- `src/App.jsx`: removed the `ResourcesPage` import and the `/resources` route. `/resources` now shows the 404 page.
+- `src/components/Header.jsx` and `src/components/Footer.jsx`: removed the "Resources" link. The menu now reads About, Services, Fees & Insurance, FAQ, Contact.
+- `src/styles/styles.css`: removed CSS used only by the Resources page (`.body-text--library`, `.display-sans--library`, and the old "Resources: library" block of `library__*`, `topic*`, `platform*` rules). Renamed the "Resources: FAQ" comment to "FAQ".
+- Verified: `npx vite build` succeeds. Not checked in a browser.
 
 ### 2026-11-04
 
@@ -392,7 +401,7 @@ Entries from 2026-11-02 and earlier are committed and on `main`. "(uncommitted)"
 
 Ordered roughly by priority.
 
-1. **Browser check** of the built app: every route, the header at narrow widths (six nav items now), modals, accordions, contact form.
+1. **Browser check** of the built app: every route, the header at narrow widths (five nav items now), modals, accordions, contact form.
 2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
    - `src/sections/Endorsements.jsx`: four testimonials that name "Zachary" and "Zach" (lines 17 to 33), the endorsement section heading that says "Zachary has received 4 professional endorsements" (line 55), the bylines "Zachary A. Walling" and the Psychology Today links (lines 21 and 60), and the Oklahoma license `#11680` (line 5).
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` removed 2026-11-04.
@@ -403,7 +412,7 @@ Ordered roughly by priority.
 4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text and the schema. Confirm which is Brian's and make it consistent.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
 6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
-7. **Resources links:** add the medication and assessment place links when Brian provides them (discrepancy 14).
+7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
 8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode, and check the header with the new button at phone width and at 1024–1279px.

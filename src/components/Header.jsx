@@ -11,7 +11,6 @@ export const NAV_LINKS = [
   { label: "Fees & Insurance", to: "/fees" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
-  { label: "Resources", to: "/resources" },
 ];
 
 export default function Header() {

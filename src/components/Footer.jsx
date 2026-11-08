@@ -6,7 +6,6 @@ const FOOTER_LINKS = [
   { label: "About & Approach", to: "/about" },
   { label: "Areas of Practice", to: "/services" },
   { label: "Fees & Insurance", to: "/fees" },
-  { label: "Resources", to: "/resources" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
 ];
