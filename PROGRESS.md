@@ -55,7 +55,17 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Privacy Policy page added, Terms of Service removed** (uncommitted)
+**Social / search share image added** (uncommitted)
+- New `public/assets/og-image.jpg` (1200x630, 86 KB): dark brand background, logo and "The Healing Spot, LPC", Brian's About-page quote ("No matter what you believe about yourself or your life at this moment — change is possible."), "Individual & couples therapy for trauma, depression, and anxiety.", "Brian Counts, LPC · Telehealth · Michigan & Texas", healingspotlpc.com, and Brian's photo faded in on the right. Uses the site's fonts and colors.
+- Source: `_specs/og-card.html` (git-ignored). To regenerate: render it with headless Chrome at 1200x630 (`chrome --headless=new --hide-scrollbars --allow-file-access-from-files --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=1200,630 --screenshot=og-card.png file:///.../og-card.html`), then `_specs/make-web-image.ps1 -Source og-card.png -BoxW 1200 -BoxH 630 -Width 1200 -Quality 85`.
+- `index.html`: added `og:image` (with type, width, height, alt), `twitter:image` and `twitter:image:alt`, changed `twitter:card` from `summary` to `summary_large_image`, and added `image` to the schema.
+- The image URL is `https://delphicoder.github.io/HealingSpotLPC/assets/og-image.jpg`, because healingspotlpc.com does not serve the site yet (it redirects to `healingspotlpc-com.l.ink`, checked 2026-11-08). See Open Item 16.
+
+**Audit: does the site point only to Brian?** (no code changed; committed with the share image)
+- Clean: no other person's name, phone, email, license, photo, or profile link anywhere in `src`, `index.html`, or `public`. Metadata (title, descriptions, Open Graph, Twitter/X, schema name/phone/email/geo/areaServed, keywords) is all Brian's. Only gaps: schema `GET_STREET_ADDRESS` / `GET_ZIP_CODE` placeholders (item 3) and the contact form's Formspree ID (item 12).
+- Not yet Brian's own words: compared against the original copied site (commit `830d270`), much of the visible text is still word for word from it (Services modalities, the practice-area drawers in `src/data/practiceAreas.js`, home-page Concerns, most FAQ answers, Process, Fees intro, insurance glossary). Brian's spec (`_specs/Website_Details.md`) edited parts of it and left the rest. See Open Item 15.
+
+**Privacy Policy page added, Terms of Service removed** (committed in `3af54f3`)
 - New `src/sections/Privacy.jsx` and `src/pages/PrivacyPage.jsx`: "Confidentiality & Privacy Policy" page at `/privacy`, using the text Brian supplied (opening paragraph, "Exceptions include:" with three bulleted exceptions, and the court-order paragraph).
 - `src/App.jsx`: added the `/privacy` route.
 - `src/components/Footer.jsx`: "Privacy Policy" in the footer bottom row is now a link to `/privacy` (it was plain text).
@@ -503,6 +513,15 @@ Ordered roughly by priority.
 12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, and UMR removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 14. ~~**Terms of Service:**~~ closed 2026-11-08: removed from the footer; not needed.
+15. **Confirm claims carried over from the original site** (audit 2026-11-08). These are first-person statements that must be true for Brian:
+   - `src/sections/Services.jsx`: EMDR is "my primary tool for trauma and PTSD work" (the spec removed "EMDR intensives"; `index.html` keywords also list "EMDR therapy").
+   - `src/sections/Services.jsx` "Also specializing" chips include Veterans (drawer says "Work with a therapist who understands military culture"), although the spec deleted "veterans and first responders" from the About focus areas. Also confirm Bipolar Disorder, Personality Disorders, Sports Performance, Career Counseling, Anger Management.
+   - `src/data/practiceAreas.js` Trauma & PTSD: "This is one of my primary areas of expertise".
+   - `src/sections/Faq.jsx` policies: 24-hour cancellation charged at the full session rate; limited sliding-scale slots.
+   - `src/sections/Concerns.jsx` (home): "Couples therapy isn't a last resort". The spec changed this wording to "doesn't have to be a last resort", which was applied only in the Couples drawer.
+   - Contact page form dropdown (`src/components/ContactForm.jsx`): "Trauma & EMDR", "Military, Veterans & First Responders", "Somatic Therapy".
+   - Longer term: reword the copied text in Brian's own voice. It is the friend's writing, and identical text on two live sites can hurt search ranking.
+16. **Domain not connected:** healingspotlpc.com redirects to `healingspotlpc-com.l.ink`; the live site is `https://delphicoder.github.io/HealingSpotLPC/`. `index.html` canonical link, `og:url`, and schema `url` say healingspotlpc.com, while `og:image`, `twitter:image`, and schema `image` use the GitHub Pages URL so they work now. When the domain points at GitHub Pages, change the three image URLs to `https://healingspotlpc.com/assets/og-image.jpg`.
 
 ## Decisions
 
