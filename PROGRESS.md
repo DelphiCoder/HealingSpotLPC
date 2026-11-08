@@ -55,14 +55,18 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Oklahoma phone number replaced** (uncommitted)
+**FAQ answers slightly wider** (uncommitted)
+- `src/styles/styles.css`: `.faq-item__answer` max-width 700px → 760px, so the telehealth answer's first line ends with "In-person" instead of breaking it at the hyphen ("In-" / "person"). The first line needs about 742px. Applies to all FAQ answers.
+- Checked in Chrome on `/faq` at desktop width. On screens where the answer box is narrower than about 742px, the line still wraps earlier, as normal.
+
+**Oklahoma phone number replaced** (committed in `2804ed3`)
 - Brian's number is (231) 425-1102. The old Oklahoma number (405) 293-3099 was in three places; all now use Brian's:
   - `src/components/ContactForm.jsx`: error message ("...or call (231) 425-1102."), now reads `PHONE` from `src/data/constants.js`.
   - `src/components/InsuranceGlossary.jsx`: "Call us directly for insurance help" link, now built from `PHONE` (`tel:2314251102`).
   - `index.html`: schema `telephone`.
 - Search for `405` / `293-3099` across `src` and `index.html`: no phone matches left. `src/components/Footer.jsx` still has the number typed in directly (correct, but not read from `PHONE`).
 
-**FAQ and search summaries: in-person coming soon** (uncommitted)
+**FAQ and search summaries: in-person coming soon** (committed in `2804ed3`)
 - `src/sections/Faq.jsx` ("Do you offer telehealth or in-person sessions?"): new answer says telehealth is offered now for Michigan and Texas (including the Austin TX area) and in-person visits are coming soon for the greater Ludington MI region. "— whatever works best for you." is on its own line (`<br />`); this answer is now JSX instead of a plain string.
 - Checked in Chrome on `/faq`.
 - `index.html`: the four hidden descriptions (meta description, Open Graph, Twitter/X card, and schema `description`) now say telehealth in Michigan and Texas, with in-person sessions in Ludington, MI coming soon. They used to say in-person sessions were available now.

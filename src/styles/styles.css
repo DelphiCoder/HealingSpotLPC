@@ -2836,7 +2836,8 @@ ul {
 }
 
 .faq-item__answer {
-  max-width: 700px;
+  /* 760px fits "...Austin TX area. In-person" on one line in the telehealth answer. */
+  max-width: 760px;
   padding-bottom: 24px;
   font-size: 15px;
   line-height: 1.625;
