@@ -55,7 +55,13 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Resources page and menu item removed** (uncommitted)
+**Line endings: added `.gitattributes`** (uncommitted)
+- New `.gitattributes`: `* text=auto eol=lf` stores and checks out text files with LF on every machine, so it no longer depends on each machine's `core.autocrlf`. Images, PDFs, and fonts are marked `binary`.
+- Before this, most files were stored with LF, but `src/styles/styles.css` was stored with CRLF, and Git printed "LF will be replaced by CRLF" warnings.
+- Needs a one-time `git add --renormalize .` commit. That mostly converts `styles.css` to LF.
+- Found while checking: `_specs/suggestions.md` is tracked in Git (from commit `5f173d0`) even though `/_specs/` is in `.gitignore`. Renormalizing does not change it (it is already stored with LF). It is still open whether to untrack it.
+
+**Resources page and menu item removed** (committed in `b51e226`)
 - Deleted `src/pages/ResourcesPage.jsx` and `src/sections/Resources.jsx`.
 - `src/App.jsx`: removed the `ResourcesPage` import and the `/resources` route. `/resources` now shows the 404 page.
 - `src/components/Header.jsx` and `src/components/Footer.jsx`: removed the "Resources" link. The menu now reads About, Services, Fees & Insurance, FAQ, Contact.
