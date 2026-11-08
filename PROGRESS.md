@@ -55,7 +55,10 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Fees page: four insurers removed** (uncommitted)
+**Fees page: Cash removed from payment methods** (uncommitted)
+- `src/sections/FeesInsurance.jsx`: removed "Cash" from `PAYMENT_METHODS`. Accepted Payment Methods now shows ACH Bank Transfer, Discover, HSA, Mastercard, Visa. No other "cash" text on the site.
+
+**Fees page: four insurers removed** (committed in `6d3622c`)
 - `src/sections/FeesInsurance.jsx`: removed Optum, Quest Behavioral Health, UMR, and UnitedHealthcare from the In-Network Insurance grid. Six remain: Aetna, BCBS, Cigna / Evernorth, Carelon Behavioral Health, WebTPA, Ascension SmartHealth.
 - UnitedHealthcare and superbill no longer appear anywhere in `src`, `index.html`, or `public`.
 - Deleted `public/logos/optum-com-logo.png` (no longer used).
@@ -63,11 +66,11 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 - `src/sections/Faq.jsx` ("Do you take insurance?"): now lists all six in-network insurers and says "See the Fees & Insurance page for more detail." instead of pointing to a nonexistent "Insurance & Rates button".
 - Checked in Chrome on `/fees` at 375, 700, and 1300px, and `/faq`.
 
-**About page: Re-Evaluation every 10 weeks, 60-minute intake** (uncommitted)
+**About page: Re-Evaluation every 10 weeks, 60-minute intake** (committed in `6d3622c`)
 - `src/sections/Process.jsx`: the Re-Evaluation step now says "Every 10 weeks" instead of "Every 12 weeks". No other "12 weeks" text on the site.
 - `src/sections/Process.jsx`: the Intake & Mapping step now says "A deep, 60-minute diagnostic intake" instead of 75-minute. No other "75-minute" text on the site.
 
-**Superbill removed (not offered)** (uncommitted)
+**Superbill removed (not offered)** (committed in `6d3622c`)
 - `src/components/InsuranceGlossary.jsx`: removed the "Superbill" term from the "Understanding Your Insurance" pop-up on the Fees & Insurance page. Six terms remain.
 - `src/sections/Faq.jsx` ("Do you take insurance?"): removed "United Healthcare" from the in-network list and the sentence offering a superbill. Answer now reads: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, and Cigna. Use the Insurance & Rates button at the top of the page for more detail."
 - Search for `superbill` / `super bill` across `src`, `index.html`, and `public`: no other matches.

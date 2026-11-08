@@ -13,7 +13,7 @@ const RATES = [
   },
 ];
 
-const PAYMENT_METHODS = ["ACH Bank Transfer", "Cash", "Discover", "HSA", "Mastercard", "Visa"];
+const PAYMENT_METHODS = ["ACH Bank Transfer", "Discover", "HSA", "Mastercard", "Visa"];
 
 // Logo files live in public/logos/. Insurers without a file yet show their name only
 // (the <img> is hidden when it fails to load).
