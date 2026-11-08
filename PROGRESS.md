@@ -55,7 +55,21 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Fees page: Cash removed from payment methods** (uncommitted)
+**Oklahoma phone number replaced** (uncommitted)
+- Brian's number is (231) 425-1102. The old Oklahoma number (405) 293-3099 was in three places; all now use Brian's:
+  - `src/components/ContactForm.jsx`: error message ("...or call (231) 425-1102."), now reads `PHONE` from `src/data/constants.js`.
+  - `src/components/InsuranceGlossary.jsx`: "Call us directly for insurance help" link, now built from `PHONE` (`tel:2314251102`).
+  - `index.html`: schema `telephone`.
+- Search for `405` / `293-3099` across `src` and `index.html`: no phone matches left. `src/components/Footer.jsx` still has the number typed in directly (correct, but not read from `PHONE`).
+
+**FAQ and search summaries: in-person coming soon** (uncommitted)
+- `src/sections/Faq.jsx` ("Do you offer telehealth or in-person sessions?"): new answer says telehealth is offered now for Michigan and Texas (including the Austin TX area) and in-person visits are coming soon for the greater Ludington MI region. "— whatever works best for you." is on its own line (`<br />`); this answer is now JSX instead of a plain string.
+- Checked in Chrome on `/faq`.
+- `index.html`: the four hidden descriptions (meta description, Open Graph, Twitter/X card, and schema `description`) now say telehealth in Michigan and Texas, with in-person sessions in Ludington, MI coming soon. They used to say in-person sessions were available now.
+- `index.html` schema `geo`: was latitude `36.1025`, longitude `-86.4500` (central Tennessee). Now `43.9553`, `-86.4526`, the city center of Ludington, MI.
+- Visible page text was checked: Ludington appears only as Brian's location (hero) and home town (Meet Your Therapist), not as an in-person offer.
+
+**Fees page: Cash removed from payment methods** (committed in `3eddd97`)
 - `src/sections/FeesInsurance.jsx`: removed "Cash" from `PAYMENT_METHODS`. Accepted Payment Methods now shows ACH Bank Transfer, Discover, HSA, Mastercard, Visa. No other "cash" text on the site.
 
 **Fees page: four insurers removed** (committed in `6d3622c`)
@@ -462,11 +476,11 @@ Ordered roughly by priority.
 2. **Zachary Terry content still on the site.** This list is kept up to date and will be removed over time. Re-run a search for `Zachary|Terry|Stillwater|Oklahoma|zachary|11680|clientsecure` before each cleanup pass.
    - `src/sections/Endorsements.jsx`: removed 2026-11-08 (whole Clinical Endorsements section). Add Brian's own endorsements when he has them.
    - `src/data/constants.js`: `SIMPLEPRACTICE_URL` removed 2026-11-04.
-   - `index.html`: the schema `telephone` is the Oklahoma number `(405) 293-3099` (line 33). It is covered by item 4.
+   - `index.html`: schema `telephone` fixed 2026-11-08 (now Brian's number).
    - `src/styles/styles.css` line 2: header comment fixed 2026-11-01.
    - `public/assets/zachary-terry.png`: already removed.
-3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`); Brian's Texas license number if he wants it shown. (Client-portal link resolved 2026-11-04: Headway for everyone.)
-4. **Phone number mismatch:** `(231) 425-1102` in `src/data/constants.js` and the footer; `(405) 293-3099` in the contact form error text, the schema, and the Insurance Glossary pop-up on the Fees page (`src/components/InsuranceGlossary.jsx` line 70, a `tel:4052933099` link; found 2026-11-08). Confirm which is Brian's and make it consistent.
+3. **Brian's details still missing:** Ludington street address and ZIP (`index.html` schema has `GET_STREET_ADDRESS` and `GET_ZIP_CODE`). Schema `geo` coordinates were fixed 2026-11-08 to Ludington's city center (43.9553, -86.4526); update them to the office location once the street address is known; Brian's Texas license number if he wants it shown. (Client-portal link resolved 2026-11-04: Headway for everyone.)
+4. ~~**Phone number mismatch:**~~ closed 2026-11-08: all phone numbers are Brian's (231) 425-1102.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
 6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
@@ -474,7 +488,7 @@ Ordered roughly by priority.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
-12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; and the error text gives the Oklahoma phone `(405) 293-3099` (see item 4). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
+12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, and UMR removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 
 ## Decisions

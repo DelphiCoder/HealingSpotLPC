@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FORMSPREE_URL } from "../data/forms";
+import { PHONE } from "../data/constants";
 
 const SERVICE_OPTIONS = [
   "Individual Therapy",
@@ -117,7 +118,7 @@ export default function ContactForm() {
         ></textarea>
       </div>
       <p className="form-error" hidden={status !== "error"}>
-        Something went wrong sending your message. Please try again or call (405) 293-3099.
+        Something went wrong sending your message. Please try again or call {PHONE}.
       </p>
       <button type="submit" className="btn btn--solid btn--form" disabled={sending}>
         {sending ? "Sending…" : "Send Message"}

@@ -23,7 +23,13 @@ const FAQ_GROUPS = [
     faqs: [
       {
         q: "Do you offer telehealth or in-person sessions?",
-        a: "I offer both. In-person sessions are available in Ludington, Michigan. I also offer telehealth sessions for clients in Michigan and Texas, including the Austin area. Many clients mix both depending on the week — whatever works best for you.",
+        a: (
+          <>
+            I currently offer telehealth sessions for clients in Michigan and Texas, including the Austin TX area.
+            In-person visits will be coming soon for persons in the greater Ludington MI region.
+            <br />— whatever works best for you.
+          </>
+        ),
       },
       {
         q: "How long does therapy usually take?",

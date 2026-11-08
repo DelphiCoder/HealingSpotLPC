@@ -1,4 +1,4 @@
-import { EMAIL } from "../data/constants";
+import { EMAIL, PHONE } from "../data/constants";
 import Modal from "./Modal";
 
 const TERMS = [
@@ -63,7 +63,7 @@ export default function InsuranceGlossary({ onClose }) {
             <div className="glossary__cta-text">
               <p className="glossary__cta-title">Still have questions?</p>
               <p className="glossary__cta-sub">
-                Call us directly for insurance help: <a href="tel:4052933099">(405) 293-3099</a>
+                Call us directly for insurance help: <a href={`tel:${PHONE.replace(/\D/g, "")}`}>{PHONE}</a>
               </p>
             </div>
             <a className="btn btn--solid btn--small" href={`mailto:${EMAIL}?subject=Insurance Question`}>
