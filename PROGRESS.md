@@ -31,10 +31,10 @@ src/App.jsx                BrowserRouter + routes + ScrollManager
 src/components/            Layout, Header, Footer, Modal, SectionLabel, ClientPortal,
                            InsuranceGlossary, PracticeAreaDrawer, ContactForm,
                            BookingButton + BookingNotice (booking time-zone pop-up)
-src/sections/              Hero, Concerns, Contact, Endorsements, Faq, FeesInsurance,
-                           MeetTherapist, Philosophy, Process, Services
+src/sections/              Hero, Concerns, Contact, Faq, FeesInsurance,
+                           MeetTherapist, Philosophy, Privacy, Process, Services
 src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage,
-                           FaqPage, ContactPage, NotFoundPage (one per route)
+                           FaqPage, ContactPage, PrivacyPage, NotFoundPage (one per route)
 src/data/                  constants.js (booking and Headway URLs, phone, email), forms.js
                            (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
 src/lib/                   asset.js (public paths from the site root), siteRoot.js,
@@ -47,7 +47,7 @@ public/assets/             Images (hero_brian_counts_reduced.jpg, compass-web.jp
 public/logos/              Insurer logos (hidden automatically if missing), site logo, state seals
 ```
 
-Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, anything else → NotFoundPage.
+Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privacy`, anything else → NotFoundPage.
 
 ## Change History
 
@@ -55,7 +55,15 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**FAQ answers slightly wider** (uncommitted)
+**Privacy Policy page added, Terms of Service removed** (uncommitted)
+- New `src/sections/Privacy.jsx` and `src/pages/PrivacyPage.jsx`: "Confidentiality & Privacy Policy" page at `/privacy`, using the text Brian supplied (opening paragraph, "Exceptions include:" with three bulleted exceptions, and the court-order paragraph).
+- `src/App.jsx`: added the `/privacy` route.
+- `src/components/Footer.jsx`: "Privacy Policy" in the footer bottom row is now a link to `/privacy` (it was plain text).
+- `src/styles/styles.css`: new "Privacy policy page" block (`.privacy` max-width 760px, `.privacy__text`, `.privacy__list`).
+- Checked in Chrome: footer link opens `/privacy` at the top; dark mode, light mode, and phone width look right.
+- Removed "Terms of Service" from the footer (plain text, no page); this site does not need one. The footer bottom row now shows only the Privacy Policy link.
+
+**FAQ answers slightly wider** (committed in `279f273`)
 - `src/styles/styles.css`: `.faq-item__answer` max-width 700px → 760px, so the telehealth answer's first line ends with "In-person" instead of breaking it at the hyphen ("In-" / "person"). The first line needs about 742px. Applies to all FAQ answers.
 - Checked in Chrome on `/faq` at desktop width. On screens where the answer box is narrower than about 742px, the line still wraps earlier, as normal.
 
@@ -494,6 +502,7 @@ Ordered roughly by priority.
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
 12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, and UMR removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
+14. ~~**Terms of Service:**~~ closed 2026-11-08: removed from the footer; not needed.
 
 ## Decisions
 

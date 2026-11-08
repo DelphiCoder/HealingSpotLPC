@@ -7,6 +7,7 @@ import ServicesPage from "./pages/ServicesPage";
 import FeesPage from "./pages/FeesPage";
 import FaqPage from "./pages/FaqPage";
 import ContactPage from "./pages/ContactPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { SITE_ROOT } from "./lib/siteRoot";
 
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="fees" element={<FeesPage />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="privacy" element={<PrivacyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

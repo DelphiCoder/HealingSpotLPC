@@ -3372,6 +3372,30 @@ a.contact__line:hover {
   opacity: 0.6;
 }
 
+/* ---------- Privacy policy page ---------- */
+.privacy {
+  max-width: 760px;
+}
+
+.privacy__text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.privacy__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.privacy__list li::marker {
+  color: var(--sage-text);
+}
+
 /* ---------- 404 ---------- */
 .not-found {
   display: flex;

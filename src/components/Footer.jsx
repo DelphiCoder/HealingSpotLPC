@@ -66,8 +66,9 @@ export default function Footer() {
         <div className="footer__bottom">
           <p className="footer__copyright">© 2026 The Healing Spot Counseling PLLC. All rights reserved.</p>
           <div className="footer__legal">
-            <span className="footer__legal-link">Privacy Policy</span>
-            <span className="footer__legal-link">Terms of Service</span>
+            <Link className="footer__legal-link" to="/privacy">
+              Privacy Policy
+            </Link>
           </div>
         </div>
       </div>
