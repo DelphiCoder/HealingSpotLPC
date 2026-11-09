@@ -55,7 +55,15 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Fees page and FAQ: WebTPA removed** (uncommitted)
+**Color-mode button: two states, device setting by default** (uncommitted)
+- `src/components/ColorModeToggle.jsx` rewritten. The button now switches only between Light and Dark (the Device state and monitor icon are gone).
+- New visitors: nothing is saved, `<html>` has no `data-theme`, and the site follows the device's light/dark setting. The button shows the mode in effect (sun or moon) and updates if the device setting changes while the page is open.
+- Clicking switches to the other mode and saves it in localStorage (`hs-color-mode`, same key as before), so it is kept on later visits. `index.html` already applies the saved choice before the page draws. localStorage was chosen over a cookie: the site is static, so no server needs to read it, and a cookie would be sent with every request.
+- Visitors who saved Light or Dark under the old three-state button keep their choice.
+- `src/styles/palette.css`: header comment updated.
+- Checked in Chrome: new visitor (no saved value) follows the device (dark here); clicks go Light → Dark → Light and save each; the choice survives a reload.
+
+**Fees page and FAQ: WebTPA removed** (committed in `f98f01b`)
 - Brian is not in-network with WebTPA.
 - `src/sections/FeesInsurance.jsx`: removed WebTPA from the In-Network Insurance grid. Five remain: Aetna, BCBS, Cigna / Evernorth, Carelon Behavioral Health, Ascension SmartHealth.
 - `src/sections/Faq.jsx` ("Do you take insurance?"): removed WebTPA from the list so it still matches the Fees page.
@@ -513,7 +521,7 @@ Ordered roughly by priority.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
 8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
-10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
+10. **Dark mode check:** Branding Three chosen, tester removed, and a Light/Dark header button added (2026-11-04; two states with device default since 2026-11-08). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
 12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, UMR, and WebTPA removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.

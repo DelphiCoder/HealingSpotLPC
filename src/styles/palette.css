@@ -8,11 +8,12 @@
    Each value notes the brand token it comes from. Values marked "derived"
    have no brand token; they are picked from the same teal/slate family.
 
-   Light/dark: the header's color-mode button (ColorModeToggle.jsx) sets
-   data-theme on <html>:
-     no data-theme      -> "Device": follows the OS / browser setting
-     data-theme="light" -> light
-     data-theme="dark"  -> dark
+   Light/dark: the header's color-mode button (ColorModeToggle.jsx) switches
+   between Light and Dark and sets data-theme on <html>:
+     no data-theme      -> new visitor, no choice saved: follows the OS /
+                           browser setting (the default)
+     data-theme="light" -> light (saved in localStorage)
+     data-theme="dark"  -> dark (saved in localStorage)
    In dark mode the header, hero, and footer go back to the page and
    primary colors.
 

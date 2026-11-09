@@ -1,34 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// Header button that cycles the color mode: Device -> Light -> Dark -> Device.
-// "Device" removes data-theme from <html>, so palette.css follows the OS or
-// browser setting. "light" / "dark" set data-theme and are saved in this
-// browser. index.html applies the saved choice before the page first draws.
+// Header button that switches between Light and Dark.
+//
+// New visitors get their device (OS / browser) setting: no choice is saved, so
+// <html> has no data-theme and palette.css follows prefers-color-scheme. The
+// button shows whichever mode is currently in effect.
+//
+// Clicking switches to the other mode and saves it in localStorage, so it is
+// kept on later visits in this browser. index.html applies the saved choice
+// before the page first draws, so there is no flash of the other mode.
 
 const STORAGE_KEY = "hs-color-mode";
+const DARK_QUERY = "(prefers-color-scheme: dark)";
 
-const MODES = {
-  device: { label: "Device", next: "light" },
-  light: { label: "Light", next: "dark" },
-  dark: { label: "Dark", next: "device" },
-};
-
-function readMode() {
+function readSaved() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved === "light" || saved === "dark" ? saved : "device";
+    return saved === "light" || saved === "dark" ? saved : null;
   } catch {
-    return "device"; // Storage blocked: fall back to the device setting.
+    return null; // Storage blocked: follow the device setting.
   }
 }
 
-function applyMode(mode) {
-  const root = document.documentElement;
-  if (mode === "device") delete root.dataset.theme;
-  else root.dataset.theme = mode;
+function deviceIsDark() {
+  return typeof window !== "undefined" && window.matchMedia?.(DARK_QUERY).matches === true;
+}
+
+function saveMode(mode) {
+  document.documentElement.dataset.theme = mode;
   try {
-    if (mode === "device") localStorage.removeItem(STORAGE_KEY);
-    else localStorage.setItem(STORAGE_KEY, mode);
+    localStorage.setItem(STORAGE_KEY, mode);
   } catch {
     // Storage blocked: the choice applies to this page view only.
   }
@@ -47,16 +48,6 @@ const ICON_PROPS = {
   "aria-hidden": true,
 };
 
-function DeviceIcon() {
-  // A monitor on a stand.
-  return (
-    <svg {...ICON_PROPS}>
-      <rect x="3" y="4" width="18" height="12" rx="2" />
-      <path d="M8 20h8M12 16v4" />
-    </svg>
-  );
-}
-
 function SunIcon() {
   return (
     <svg {...ICON_PROPS}>
@@ -74,22 +65,32 @@ function MoonIcon() {
   );
 }
 
-const ICONS = { device: DeviceIcon, light: SunIcon, dark: MoonIcon };
-
 export default function ColorModeToggle() {
-  const [mode, setMode] = useState(readMode);
-  const Icon = ICONS[mode];
-  const next = MODES[mode].next;
-  const label = `Color mode: ${MODES[mode].label}. Switch to ${MODES[next].label}.`;
+  const [saved, setSaved] = useState(readSaved);
+  const [deviceDark, setDeviceDark] = useState(deviceIsDark);
+
+  // Until the visitor picks a mode, keep the icon in step if the device setting
+  // changes while the page is open (for example, an automatic evening switch).
+  useEffect(() => {
+    const media = window.matchMedia?.(DARK_QUERY);
+    if (!media) return undefined;
+    const onChange = (event) => setDeviceDark(event.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  const current = saved ?? (deviceDark ? "dark" : "light");
+  const next = current === "dark" ? "light" : "dark";
+  const label = `Color mode: ${current === "dark" ? "Dark" : "Light"}. Switch to ${next === "dark" ? "Dark" : "Light"}.`;
 
   const handleClick = () => {
-    applyMode(next);
-    setMode(next);
+    saveMode(next);
+    setSaved(next);
   };
 
   return (
     <button type="button" className="color-mode" onClick={handleClick} aria-label={label} title={label}>
-      <Icon />
+      {current === "dark" ? <MoonIcon /> : <SunIcon />}
     </button>
   );
 }
