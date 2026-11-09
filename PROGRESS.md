@@ -55,7 +55,12 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Social / search share image added** (uncommitted)
+**Fees page and FAQ: WebTPA removed** (uncommitted)
+- Brian is not in-network with WebTPA.
+- `src/sections/FeesInsurance.jsx`: removed WebTPA from the In-Network Insurance grid. Five remain: Aetna, BCBS, Cigna / Evernorth, Carelon Behavioral Health, Ascension SmartHealth.
+- `src/sections/Faq.jsx` ("Do you take insurance?"): removed WebTPA from the list so it still matches the Fees page.
+
+**Social / search share image added** (committed in `594072d`)
 - New `public/assets/og-image.jpg` (1200x630, 86 KB): dark brand background, logo and "The Healing Spot, LPC", Brian's About-page quote ("No matter what you believe about yourself or your life at this moment — change is possible."), "Individual & couples therapy for trauma, depression, and anxiety.", "Brian Counts, LPC · Telehealth · Michigan & Texas", healingspotlpc.com, and Brian's photo faded in on the right. Uses the site's fonts and colors.
 - Source: `_specs/og-card.html` (git-ignored). To regenerate: render it with headless Chrome at 1200x630 (`chrome --headless=new --hide-scrollbars --allow-file-access-from-files --force-device-scale-factor=1 --virtual-time-budget=3000 --window-size=1200,630 --screenshot=og-card.png file:///.../og-card.html`), then `_specs/make-web-image.ps1 -Source og-card.png -BoxW 1200 -BoxH 630 -Width 1200 -Quality 85`.
 - `index.html`: added `og:image` (with type, width, height, alt), `twitter:image` and `twitter:image:alt`, changed `twitter:card` from `summary` to `summary_large_image`, and added `image` to the schema.
@@ -511,7 +516,7 @@ Ordered roughly by priority.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Device/Light/Dark header button added (2026-11-04). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
 12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
-13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, and UMR removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
+13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, UMR, and WebTPA removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 14. ~~**Terms of Service:**~~ closed 2026-11-08: removed from the footer; not needed.
 15. **Confirm claims carried over from the original site** (audit 2026-11-08). These are first-person statements that must be true for Brian:
    - `src/sections/Services.jsx`: EMDR is "my primary tool for trauma and PTSD work" (the spec removed "EMDR intensives"; `index.html` keywords also list "EMDR therapy").

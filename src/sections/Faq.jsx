@@ -47,7 +47,7 @@ const FAQ_GROUPS = [
     faqs: [
       {
         q: "Do you take insurance?",
-        a: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, Cigna / Evernorth, Carelon Behavioral Health, WebTPA, and Ascension SmartHealth. See the Fees & Insurance page for more detail.",
+        a: "Yes. I am currently in-network with Aetna, Blue Cross Blue Shield, Cigna / Evernorth, Carelon Behavioral Health, and Ascension SmartHealth. See the Fees & Insurance page for more detail.",
       },
       {
         q: "Do you offer a sliding scale?",
