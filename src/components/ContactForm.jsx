@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FORMSPREE_URL } from "../data/forms";
-import { PHONE } from "../data/constants";
+import ContactFormNotice from "./ContactFormNotice";
 
 const SERVICE_OPTIONS = [
   "Individual Therapy",
@@ -11,55 +10,16 @@ const SERVICE_OPTIONS = [
   "Anxiety & Burnout",
 ];
 
+// The form has no working form service yet (see src/data/forms.js), so
+// submitting only opens a popup that says so and gives Brian's email and
+// phone. Nothing the visitor types is sent anywhere.
 export default function ContactForm() {
-  const [status, setStatus] = useState("idle"); // idle | sending | error | sent
+  const [noticeOpen, setNoticeOpen] = useState(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    setStatus("sending");
-    try {
-      await fetch(FORMSPREE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          phone: data.get("phone"),
-          service: data.get("service"),
-          message: data.get("message"),
-        }),
-      });
-      setStatus("sent");
-    } catch {
-      setStatus("error");
-    }
+    setNoticeOpen(true);
   };
-
-  if (status === "sent") {
-    return (
-      <div className="contact-success">
-        <div className="contact-success__icon">
-          <svg width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true">
-            <path
-              d="M4 10l4 4 8-8"
-              style={{ stroke: "var(--on-fill)" }}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <p className="contact-success__title">Message Received</p>
-        <p className="contact-success__text">
-          Thank you for reaching out. I'll be in touch within 1 business day to schedule your free consultation.
-        </p>
-      </div>
-    );
-  }
-
-  const sending = status === "sending";
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
@@ -117,12 +77,10 @@ export default function ContactForm() {
           placeholder="Tell me a bit about what's brought you here…"
         ></textarea>
       </div>
-      <p className="form-error" hidden={status !== "error"}>
-        Something went wrong sending your message. Please try again or call {PHONE}.
-      </p>
-      <button type="submit" className="btn btn--solid btn--form" disabled={sending}>
-        {sending ? "Sending…" : "Send Message"}
+      <button type="submit" className="btn btn--solid btn--form">
+        Send Message
       </button>
+      {noticeOpen && <ContactFormNotice onClose={() => setNoticeOpen(false)} />}
     </form>
   );
 }

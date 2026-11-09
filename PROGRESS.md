@@ -53,9 +53,21 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privac
 
 Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushed and deployed). "(uncommitted)" tags on these entries are historical.
 
+### 2026-11-09
+
+**Contact form switched off: shows a "not working yet" popup** (uncommitted)
+- The form used to post to Formspree form `xgaejdlw`, copied from the original site, so submissions most likely went to the other therapist. That ID is now removed from the code.
+- `src/data/forms.js`: `FORMSPREE_URL` replaced by an empty `FORM_ENDPOINT`, with a comment explaining why and what to do once a provider is chosen.
+- `src/components/ContactForm.jsx`: submitting no longer sends anything. It opens a popup instead. Removed the fetch, the "sending" / "sent" / "error" states, and the error line. The browser's required-field checks still run first.
+- New `src/components/ContactFormNotice.jsx`: popup in the same style as the booking popup. Title "This form isn't working yet"; says the form is being worked on and the message was not sent; gives Brian's email and phone as links; "Email Me →" button opens a new email. Closes with the X, Escape, or a click outside.
+- What the visitor typed stays in the form, so they can copy it.
+- The email and phone links in the popup use the same gold as the "Email Me" button (`--terracotta`, #b8935a), bold, underlined on hover. New `.portal__link` class in `src/styles/styles.css`. Contrast on the popup background: 6.2:1 in dark mode, 2.7:1 in light mode (below the 4.5:1 guideline for small text).
+- Checked in Chrome on `/contact`: popup shows on submit; no network request is made; the message stays in the form; all three ways of closing work.
+- The `.contact-success` CSS is unused for now. Keep it for when the form works again.
+
 ### 2026-11-08
 
-**Fees page: BCBS, Cigna / Evernorth, Carelon, and Ascension logos added, Aetna logo replaced, BCBS spelled out** (uncommitted)
+**Fees page: BCBS, Cigna / Evernorth, Carelon, and Ascension logos added, Aetna logo replaced, BCBS spelled out** (committed in `e58ffc5`)
 - New `public/logos/bcbs.png` (186x98, supplied by the user). The BCBS tile already pointed at `logos/bcbs.png`.
 - New `public/logos/cigna_ever.png` (128x64, supplied by the user). `src/sections/FeesInsurance.jsx`: Cigna / Evernorth tile now points at `cigna_ever.png` (was `cigna.png`, which never existed).
 - `public/logos/aetna_2.png` was replaced by the user with a 32x32 purple heart version (was 256x256).
@@ -533,7 +545,7 @@ Ordered roughly by priority.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Light/Dark header button added (2026-11-04; two states with device default since 2026-11-08). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
-12. **Contact form sends to the wrong person.** `src/data/forms.js` uses the Formspree form `xgaejdlw`, copied from the friend's (Zachary Terry's) original site in commit `830d270`. Submissions (name, email, phone, message) likely go to that account, not to Brian. Also in `src/components/ContactForm.jsx`: `handleSubmit` never checks `response.ok`, so a rejected submission still shows "Message Received"; (error-text phone fixed 2026-11-08). Waiting on the choice of form provider. Possible stopgap: hide the form and show Brian's email and phone.
+12. **Contact form needs a form provider.** Since 2026-11-09 the form sends nothing: submitting shows a "this form isn't working yet" popup with Brian's email and phone, and the old Formspree ID (`xgaejdlw`, the other therapist's) is removed from the code. To turn it back on: pick a provider, put its endpoint in `src/data/forms.js` (`FORM_ENDPOINT`), send from `src/components/ContactForm.jsx`, and show an error unless `response.ok`. Restore the success message (the `.contact-success` styles are still in `styles.css`).
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, UMR, and WebTPA removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 14. ~~**Terms of Service:**~~ closed 2026-11-08: removed from the footer; not needed.
 15. **Confirm claims carried over from the original site** (audit 2026-11-08). These are first-person statements that must be true for Brian:

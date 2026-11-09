@@ -1011,6 +1011,16 @@ ul {
   color: var(--ink-soft);
 }
 
+/* Links in popup text: the same gold as the terracotta button (--terracotta). */
+.portal__link {
+  color: var(--terracotta);
+  font-weight: 600;
+}
+
+.portal__link:hover {
+  text-decoration: underline;
+}
+
 .portal__footer {
   display: flex;
   align-items: center;
