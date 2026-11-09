@@ -19,9 +19,9 @@ const PAYMENT_METHODS = ["ACH Bank Transfer", "Discover", "HSA", "Mastercard", "
 // (the <img> is hidden when it fails to load).
 const INSURERS = [
   { name: "Aetna", logo: "aetna_2.png" },
-  { name: "BCBS", logo: "bcbs.png" },
-  { name: "Cigna / Evernorth", logo: "cigna.png" },
-  { name: "Carelon Behavioral Health", logo: "carelon.png" },
+  { name: "Blue Cross Blue Shield", logo: "bcbs.png" },
+  { name: "Cigna / Evernorth", logo: "cigna_ever.png" },
+  { name: "Carelon Behavioral Health", logo: "carelon_128.png" },
   { name: "Ascension SmartHealth", logo: "ascension.png" },
 ];
 

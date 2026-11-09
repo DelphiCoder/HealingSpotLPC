@@ -55,7 +55,17 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-08
 
-**Color-mode button: two states, device setting by default** (uncommitted)
+**Fees page: BCBS, Cigna / Evernorth, Carelon, and Ascension logos added, Aetna logo replaced, BCBS spelled out** (uncommitted)
+- New `public/logos/bcbs.png` (186x98, supplied by the user). The BCBS tile already pointed at `logos/bcbs.png`.
+- New `public/logos/cigna_ever.png` (128x64, supplied by the user). `src/sections/FeesInsurance.jsx`: Cigna / Evernorth tile now points at `cigna_ever.png` (was `cigna.png`, which never existed).
+- `public/logos/aetna_2.png` was replaced by the user with a 32x32 purple heart version (was 256x256).
+- Checked in Chrome in light and dark mode: logos show above the names (on the light chip in dark mode).
+- `src/sections/FeesInsurance.jsx`: the BCBS tile label now reads "Blue Cross Blue Shield" (no slash, matching the FAQ) instead of the abbreviation. On phones (2 tiles per row) it wraps to two lines; tile heights stay even (checked at 320, 375, 700, 1300px).
+- New `public/logos/carelon_128.png` (128x128, supplied by the user). Carelon Behavioral Health tile now points at `carelon_128.png` (was `carelon.png`, which never existed).
+- New `public/logos/ascension.png` (31x32, supplied by the user). The tile already pointed at `ascension.png`.
+- All five in-network insurers now have logos. Aetna (32x32) and Ascension (31x32) are small files shown at 28px tall, so they may look slightly soft on high-resolution screens; 64px or larger versions would be crisper.
+
+**Color-mode button: two states, device setting by default** (committed in `242f48a`)
 - `src/components/ColorModeToggle.jsx` rewritten. The button now switches only between Light and Dark (the Device state and monitor icon are gone).
 - New visitors: nothing is saved, `<html>` has no `data-theme`, and the site follows the device's light/dark setting. The button shows the mode in effect (sun or moon) and updates if the device setting changes while the page is open.
 - Clicking switches to the other mode and saves it in localStorage (`hs-color-mode`, same key as before), so it is kept on later visits. `index.html` already applies the saved choice before the page draws. localStorage was chosen over a cookie: the site is static, so no server needs to read it, and a cookie would be sent with every request.
