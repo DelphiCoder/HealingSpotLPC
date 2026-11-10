@@ -1,0 +1,32 @@
+# Apache settings for www.healingspotlpc.com (added 2026-11-09).
+#
+# The site is a single-page React app: index.html loads the app, and the app
+# shows the right page for the address (/about, /fees, /privacy, ...). Without
+# this file, opening or refreshing any page other than the home page gives the
+# host's "404 Not Found", because no /about file exists on the server.
+
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # /about/ -> /about (the app's addresses have no trailing slash, and the
+  # page's relative asset paths only work without one).
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # Real files and folders (images, scripts, robots.txt, ...) are served as is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else gets the app, with a 200 status, so the app can show the
+  # page (or its own "Page not found" for unknown addresses).
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Same result on hosts without mod_rewrite.
+<IfModule !mod_rewrite.c>
+  FallbackResource /index.html
+</IfModule>

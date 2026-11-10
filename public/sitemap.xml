@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pages for search engines. Keep in step with the routes in src/App.jsx and
+     the titles in src/data/pages.js. Update <lastmod> when a page changes. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.healingspotlpc.com/</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/about</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/services</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/fees</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/faq</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/contact</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://www.healingspotlpc.com/privacy</loc><lastmod>2026-11-09</lastmod></url>
+</urlset>

@@ -10,6 +10,7 @@ import ContactPage from "./pages/ContactPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { SITE_ROOT } from "./lib/siteRoot";
+import { NOT_FOUND_TITLE, PAGE_TITLES, SITE_URL } from "./data/pages";
 
 // Folder the site is served from: "" on a domain root, "/HealingSpotLPC" on a GitHub project page.
 const basename = new URL(SITE_ROOT, window.location.href).pathname.replace(/\/$/, "");
@@ -31,10 +32,47 @@ function ScrollManager() {
   return null;
 }
 
+// Finds a <head> tag, creating it if needed.
+function headTag(selector, create) {
+  let tag = document.head.querySelector(selector);
+  if (!tag) {
+    tag = create();
+    document.head.appendChild(tag);
+  }
+  return tag;
+}
+
+// Gives each page its own title and canonical address (index.html only has the
+// home page's), and tells search engines not to index unknown addresses.
+function PageMeta() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const path = pathname.replace(/\/+$/, "") || "/";
+    const known = Object.hasOwn(PAGE_TITLES, path);
+    const url = SITE_URL + (path === "/" ? "/" : path);
+
+    document.title = known ? PAGE_TITLES[path] : NOT_FOUND_TITLE;
+    headTag('link[rel="canonical"]', () => Object.assign(document.createElement("link"), { rel: "canonical" })).href = url;
+    headTag('meta[property="og:url"]', () => {
+      const tag = document.createElement("meta");
+      tag.setAttribute("property", "og:url");
+      return tag;
+    }).content = url;
+
+    const robots = document.head.querySelector('meta[name="robots"]');
+    if (known) robots?.remove();
+    else headTag('meta[name="robots"]', () => Object.assign(document.createElement("meta"), { name: "robots" })).content = "noindex";
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter basename={basename}>
       <ScrollManager />
+      <PageMeta />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />

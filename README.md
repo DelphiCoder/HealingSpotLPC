@@ -2,7 +2,7 @@
 
 Website for Brian Counts, LPC: counseling via telehealth in Michigan and Texas.
 
-Live site: https://delphicoder.github.io/HealingSpotLPC/
+Live site: https://www.healingspotlpc.com/
 
 Built with Vite and React. Pushing to `main` builds and deploys the site to GitHub Pages.
 

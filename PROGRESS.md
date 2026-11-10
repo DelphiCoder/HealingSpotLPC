@@ -24,7 +24,7 @@ npm run preview   # serve dist/ locally
 
 ```
 index.html                 Vite entry: head meta, SEO, JSON-LD schema
-vite.config.js             React plugin, base "/", copies index.html to 404.html after build
+vite.config.js             React plugin, relative base "./" for builds, copies index.html to 404.html after build
 README.md                  Short repo readme (live link, run commands, points here)
 src/main.jsx               React root: fonts, tokens, styles, favicon
 src/App.jsx                BrowserRouter + routes + ScrollManager
@@ -36,14 +36,18 @@ src/sections/              Hero, Concerns, Contact, Faq, FeesInsurance,
 src/pages/                 HomePage, AboutPage, ServicesPage, FeesPage,
                            FaqPage, ContactPage, PrivacyPage, NotFoundPage (one per route)
 src/data/                  constants.js (booking and Headway URLs, phone, email), forms.js
-                           (Formspree endpoint), practiceAreas.js (drawer copy), svgPaths.js
+                           (form endpoint, empty until a provider is chosen), pages.js (site
+                           URL and page titles), practiceAreas.js (drawer copy), svgPaths.js
 src/lib/                   asset.js (public paths from the site root), siteRoot.js,
                            favicon.js
 src/fonts/                 Font files + fonts.css
 src/styles/                styles.css; design-tokens.css (token list, shared tokens, imports
                            palette.css); palette.css (Branding Three colors, light + dark)
 .github/workflows/         deploy-pages.yml (build and deploy to GitHub Pages on push to main)
-public/assets/             Images (hero_brian_counts_reduced.jpg, compass-web.jpg)
+public/.htaccess           Apache: send every page address to index.html (live host)
+public/robots.txt          Search-engine rules; points to sitemap.xml
+public/sitemap.xml         The seven page addresses on www.healingspotlpc.com
+public/assets/             Images (hero_brian_counts_reduced.jpg, compass-web.jpg, og-image.jpg)
 public/logos/              Insurer logos (hidden automatically if missing), site logo, state seals
 ```
 
@@ -55,7 +59,19 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushe
 
 ### 2026-11-09
 
-**Contact form switched off: shows a "not working yet" popup** (uncommitted)
+**Site live at www.healingspotlpc.com: fixes for the new host** (uncommitted)
+- Checked the live site: `https://www.healingspotlpc.com/` is the main address; `https://healingspotlpc.com/` and both `http://` forms redirect to it (301). It is served by **Apache** (not GitHub Pages) and has the same build as GitHub Pages. `https://delphicoder.github.io/HealingSpotLPC/` still serves a second copy.
+- Problem found: on the new host, every page except home (`/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privacy`) returned Apache's "404 Not Found" when opened directly, refreshed, bookmarked, or reached from a search result. Clicking through from home worked because the app changes pages itself.
+- New `public/.htaccess` (copied into `dist/` by the build): sends any address that is not a real file to `index.html` with a 200 status, so the app shows the right page; redirects a trailing slash (`/about/` → `/about`); `FallbackResource` for hosts without mod_rewrite. **It must be uploaded with the rest of `dist/`.** Some FTP programs hide files that start with a dot.
+- New `public/robots.txt` (allow all, points to the sitemap) and `public/sitemap.xml` (all seven pages on www).
+- New `src/data/pages.js`: `SITE_URL` (`https://www.healingspotlpc.com`) and a title for each page.
+- `src/App.jsx`: new `PageMeta` sets each page's title, canonical link, and `og:url` (index.html only had the home page's, so every page told Google it was a copy of home). Unknown addresses get "Page Not Found" and `<meta name="robots" content="noindex">`.
+- `index.html`: home title now "The Healing Spot, LPC | Brian Counts, LPC" (was "The Healing Spot"); canonical, `og:url`, schema `url` → `https://www.healingspotlpc.com/`; `og:image`, `twitter:image`, schema `image` → `https://www.healingspotlpc.com/assets/og-image.jpg` (were the GitHub Pages address).
+- `README.md`: live link now www.healingspotlpc.com.
+- Checked in Chrome (dev server): each route has its own title and one canonical link on www; `/nope` gets the not-found title and `noindex`.
+- Kept: relative `base` (`./`) in `vite.config.js`, so the GitHub Pages copy still works.
+
+**Contact form switched off: shows a "not working yet" popup** (committed in `12af33b`)
 - The form used to post to Formspree form `xgaejdlw`, copied from the original site, so submissions most likely went to the other therapist. That ID is now removed from the code.
 - `src/data/forms.js`: `FORMSPREE_URL` replaced by an empty `FORM_ENDPOINT`, with a comment explaining why and what to do once a provider is chosen.
 - `src/components/ContactForm.jsx`: submitting no longer sends anything. It opens a popup instead. Removed the fetch, the "sending" / "sent" / "error" states, and the error line. The browser's required-field checks still run first.
@@ -541,7 +557,7 @@ Ordered roughly by priority.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
 6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
-8. **Deployment:** `base` is `/` for HealingSpotLPC.com. For a GitHub Pages project URL without the custom domain, set `base` to `/HealingSpotLPC/`.
+8. **Deployment:** the live site is on an Apache host at www.healingspotlpc.com (2026-11-09). `vite.config.js` builds with a relative base (`./`), which works there and on GitHub Pages. Confirm how `dist/` gets to the Apache host, and that `.htaccess` is uploaded with it. The GitHub Pages copy (`delphicoder.github.io/HealingSpotLPC/`) is a duplicate: turn it off (repo Settings → Pages) once the host deploy is settled, or keep it as a preview. Its canonical links already point to www.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Light/Dark header button added (2026-11-04; two states with device default since 2026-11-08). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
@@ -556,7 +572,7 @@ Ordered roughly by priority.
    - `src/sections/Concerns.jsx` (home): "Couples therapy isn't a last resort". The spec changed this wording to "doesn't have to be a last resort", which was applied only in the Couples drawer.
    - Contact page form dropdown (`src/components/ContactForm.jsx`): "Trauma & EMDR", "Military, Veterans & First Responders", "Somatic Therapy".
    - Longer term: reword the copied text in Brian's own voice. It is the friend's writing, and identical text on two live sites can hurt search ranking.
-16. **Domain not connected:** healingspotlpc.com redirects to `healingspotlpc-com.l.ink`; the live site is `https://delphicoder.github.io/HealingSpotLPC/`. `index.html` canonical link, `og:url`, and schema `url` say healingspotlpc.com, while `og:image`, `twitter:image`, and schema `image` use the GitHub Pages URL so they work now. When the domain points at GitHub Pages, change the three image URLs to `https://healingspotlpc.com/assets/og-image.jpg`.
+16. ~~**Domain not connected:**~~ closed 2026-11-09: live at `https://www.healingspotlpc.com/`; all metadata URLs switched to www. After uploading the new build, check that `/about` etc. open directly, then submit `https://www.healingspotlpc.com/sitemap.xml` in Google Search Console.
 
 ## Decisions
 
