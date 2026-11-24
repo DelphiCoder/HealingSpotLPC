@@ -55,17 +55,17 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privac
 
 ## Change History
 
-Everything below is committed and on `main` (2026-11-04 work in `3515b40`; latest is `fd3e832`, 2026-11-09). "(uncommitted)" tags on these entries are historical.
+Everything below is committed and on `main` (2026-11-04 work in `3515b40`; 2026-11-09 in `fd3e832`; 2026-11-24 in `1c84f70` and `9089dc5`). "(uncommitted)" tags on these entries are historical.
 
 ### 2026-11-24
 
-**Social share image: checked live; cache refresh** (uncommitted, on branch `redesign`)
+**Social share image: checked live; cache refresh** (committed in `9089dc5`; on GitHub Pages, not yet uploaded to www)
 - Checked the live site: `https://www.healingspotlpc.com/` sends full Open Graph and X (`summary_large_image`) tags; `og-image.jpg` returns 200 `image/jpeg` (1200x630, 86 KB) to the Facebook, X, Discord, and LinkedIn crawlers; the bare domain and `http://` redirect to www in one step; `robots.txt` allows all. Nothing on the live site blocks share previews.
 - Why it failed before: no image tag before 2026-11-08; from 11-08 to the 11-09 upload the image pointed at GitHub Pages while healingspotlpc.com did not serve the site. Social sites save the first preview they fetch, so links shared then can keep showing no image.
 - `index.html`: share image address is now `og-image.jpg?v=2` (`og:image`, `twitter:image`), so sites that saved an imageless preview fetch it again. Raise the number whenever the image is replaced. Added `og:image:secure_url` and `og:locale` (`en_US`). Discord also uses the new `theme-color` as the embed's side color.
 - Still to do after upload: refresh saved previews (Facebook Sharing Debugger "Scrape Again", LinkedIn Post Inspector); X and Discord refresh on their own over time.
 
-**Mobile-first redesign for phones and tablets** (uncommitted, on branch `redesign`)
+**Mobile-first redesign for phones and tablets** (committed in `9089dc5`, made on branch `redesign`, fast-forward merged into `main` and pushed; branch deleted. On GitHub Pages for Brian's review; not yet uploaded to www)
 - Work time: started 02:14:07, finished 02:28 (US Central). No site wording was changed: text is only re-wrapped, resized, or moved. The only changed label is the menu button's screen-reader label ("Toggle menu" → "Open menu" / "Close menu").
 - Sources followed: web.dev responsive basics and accessible tap targets (about 48px targets, 8px apart), MDN viewport meta and `env()` safe areas, MDN `@media (hover)`, WCAG 2.2 target size (24px minimum, 44px AAA).
 - **Main bug fixed:** on phones about 360–400px wide (common Android sizes), the hidden footer license popups (220px, centered on "Texas") stretched the page wider than the screen, so the whole page scrolled sideways and the fixed header pushed the menu button off screen. Hidden popups now use `display: none`, and they only appear with a mouse or keyboard; on touch screens a tap just opens the license page. Closes Open Item 11.
@@ -88,7 +88,7 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`; lates
 - Checked with Chrome phone emulation (touch, mobile viewport) at 320x568, 360x740, 390x844, 844x390 (sideways), 768x1024, 820x1180, 1180x800, 1366x900, light and dark: no sideways scrolling on any page; desktop looks as before. Tap tests passed: menu open/close, scroll lock, Escape, current-page link, booking from the menu, concern cards, FAQ items.
 - Not checked: a real iPhone/Android device (notch insets can only be seen on a device), and every popup in landscape.
 
-**Progress log corrected** (uncommitted)
+**Progress log corrected** (committed in `1c84f70`)
 - `PROGRESS.md`: the 2026-11-09 "Site live" entry now says it was committed in `fd3e832` (it was marked uncommitted); the note at the top of Change History names `fd3e832` as the latest commit; the "Decisions" line about the Formspree endpoint now says that ID was removed and `FORM_ENDPOINT` is empty until a provider is chosen.
 
 ### 2026-11-09
@@ -591,7 +591,7 @@ Ordered roughly by priority.
 5. **Placeholder copy to review:** Anxiety focus-card description (spec discrepancy 5).
 6. **Philosophy image:** done 2026-11-04 (`compass-web.jpg`). Only phone-width framing is unchecked.
 7. ~~**Resources links:**~~ closed 2026-11-08: Resources page removed.
-8. **Deployment:** the live site is on an Apache host at www.healingspotlpc.com (2026-11-09). `vite.config.js` builds with a relative base (`./`), which works there and on GitHub Pages. Confirm how `dist/` gets to the Apache host, and that `.htaccess` is uploaded with it. The GitHub Pages copy (`delphicoder.github.io/HealingSpotLPC/`) is a duplicate: turn it off (repo Settings → Pages) once the host deploy is settled, or keep it as a preview. Its canonical links already point to www.
+8. **Deployment:** the GitHub Pages copy is the review version for Brian; every push to `main` updates it (confirmed 2026-11-24: it serves the mobile redesign). www.healingspotlpc.com (Apache) still runs the 2026-11-09 build and is updated only after Brian approves. The share-image refresh (`?v=2`, then Facebook "Scrape Again") only takes effect once that upload happens. The live site is on an Apache host at www.healingspotlpc.com (2026-11-09). `vite.config.js` builds with a relative base (`./`), which works there and on GitHub Pages. Confirm how `dist/` gets to the Apache host, and that `.htaccess` is uploaded with it. The GitHub Pages copy (`delphicoder.github.io/HealingSpotLPC/`) is a duplicate: turn it off (repo Settings → Pages) once the host deploy is settled, or keep it as a preview. Its canonical links already point to www.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Light/Dark header button added (2026-11-04; two states with device default since 2026-11-08). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
 11. ~~**Footer license tooltips cause sideways scroll**~~ closed 2026-11-24 (mobile redesign): hidden popups take no space and show only with a mouse or keyboard.
