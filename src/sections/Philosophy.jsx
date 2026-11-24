@@ -16,6 +16,8 @@ export default function Philosophy() {
         src={asset("assets/compass-web.jpg")}
         width="1200"
         height="1119"
+        loading="lazy"
+        decoding="async"
         alt="A hand holding a compass above a road — a metaphor for finding your direction"
       />
       <div className="stack stack--lg philosophy__content">

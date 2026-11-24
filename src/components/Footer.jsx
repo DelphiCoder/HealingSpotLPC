@@ -23,7 +23,7 @@ export default function Footer() {
               <span className="license-tip">
                 <a href="https://aca-prod.accela.com/MILARA/GeneralProperty/LicenseeDetail.aspx?LicenseeNumber=6401226146" target="_blank" rel="noopener noreferrer" className="footer__license-link">Michigan</a>
                 <span className="license-tip__popup" role="tooltip">
-                  <img className="license-tip__seal" src={asset("logos/MichiganGlobal-logo.svg")} alt="Michigan Global logo" />
+                  <img className="license-tip__seal" loading="lazy" src={asset("logos/MichiganGlobal-logo.svg")} alt="Michigan Global logo" />
                   <span className="license-tip__text">Michigan LPC License No. 6401226146</span>
                 </span>
               </span>
@@ -31,7 +31,7 @@ export default function Footer() {
               <span className="license-tip">
                 <a href="https://bhec.texas.gov/tbhec/verify-a-license/" target="_blank" rel="noopener noreferrer" className="footer__license-link">Texas</a>
                 <span className="license-tip__popup" role="tooltip">
-                  <img className="license-tip__seal" src={asset("logos/Seal_of_Texas.svg")} alt="Seal of the State of Texas" />
+                  <img className="license-tip__seal" loading="lazy" src={asset("logos/Seal_of_Texas.svg")} alt="Seal of the State of Texas" />
                   <span className="license-tip__text">Texas LPC License No. 89420</span>
                 </span>
               </span>{" "}

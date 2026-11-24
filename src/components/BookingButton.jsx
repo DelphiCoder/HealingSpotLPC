@@ -6,13 +6,15 @@ import BookingNotice from "./BookingNotice";
 // time-zone notice first; the notice's "Go to Calendar" opens the booking
 // page in a new tab. The link keeps its real address, so a middle-click or
 // Ctrl+click still opens the calendar directly.
-export default function BookingButton({ className, children }) {
+// `onClick` (optional) also runs on a normal click, e.g. to close the phone menu.
+export default function BookingButton({ className, children, onClick }) {
   const [open, setOpen] = useState(false);
 
   const handleClick = (event) => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     setOpen(true);
+    onClick?.();
   };
 
   return (

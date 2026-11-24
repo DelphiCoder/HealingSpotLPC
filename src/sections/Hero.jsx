@@ -29,7 +29,15 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero__media">
-          <img className="hero__photo" src={asset("assets/hero_brian_counts_reduced.jpg")} alt="Brian Counts, Licensed Professional Counselor" />
+          <img
+            className="hero__photo"
+            src={asset("assets/hero_brian_counts_reduced.jpg")}
+            alt="Brian Counts, Licensed Professional Counselor"
+            width="800"
+            height="1019"
+            fetchPriority="high"
+            decoding="async"
+          />
           <div className="hero__fade" aria-hidden="true"></div>
         </div>
       </div>

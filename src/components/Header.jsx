@@ -32,6 +32,31 @@ export default function Header() {
     setPortalOpen(false);
   }, [pathname]);
 
+  // While the phone menu is open: the page behind it doesn't scroll, and
+  // Escape closes it. The menu also closes if the screen grows to the desktop
+  // header (for example, a tablet turned sideways).
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const root = document.documentElement;
+    root.classList.add("menu-open");
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    const wide = window.matchMedia("(min-width: 1180px)");
+    const onWide = (event) => {
+      if (event.matches) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    wide.addEventListener("change", onWide);
+    return () => {
+      root.classList.remove("menu-open");
+      document.removeEventListener("keydown", onKeyDown);
+      wide.removeEventListener("change", onWide);
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
   const openPortal = () => {
     setMenuOpen(false);
     setPortalOpen(true);
@@ -40,7 +65,7 @@ export default function Header() {
   return (
     <header className={`header${scrolled ? " is-scrolled" : ""}`} id="site-header">
       <div className="header__bar">
-        <Link to="/" className="brand">
+        <Link to="/" className="brand" onClick={closeMenu}>
           <span className="brand__mark">
             <img src={asset("logos/Healing_spot_logo_sans_text.svg")} alt="" aria-hidden="true" />
           </span>
@@ -67,7 +92,7 @@ export default function Header() {
           <button
             type="button"
             className="menu-toggle"
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((open) => !open)}
@@ -85,16 +110,18 @@ export default function Header() {
         </div>
       </div>
       <div className="mobile-menu" id="mobile-menu" hidden={!menuOpen}>
-        {NAV_LINKS.map((link) => (
-          <NavLink key={link.to} to={link.to} className="mobile-menu__link">
-            {link.label}
-          </NavLink>
-        ))}
+        <nav className="mobile-menu__nav" aria-label="Menu">
+          {NAV_LINKS.map((link) => (
+            <NavLink key={link.to} to={link.to} className="mobile-menu__link" onClick={closeMenu}>
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
         <div className="mobile-menu__actions">
           <button type="button" className="btn btn--outline btn--block" onClick={openPortal}>
             Client Portal
           </button>
-          <BookingButton className="btn btn--solid btn--block">
+          <BookingButton className="btn btn--solid btn--block" onClick={closeMenu}>
             Book a Consultation
           </BookingButton>
         </div>

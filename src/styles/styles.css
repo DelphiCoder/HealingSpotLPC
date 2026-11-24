@@ -9,6 +9,39 @@
   --font-serif: "Cormorant Garamond Variable", ui-serif, Georgia, serif;
   --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
+  /* Mobile-first layout tokens (2026-11-24).
+     --header-h: height of the fixed header bar; the page content starts below it.
+     --gutter: side padding on phones. On notched phones held sideways, the safe-area
+     insets are larger than 20px, so the gutter grows to keep text clear of the notch. */
+  --header-h: 64px;
+  --gutter-l: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(20px, env(safe-area-inset-right, 0px));
+  --tap: 48px; /* comfortable touch target (web.dev: about 48px) */
+
+  /* Side padding of the header, sections, and footer from 768px:
+     48px on tablets and sideways phones (also clears a notch), 80px on desktop. */
+  --pad-l: max(48px, env(safe-area-inset-left, 0px));
+  --pad-r: max(48px, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 80px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --pad-l: 80px;
+    --pad-r: 80px;
+  }
+}
+
+/* Phones held sideways are short: a slimmer header leaves more room for content. */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --header-h: 56px;
+  }
 }
 
 /* ---------- Base ---------- */
@@ -20,17 +53,65 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  /* Anchor links (#section) stop below the fixed header, not under it. */
+  scroll-padding-top: calc(var(--header-h) + 16px);
   line-height: 1.5;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100svh;
+  /* Safety net: nothing can make the page scroll sideways on a phone. */
+  overflow-x: clip;
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Touch: no 300ms double-tap-zoom delay on controls (pinch zoom still works). */
+a,
+button,
+input,
+select,
+textarea,
+label,
+summary {
+  touch-action: manipulation;
+}
+
+/* Headings break into even lines; paragraphs avoid a lone last word.
+   This only changes where lines wrap, never the words. */
+h1,
+h2,
+h3,
+h4,
+.hero__title,
+.cta-band__title,
+.footer__name {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 img {
@@ -83,6 +164,7 @@ ul {
   align-items: center;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   background: var(--page);
 }
 
@@ -99,13 +181,7 @@ ul {
 }
 
 .header-spacer {
-  margin-top: 72px;
-}
-
-@media (min-width: 768px) {
-  .header-spacer {
-    margin-top: 80px;
-  }
+  margin-top: var(--header-h);
 }
 
 /* Generic vertical stack used throughout the sections */
@@ -177,24 +253,22 @@ ul {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  height: 72px;
-  padding: 0 16px;
+  height: var(--header-h);
+  /* Phones: the gutter also clears the notch when the phone is held sideways. */
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
   max-width: 1440px;
   margin: 0 auto;
 }
 
-/* Small phones (under 400px): the brand, the color-mode button, and the menu
-   button only just fit, so the bar padding, logo, and name are smaller there. */
 @media (min-width: 400px) {
   .header__bar {
-    padding: 0 20px;
+    padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 var(--gutter-l);
   }
 }
 
 @media (min-width: 768px) {
   .header__bar {
-    height: 80px;
-    padding: 0 80px;
+    padding: 0 var(--pad-r) 0 var(--pad-l);
   }
 }
 
@@ -202,7 +276,9 @@ ul {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
+  min-width: 0;
+  min-height: var(--tap);
+  flex-shrink: 1;
 }
 
 .brand__mark {
@@ -240,16 +316,11 @@ ul {
 .brand__name {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.5px;
+  /* Grows with the screen: 17px on a 320px phone, 22px from about 430px. */
+  font-size: clamp(17px, 4.2vw + 3px, 22px);
+  letter-spacing: -0.3px;
   white-space: nowrap;
   color: var(--sage-text);
-}
-
-@media (min-width: 400px) {
-  .brand__name {
-    font-size: 22px;
-  }
 }
 
 @media (min-width: 768px) {
@@ -278,11 +349,14 @@ ul {
   transition: color 0.2s ease;
 }
 
-.nav__link:hover {
-  color: var(--sage-text);
+@media (hover: hover) {
+  .nav__link:hover {
+    color: var(--sage-text);
+  }
 }
 
-.nav__link.is-active {
+.nav__link.is-active,
+.nav__link.active {
   color: var(--sage-text);
   font-weight: 600;
 }
@@ -294,16 +368,20 @@ ul {
   flex-shrink: 0;
 }
 
+/* Menu button: a full 48px touch target. */
 .menu-toggle {
-  display: block;
-  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  margin-right: -6px;
+  border-radius: 50%;
   color: var(--ink);
 }
 
-@media (min-width: 400px) {
-  .menu-toggle {
-    padding: 8px;
-  }
+.menu-toggle:active {
+  background: var(--on-dark-hover);
 }
 
 /* Right side of the header bar: keeps the color-mode button beside the
@@ -311,13 +389,19 @@ ul {
 .header__end {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 @media (min-width: 1180px) {
   .header__end {
     gap: 16px;
+  }
+
+  /* The full desktop header is tight; keep the desktop button size there. */
+  .color-mode {
+    width: 36px;
+    height: 36px;
   }
 
   .header__actions .btn {
@@ -331,8 +415,8 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--line);
   border-radius: 50%;
   background: transparent;
@@ -341,9 +425,11 @@ ul {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.color-mode:hover {
-  border-color: var(--sage-text);
-  background: var(--on-dark-hover);
+@media (hover: hover) {
+  .color-mode:hover {
+    border-color: var(--sage-text);
+    background: var(--on-dark-hover);
+  }
 }
 
 /* Full desktop header (links and both buttons) from 1180px. With the usual
@@ -366,30 +452,143 @@ ul {
   }
 }
 
+/* Phone/tablet menu: a full-height sheet under the header bar, with large,
+   easy-to-tap rows. The page behind it does not scroll while it is open
+   (Header.jsx). Scrolls by itself if the screen is short (landscape). */
 .mobile-menu {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px 20px;
+  gap: 32px;
+  padding: 8px var(--gutter-r) calc(24px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--header-bg);
   border-top: 1px solid var(--line);
+  animation: menu-in 0.22s ease-out;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
 }
 
 .mobile-menu__link {
-  font-size: 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-serif);
+  font-size: 26px;
   font-weight: 500;
+  line-height: 1.2;
   color: var(--ink);
 }
 
-.mobile-menu__link:hover {
+/* Small chevron drawn with borders (decorative; no text added). */
+.mobile-menu__link::after {
+  content: "";
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.6;
+}
+
+.mobile-menu__link.active {
   color: var(--sage-text);
+}
+
+.mobile-menu__link.active::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--terracotta);
+}
+
+.mobile-menu__link:active {
+  background: var(--on-dark-hover);
+}
+
+@media (hover: hover) {
+  .mobile-menu__link:hover {
+    color: var(--sage-text);
+  }
 }
 
 .mobile-menu__actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 8px;
+}
+
+.mobile-menu__actions .btn {
+  min-height: 52px;
+  font-size: 15px;
+}
+
+/* Wider screens and phones held sideways: two columns of links,
+   buttons side by side. */
+@media (min-width: 600px) {
+  .mobile-menu__nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+  }
+
+  .mobile-menu__actions {
+    flex-direction: row;
+  }
+
+  .mobile-menu__actions .btn {
+    flex: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    padding-left: var(--pad-l);
+    padding-right: var(--pad-r);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .mobile-menu {
+    gap: 20px;
+  }
+
+  .mobile-menu__link {
+    min-height: 52px;
+    font-size: 22px;
+  }
+}
+
+/* Keeps the page from scrolling behind the open menu. */
+.menu-open {
+  overflow: hidden;
 }
 
 @media (min-width: 1180px) {
@@ -404,18 +603,31 @@ ul {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: var(--tap);
   padding: 12px 24px;
   border: 1px solid transparent;
   border-radius: 30px;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   text-align: center;
   white-space: normal;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
+}
+
+@media (min-width: 1024px) {
+  .btn {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Touch feedback: the button gives slightly under the finger. */
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn:disabled {
@@ -428,8 +640,10 @@ ul {
   color: var(--on-fill);
 }
 
-.btn--solid:hover {
-  background: var(--sage-dark);
+@media (hover: hover) {
+  .btn--solid:hover {
+    background: var(--sage-dark);
+  }
 }
 
 .btn--outline {
@@ -438,9 +652,11 @@ ul {
   background: transparent;
 }
 
-.btn--outline:hover {
-  background: var(--sage);
-  color: var(--on-fill-strong);
+@media (hover: hover) {
+  .btn--outline:hover {
+    background: var(--sage);
+    color: var(--on-fill-strong);
+  }
 }
 
 .btn--white {
@@ -449,8 +665,10 @@ ul {
   padding: 14px 28px;
 }
 
-.btn--white:hover {
-  background: var(--page);
+@media (hover: hover) {
+  .btn--white:hover {
+    background: var(--page);
+  }
 }
 
 .btn--ghost-light {
@@ -459,8 +677,10 @@ ul {
   background: transparent;
 }
 
-.btn--ghost-light:hover {
-  background: var(--on-dark-hover);
+@media (hover: hover) {
+  .btn--ghost-light:hover {
+    background: var(--on-dark-hover);
+  }
 }
 
 .btn--terracotta {
@@ -469,8 +689,10 @@ ul {
   padding: 14px 28px;
 }
 
-.btn--terracotta:hover {
-  background: var(--terracotta-hover);
+@media (hover: hover) {
+  .btn--terracotta:hover {
+    background: var(--terracotta-hover);
+  }
 }
 
 .btn--terracotta-deep {
@@ -478,8 +700,10 @@ ul {
   color: var(--on-fill-strong);
 }
 
-.btn--terracotta-deep:hover {
-  background: var(--terracotta-deep-hover);
+@media (hover: hover) {
+  .btn--terracotta-deep:hover {
+    background: var(--terracotta-deep-hover);
+  }
 }
 
 .btn--youtube {
@@ -487,8 +711,10 @@ ul {
   color: var(--on-fill-strong);
 }
 
-.btn--youtube:hover {
-  background: var(--youtube-hover);
+@media (hover: hover) {
+  .btn--youtube:hover {
+    background: var(--youtube-hover);
+  }
 }
 
 .btn--outline-terracotta {
@@ -497,9 +723,11 @@ ul {
   padding: 14px 28px;
 }
 
-.btn--outline-terracotta:hover {
-  background: var(--terracotta);
-  color: var(--on-fill-strong);
+@media (hover: hover) {
+  .btn--outline-terracotta:hover {
+    background: var(--terracotta);
+    color: var(--on-fill-strong);
+  }
 }
 
 .btn--hero {
@@ -520,14 +748,16 @@ ul {
 }
 
 .btn--small {
+  min-height: 44px;
   padding: 10px 20px;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.3px;
 }
 
 .btn--pill-small {
+  min-height: 44px;
   padding: 10px 20px;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0;
   border-radius: 999px;
 }
@@ -571,16 +801,21 @@ ul {
 }
 
 .text-button {
+  display: inline-flex;
+  align-items: center;
   align-self: flex-start;
-  margin-top: 4px;
-  font-size: 12px;
+  min-height: 44px;
+  margin: -6px 0 -10px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.3px;
   color: var(--terracotta);
 }
 
-.text-button:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .text-button:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-link {
@@ -589,14 +824,17 @@ ul {
   color: var(--sage-text);
 }
 
-.text-link:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .text-link:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-link--icon {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
 }
 
 .text-link--underline {
@@ -605,8 +843,10 @@ ul {
   text-decoration: underline;
 }
 
-.text-link--underline:hover {
-  text-decoration: none;
+@media (hover: hover) {
+  .text-link--underline:hover {
+    text-decoration: none;
+  }
 }
 
 .text-link--small {
@@ -619,8 +859,8 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   flex-shrink: 0;
   transition: background-color 0.2s ease;
@@ -630,16 +870,20 @@ ul {
   border: 1px solid var(--line);
 }
 
-.icon-button--outline:hover {
-  background: var(--line);
+@media (hover: hover) {
+  .icon-button--outline:hover {
+    background: var(--line);
+  }
 }
 
 .icon-button--muted {
   background: var(--sand);
 }
 
-.icon-button--muted:hover {
-  background: var(--line);
+@media (hover: hover) {
+  .icon-button--muted:hover {
+    background: var(--line);
+  }
 }
 
 /* ---------- Typography ---------- */
@@ -755,7 +999,7 @@ ul {
 .display-sans {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 36px;
+  font-size: clamp(30px, 6vw + 10px, 36px);
   line-height: 1.2;
   color: var(--ink);
 }
@@ -788,7 +1032,7 @@ ul {
 }
 
 .display-sans--faq {
-  font-size: 38px;
+  font-size: clamp(32px, 7vw + 6px, 38px);
   line-height: 1.2;
 }
 
@@ -799,7 +1043,7 @@ ul {
 }
 
 .display-sans--concerns {
-  font-size: 44px;
+  font-size: clamp(34px, 8vw + 6px, 44px);
   line-height: 1.1;
 }
 
@@ -869,7 +1113,7 @@ ul {
 }
 
 .body-text {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
   color: var(--muted);
 }
@@ -925,14 +1169,23 @@ ul {
 }
 
 /* ---------- Modal shell ---------- */
+/* Phones: popups rise from the bottom as a sheet (thumb-friendly, like the
+   phone's own dialogs). From 640px they are centered cards as before. */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  padding: 16px;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .modal {
+    align-items: center;
+    padding: 16px;
+  }
 }
 
 .modal__backdrop {
@@ -966,10 +1219,28 @@ ul {
   width: 100%;
   max-width: 520px;
   max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 24px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--page);
-  border-radius: 24px;
+  border-radius: 24px 24px 0 0;
   box-shadow: 0 25px 50px -12px var(--shadow-overlay);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  animation: sheet-up 0.25s ease-out;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .portal {
+    border-radius: 24px;
+    padding-bottom: 0;
+  }
 }
 
 .portal__header {
@@ -977,14 +1248,18 @@ ul {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  padding: 32px 32px 20px;
+  padding: 24px 20px 16px 24px;
   border-bottom: 1px solid var(--line);
 }
 
 .portal__header .icon-button {
-  width: 32px;
-  height: 32px;
-  margin-top: 4px;
+  margin-top: -4px;
+}
+
+@media (min-width: 640px) {
+  .portal__header {
+    padding: 32px 28px 20px 32px;
+  }
 }
 
 .portal__heading {
@@ -1005,8 +1280,8 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 24px 32px;
-  font-size: 15px;
+  padding: 20px 24px;
+  font-size: 16px;
   line-height: 1.625;
   color: var(--ink-soft);
 }
@@ -1017,8 +1292,10 @@ ul {
   font-weight: 600;
 }
 
-.portal__link:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .portal__link:hover {
+    text-decoration: underline;
+  }
 }
 
 .portal__footer {
@@ -1026,8 +1303,29 @@ ul {
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
-  padding: 20px 32px 32px;
+  padding: 16px 24px 24px;
   border-top: 1px solid var(--line);
+}
+
+/* Phones: the main button spans the sheet. */
+.portal__footer .btn {
+  flex: 1;
+  min-height: 52px;
+}
+
+@media (min-width: 640px) {
+  .portal__body {
+    padding: 24px 32px;
+  }
+
+  .portal__footer {
+    padding: 20px 32px 32px;
+  }
+
+  .portal__footer .btn {
+    flex: none;
+    min-height: 44px;
+  }
 }
 
 /* EMDR notify */
@@ -1049,8 +1347,10 @@ ul {
   transition: color 0.2s ease;
 }
 
-.emdr__close:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .emdr__close:hover {
+    color: var(--ink);
+  }
 }
 
 .emdr__intro {
@@ -1116,8 +1416,10 @@ ul {
   transition: background-color 0.2s ease;
 }
 
-.emdr__submit:hover {
-  background: var(--sage-dark);
+@media (hover: hover) {
+  .emdr__submit:hover {
+    background: var(--sage-dark);
+  }
 }
 
 .emdr__submit:disabled {
@@ -1148,10 +1450,14 @@ ul {
 .glossary {
   width: 100%;
   max-width: 720px;
-  max-height: 85vh;
+  max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--page);
-  border-radius: 24px;
+  border-radius: 24px 24px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  animation: sheet-up 0.25s ease-out;
   box-shadow: 0 25px 50px -12px var(--shadow-overlay);
 }
 
@@ -1163,7 +1469,7 @@ ul {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 24px 32px;
+  padding: 20px 16px 16px 20px;
   background: var(--page);
   border-bottom: 1px solid var(--line);
 }
@@ -1190,7 +1496,23 @@ ul {
 .glossary__body {
   display: flex;
   flex-direction: column;
-  padding: 24px 32px;
+  padding: 20px;
+}
+
+@media (min-width: 640px) {
+  .glossary {
+    max-height: 85vh;
+    border-radius: 24px;
+    padding-bottom: 0;
+  }
+
+  .glossary__header {
+    padding: 24px 32px;
+  }
+
+  .glossary__body {
+    padding: 24px 32px;
+  }
 }
 
 .glossary__intro {
@@ -1200,16 +1522,29 @@ ul {
   color: var(--muted);
 }
 
+/* Phones: term name above its meaning; side by side from 640px. */
 .glossary__term {
   display: flex;
-  gap: 24px;
-  padding: 24px 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 0;
   border-top: 1px solid var(--line);
 }
 
 .glossary__term-title-wrap {
-  width: 180px;
   flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .glossary__term {
+    flex-direction: row;
+    gap: 24px;
+    padding: 24px 0;
+  }
+
+  .glossary__term-title-wrap {
+    width: 180px;
+  }
 }
 
 .glossary__term-title {
@@ -1222,7 +1557,7 @@ ul {
 
 .glossary__term-body {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--muted);
 }
@@ -1268,8 +1603,10 @@ ul {
   color: var(--sage-text);
 }
 
-.glossary__cta-sub a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .glossary__cta-sub a:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Practice-area drawer */
@@ -1280,8 +1617,17 @@ ul {
   max-width: 560px;
   height: 100%;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: drawer-in 0.25s ease-out;
   background: var(--page);
   box-shadow: -25px 0 50px -12px var(--shadow-overlay);
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(32px);
+    opacity: 0;
+  }
 }
 
 .drawer__header {
@@ -1289,7 +1635,7 @@ ul {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  padding: 40px 32px 24px;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 20px 24px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1306,7 +1652,7 @@ ul {
 .drawer__title {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 30px;
+  font-size: clamp(26px, 5vw + 8px, 30px);
   line-height: 1.375;
   color: var(--ink);
 }
@@ -1315,8 +1661,8 @@ ul {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 40px;
-  padding: 32px;
+  gap: 32px;
+  padding: 24px max(24px, env(safe-area-inset-right, 0px)) 32px 24px;
 }
 
 .drawer__block {
@@ -1330,7 +1676,7 @@ ul {
 }
 
 .drawer__text {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.625;
   color: var(--ink-soft);
 }
@@ -1361,18 +1707,31 @@ ul {
   background: var(--terracotta);
 }
 
+/* Stays at the bottom of the drawer while the text scrolls, so booking is always in reach. */
 .drawer__footer {
+  position: sticky;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 32px;
+  padding: 16px max(24px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) 24px;
   border-top: 1px solid var(--line);
   background: var(--surface);
 }
 
 @media (min-width: 640px) {
+  .drawer__header {
+    padding: 40px 32px 24px;
+  }
+
+  .drawer__body {
+    gap: 40px;
+    padding: 32px;
+  }
+
   .drawer__footer {
     flex-direction: row;
+    padding: 24px 32px calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1384,14 +1743,8 @@ ul {
 /* ---------- Hero ---------- */
 .hero {
   width: 100%;
-  margin-top: 72px;
+  margin-top: var(--header-h);
   background: var(--hero-bg);
-}
-
-@media (min-width: 768px) {
-  .hero {
-    margin-top: 80px;
-  }
 }
 
 .hero__inner {
@@ -1400,7 +1753,6 @@ ul {
   align-items: stretch;
   width: 100%;
   max-width: 1440px;
-  min-height: 600px;
   margin: 0 auto;
 }
 
@@ -1408,6 +1760,15 @@ ul {
   .hero__inner {
     flex-direction: row;
     min-height: 760px;
+  }
+}
+
+/* Phones held sideways and small tablets in landscape: words on the left,
+   Brian's portrait on the right, so neither is cut off. */
+@media (orientation: landscape) and (min-width: 600px) and (max-width: 1023.98px) {
+  .hero__inner {
+    flex-direction: row;
+    align-items: center;
   }
 }
 
@@ -1419,28 +1780,28 @@ ul {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 32px;
-  padding: 80px 20px;
+  gap: 28px;
+  padding: 48px var(--gutter-r) 40px var(--gutter-l);
 }
 
 @media (min-width: 768px) {
   .hero__copy {
     gap: 40px;
-    padding: 80px 64px;
+    padding: 80px var(--pad-r) 80px var(--pad-l);
   }
 }
 
 @media (min-width: 1024px) {
   .hero__copy {
-    padding: 112px 80px;
+    padding: 112px var(--pad-r) 112px var(--pad-l);
   }
 }
 
 .hero__title {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 44px;
-  line-height: 1.05;
+  font-size: clamp(34px, 8vw + 6px, 46px);
+  line-height: 1.08;
   color: var(--on-fill);
 }
 
@@ -1458,8 +1819,8 @@ ul {
 
 .hero__lede {
   max-width: 560px;
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 16.5px;
+  line-height: 1.65;
   color: var(--on-fill);
   opacity: 0.9;
 }
@@ -1470,17 +1831,24 @@ ul {
   }
 }
 
+/* Phones: both buttons full width, stacked, easy to reach with a thumb. */
 .hero__ctas {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+}
+
+.hero__ctas .btn {
+  min-height: 52px;
 }
 
 @media (min-width: 640px) {
   .hero__ctas {
     flex-direction: row;
     align-items: center;
+    width: auto;
   }
 }
 
@@ -1506,6 +1874,9 @@ ul {
   opacity: 0.6;
 }
 
+/* Phones and tablets: Brian's photo is a smaller rounded portrait below the
+   words, so the welcome message is read first. Desktop (1024px+) keeps the
+   tall photo that fades into the hero. */
 .hero__media {
   position: relative;
   display: flex;
@@ -1513,7 +1884,16 @@ ul {
   justify-content: center;
   align-self: stretch;
   width: 100%;
-  overflow: hidden;
+  padding: 0 var(--gutter-r) 48px var(--gutter-l);
+}
+
+@media (orientation: landscape) and (min-width: 600px) and (max-width: 1023.98px) {
+  .hero__media {
+    align-self: center;
+    width: 40%;
+    flex-shrink: 0;
+    padding: 32px var(--gutter-r) 32px 0;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1521,6 +1901,8 @@ ul {
     justify-content: flex-end;
     width: 480px;
     flex-shrink: 0;
+    padding: 0;
+    overflow: hidden;
   }
 }
 
@@ -1532,20 +1914,45 @@ ul {
 
 .hero__photo {
   width: 100%;
-  height: 420px;
+  max-width: 300px;
+  height: auto;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  object-position: top;
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 18%);
-  mask-image: linear-gradient(to top, transparent 0%, black 18%);
+  object-position: center top;
+  border-radius: 24px;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 600px) {
+  .hero__photo {
+    max-width: 340px;
+  }
+}
+
+/* Sideways phones: the photo fits the short screen height. */
+@media (orientation: landscape) and (min-width: 600px) and (max-width: 1023.98px) {
+  .hero__photo {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100svh - var(--header-h) - 64px);
+    min-height: 220px;
+  }
 }
 
 @media (min-width: 1024px) {
   .hero__photo {
+    max-width: none;
     height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 18%);
+    mask-image: linear-gradient(to top, transparent 0%, black 18%);
   }
 }
 
 .hero__fade {
+  display: none;
   position: absolute;
   left: 0;
   right: 0;
@@ -1555,21 +1962,54 @@ ul {
   pointer-events: none;
 }
 
+@media (min-width: 1024px) {
+  .hero__fade {
+    display: block;
+  }
+}
+
+/* Sideways phones and small landscape tablets (after the 768px rules, so these win). */
+@media (orientation: landscape) and (min-width: 600px) and (max-width: 1023.98px) {
+  .hero__copy {
+    gap: 22px;
+    padding: 36px 32px 36px var(--gutter-l);
+  }
+
+  .hero__title {
+    font-size: clamp(30px, 3.2vw + 10px, 42px);
+  }
+
+  .hero__lede {
+    font-size: 15.5px;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 768px) and (max-width: 1023.98px) {
+  .hero__copy {
+    padding-left: var(--pad-l);
+  }
+
+  .hero__media {
+    padding-right: var(--pad-r);
+  }
+}
+
 /* ---------- Generic sections ---------- */
 .section {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 56px;
+  gap: 40px;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 80px 20px;
+  padding: 56px var(--gutter-r) 64px var(--gutter-l);
 }
 
 @media (min-width: 768px) {
   .section {
-    padding: 112px 80px;
+    gap: 56px;
+    padding: 112px var(--pad-r) 112px var(--pad-l);
   }
 }
 
@@ -1583,7 +2023,14 @@ ul {
 
 .section--process,
 .section--services {
-  gap: 64px;
+  gap: 48px;
+}
+
+@media (min-width: 768px) {
+  .section--process,
+  .section--services {
+    gap: 64px;
+  }
 }
 
 /* About page: half the usual space between My Philosophy and The Process
@@ -1625,13 +2072,13 @@ ul {
 
 /* ---------- Home: concerns accordion ---------- */
 .section--concerns {
-  gap: 40px;
-  padding: 64px 20px;
+  gap: 32px;
+  padding: 56px var(--gutter-r) 56px var(--gutter-l);
 }
 
 @media (min-width: 768px) {
   .section--concerns {
-    padding: 80px;
+    padding: 80px var(--pad-r) 80px var(--pad-l);
   }
 }
 
@@ -1658,7 +2105,7 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px;
+  padding: 22px 20px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
@@ -1668,7 +2115,13 @@ ul {
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.concern:hover {
+@media (hover: hover) {
+  .concern:hover {
+    border-color: var(--sage-text);
+  }
+}
+
+.concern:active {
   border-color: var(--sage-text);
 }
 
@@ -1752,7 +2205,7 @@ ul {
 }
 
 .concern__body {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   text-align: left;
   color: var(--on-fill);
@@ -1770,13 +2223,13 @@ ul {
 
 .cta-band {
   width: 100%;
-  padding: 48px 20px;
+  padding: 56px var(--gutter-r) 64px var(--gutter-l);
   background: var(--sage);
 }
 
 @media (min-width: 768px) {
   .cta-band {
-    padding: 64px 80px;
+    padding: 64px var(--pad-r) 64px var(--pad-l);
   }
 }
 
@@ -1784,7 +2237,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
   max-width: 880px;
   margin: 0 auto;
   text-align: center;
@@ -1800,7 +2253,7 @@ ul {
 .cta-band__title {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 44px;
+  font-size: clamp(34px, 8vw + 6px, 44px);
   line-height: 1.1;
   color: var(--on-fill);
 }
@@ -1813,7 +2266,7 @@ ul {
 
 .cta-band__text {
   max-width: 640px;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.65;
   color: var(--on-fill);
   opacity: 0.9;
@@ -1828,15 +2281,24 @@ ul {
 .cta-band__actions {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
   flex-shrink: 0;
+  width: 100%;
+  max-width: 360px;
+}
+
+.cta-band__actions .btn {
+  min-height: 52px;
 }
 
 @media (min-width: 640px) {
   .cta-band__actions {
     flex-direction: row;
+    align-items: center;
     gap: 16px;
+    width: auto;
+    max-width: none;
   }
 }
 
@@ -1849,8 +2311,43 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 48px;
+  gap: 32px;
   width: 100%;
+}
+
+/* Sideways phones and landscape tablets: photo beside the text. */
+@media (orientation: landscape) and (min-width: 700px) and (max-width: 1023.98px) {
+  .meet {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .meet__photo {
+    width: 38%;
+    max-width: 340px;
+    position: sticky;
+    top: calc(var(--header-h) + 20px);
+  }
+
+  .meet__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* My Philosophy: compass photo beside the words, sized to the short screen. */
+  .section--philosophy {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* (two classes so this wins over the later 768px height rule) */
+  .section--philosophy .philosophy__image {
+    width: 38%;
+    height: auto;
+    max-height: calc(100svh - var(--header-h) - 48px);
+    aspect-ratio: 1200 / 1119;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1860,17 +2357,30 @@ ul {
   }
 }
 
+/* Phones: a portrait no wider than 320px, so it doesn't fill the whole screen. */
 .meet__photo {
   width: 100%;
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 4 / 5;
   border-radius: 20px;
   object-fit: cover;
+  object-position: center top;
   flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .meet__photo {
+    max-width: 380px;
+  }
 }
 
 @media (min-width: 1024px) {
   .meet__photo {
     width: 520px;
+    max-width: none;
     height: 620px;
+    aspect-ratio: auto;
   }
 }
 
@@ -1899,7 +2409,7 @@ ul {
 .meet__name {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: 40px;
+  font-size: clamp(34px, 7vw + 8px, 40px);
   line-height: 1.1;
   color: var(--ink);
 }
@@ -1945,7 +2455,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
+  gap: 16px;
 }
 
 @media (min-width: 640px) {
@@ -1965,10 +2475,16 @@ ul {
 
 .philosophy__image {
   width: 100%;
-  height: 320px;
+  height: 240px;
   border-radius: 20px;
   object-fit: cover;
   flex-shrink: 0;
+}
+
+@media (min-width: 600px) {
+  .philosophy__image {
+    height: 320px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -2015,7 +2531,7 @@ ul {
 }
 
 .pillar__sub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
 
@@ -2072,7 +2588,7 @@ ul {
 }
 
 .step__desc {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--muted);
 }
@@ -2081,9 +2597,9 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
-  padding: 28px 32px;
+  padding: 24px 22px;
   border-radius: 20px;
   background: var(--sage);
 }
@@ -2091,6 +2607,8 @@ ul {
 @media (min-width: 640px) {
   .promise {
     flex-direction: row;
+    gap: 20px;
+    padding: 28px 32px;
   }
 }
 
@@ -2125,9 +2643,9 @@ ul {
 .panel-dark {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
   width: 100%;
-  padding: 32px;
+  padding: 28px 20px;
   border-radius: 20px;
   background: var(--sage-deep);
 }
@@ -2171,7 +2689,7 @@ ul {
 }
 
 .panel-dark__hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--mist);
 }
 
@@ -2211,8 +2729,8 @@ ul {
 .focus {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 28px 0;
+  gap: 10px;
+  padding: 24px 0;
   border-bottom: 1px solid var(--sage-line);
 }
 
@@ -2245,24 +2763,30 @@ ul {
 
 .focus__desc {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.625;
   color: var(--mist);
 }
 
+/* Practice-area chips are buttons: 44px tall on touch screens. */
 .topic-chip {
-  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
   border: 1px solid var(--sage-line);
-  border-radius: 20px;
-  font-size: 12px;
+  border-radius: 22px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--mist-soft);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.topic-chip:hover {
-  background: var(--sage-line);
-  color: var(--on-fill-strong);
+@media (hover: hover) {
+  .topic-chip:hover {
+    background: var(--sage-line);
+    color: var(--on-fill-strong);
+  }
 }
 
 .callout {
@@ -2275,9 +2799,9 @@ ul {
 .callout__inner {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  padding: 32px 20px;
+  align-items: stretch;
+  gap: 28px;
+  padding: 28px 20px;
   background: var(--terracotta-soft);
 }
 
@@ -2333,7 +2857,7 @@ ul {
 .callout__actions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
@@ -2376,7 +2900,7 @@ ul {
 }
 
 .notice__text {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   color: var(--muted);
 }
@@ -2384,11 +2908,11 @@ ul {
 .offer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
-  padding: 28px 32px;
+  padding: 24px 20px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
@@ -2398,6 +2922,7 @@ ul {
   .offer {
     flex-direction: row;
     align-items: center;
+    padding: 28px 32px;
   }
 }
 
@@ -2413,15 +2938,27 @@ ul {
 }
 
 .offer__text {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.625;
   color: var(--muted);
 }
 
+/* Phones: the two buttons share the row equally instead of squeezing. */
 .offer__actions {
   display: flex;
+  flex-wrap: wrap;
   flex-shrink: 0;
   gap: 12px;
+}
+
+.offer__actions .btn {
+  flex: 1 1 140px;
+}
+
+@media (min-width: 768px) {
+  .offer__actions .btn {
+    flex: none;
+  }
 }
 
 .approach {
@@ -2466,7 +3003,7 @@ ul {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  padding: 32px 0;
+  padding: 28px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -2525,6 +3062,7 @@ ul {
   align-items: center;
   gap: 8px;
   align-self: flex-start;
+  min-height: 44px;
   padding: 8px 16px;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -2533,19 +3071,23 @@ ul {
   transition: border-color 0.2s ease;
 }
 
-.research-link:hover {
-  border-color: var(--sage-text);
+@media (hover: hover) {
+  .research-link:hover {
+    border-color: var(--sage-text);
+  }
 }
 
 .research-link span {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--ink-soft);
   transition: color 0.2s ease;
 }
 
-.research-link:hover span {
-  color: var(--sage-text);
+@media (hover: hover) {
+  .research-link:hover span {
+    color: var(--sage-text);
+  }
 }
 
 /* ---------- Fees & insurance ---------- */
@@ -2594,13 +3136,17 @@ ul {
   .rate-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .rate {
+    padding: 28px;
+  }
 }
 
 .rate {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 28px;
+  gap: 10px;
+  padding: 22px 20px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
@@ -2630,7 +3176,7 @@ ul {
 }
 
 .rate__desc {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--muted);
 }
@@ -2650,7 +3196,7 @@ ul {
 }
 
 .insurer-head__note {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
 
@@ -2658,8 +3204,10 @@ ul {
   color: var(--sage-text);
 }
 
-.insurer-head__note a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .insurer-head__note a:hover {
+    text-decoration: underline;
+  }
 }
 
 .insurer-grid {
@@ -2675,14 +3223,21 @@ ul {
   }
 }
 
+/* Phones (2 per row): an odd last tile spans the row instead of sitting alone. */
+@media (max-width: 639.98px) {
+  .insurer:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
 .insurer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  height: 90px;
-  padding: 16px;
+  gap: 10px;
+  min-height: 96px;
+  padding: 14px 10px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--surface);
@@ -2715,16 +3270,17 @@ ul {
 .faq {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 48px;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 80px 20px;
+  padding: 56px var(--gutter-r) 64px var(--gutter-l);
 }
 
 @media (min-width: 768px) {
   .faq {
-    padding: 112px 80px;
+    gap: 64px;
+    padding: 112px var(--pad-r) 112px var(--pad-l);
   }
 }
 
@@ -2798,7 +3354,7 @@ ul {
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  padding: 24px 0;
+  padding: 20px 0;
   text-align: left;
 }
 
@@ -2849,7 +3405,7 @@ ul {
   /* 760px fits "...Austin TX area. In-person" on one line in the telehealth answer. */
   max-width: 760px;
   padding-bottom: 24px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.625;
   color: var(--ink-soft);
 }
@@ -2858,8 +3414,8 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
-  padding: 40px 32px;
+  gap: 20px;
+  padding: 28px 22px;
   border-radius: 20px;
   background: var(--surface);
 }
@@ -2918,11 +3474,14 @@ ul {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-height: 48px;
   transition: opacity 0.2s ease;
 }
 
-a.contact__line:hover {
-  opacity: 0.75;
+@media (hover: hover) {
+  a.contact__line:hover {
+    opacity: 0.75;
+  }
 }
 
 .contact__line--address {
@@ -2948,7 +3507,7 @@ a.contact__line:hover {
 }
 
 .contact__value {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
 }
 
@@ -3006,7 +3565,7 @@ a.contact__line:hover {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 32px;
+  padding: 24px 20px;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: var(--sand);
@@ -3053,14 +3612,16 @@ a.contact__line:hover {
   color: var(--sage-text);
 }
 
+/* 16px text: iPhones zoom the page into any form field with smaller text. */
 .field__input {
   width: 100%;
+  min-height: var(--tap);
   padding: 12px 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
   outline: none;
   transition: box-shadow 0.2s ease;
@@ -3076,11 +3637,17 @@ a.contact__line:hover {
 
 .field__input--select {
   appearance: none;
+  padding-right: 44px;
   cursor: pointer;
+  /* Down arrow drawn in CSS (the native one is turned off by appearance: none). */
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
 }
 
 .field__input--textarea {
-  resize: none;
+  resize: vertical;
 }
 
 .form-error {
@@ -3135,25 +3702,26 @@ a.contact__line:hover {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 64px;
+  gap: 40px;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 48px var(--gutter-r) calc(24px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
 }
 
 @media (min-width: 768px) {
   .footer__inner {
-    padding: 40px 80px;
+    gap: 64px;
+    padding: 40px var(--pad-r) calc(40px + env(safe-area-inset-bottom, 0px)) var(--pad-l);
   }
 }
 
 .crisis {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 14px;
   width: 100%;
-  padding: 20px;
+  padding: 18px;
   border: 1px solid var(--crisis-border);
   border-radius: 12px;
   background: var(--crisis-bg);
@@ -3163,13 +3731,14 @@ a.contact__line:hover {
   flex-shrink: 0;
   width: 10px;
   height: 10px;
+  margin-top: 6px;
   border-radius: 50%;
   background: var(--crisis-red);
 }
 
 .crisis__text {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--on-fill-strong);
 }
@@ -3180,13 +3749,21 @@ a.contact__line:hover {
   color: var(--crisis-red);
 }
 
-.crisis__link:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .crisis__link:hover {
+    text-decoration: underline;
+  }
 }
 
-/* Pulls the bottom rule up under the crisis card (footer gap is 64px; this leaves 24px). */
+/* Pulls the bottom rule up under the crisis card (leaves 24px). */
 .crisis + .footer__bottom {
-  margin-top: -40px;
+  margin-top: -16px;
+}
+
+@media (min-width: 768px) {
+  .crisis + .footer__bottom {
+    margin-top: -40px;
+  }
 }
 
 .footer__columns {
@@ -3194,7 +3771,7 @@ a.contact__line:hover {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 48px;
+  gap: 36px;
   width: 100%;
 }
 
@@ -3223,13 +3800,13 @@ a.contact__line:hover {
 .footer__name {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 34px;
+  font-size: clamp(28px, 6vw + 6px, 34px);
   line-height: 1.15;
   color: var(--on-fill);
 }
 
 .footer__blurb {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.7;
   /* Text is set to 90% cream with a color, not opacity, so the hover popup inside
      this paragraph is not made translucent. */
@@ -3257,19 +3834,32 @@ a.contact__line:hover {
   }
 }
 
+/* Phones: two even columns. */
 .footer__links {
-  display: flex;
-  align-items: flex-start;
-  gap: 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 24px;
+  width: 100%;
 }
 
+@media (min-width: 640px) {
+  .footer__links {
+    display: flex;
+    gap: 64px;
+    width: auto;
+  }
+}
+
+/* Each footer link is a 44px-tall row, easy to tap. */
 .footer__col {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 0;
 }
 
 .footer__heading {
+  margin-bottom: 4px;
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 1.5px;
@@ -3279,7 +3869,11 @@ a.contact__line:hover {
 
 .footer__link,
 .footer__text {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 16px;
+  line-height: 1.3;
   color: var(--on-fill);
   opacity: 0.9;
 }
@@ -3289,8 +3883,10 @@ a.contact__line:hover {
   text-underline-offset: 3px;
 }
 
-.footer__license-link:hover {
-  opacity: 0.7;
+@media (hover: hover) {
+  .footer__license-link:hover {
+    opacity: 0.7;
+  }
 }
 
 .license-tip {
@@ -3298,13 +3894,16 @@ a.contact__line:hover {
   display: inline-block;
 }
 
+/* Hidden popups take no space (display: none), so they can't push the page
+   wider than a phone screen. Shown on mouse hover or keyboard focus only;
+   on touch screens a tap simply opens the license page. */
 .license-tip__popup {
   position: absolute;
   bottom: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 8px;
@@ -3328,18 +3927,23 @@ a.contact__line:hover {
   height: auto;
 }
 
-.license-tip:hover .license-tip__popup,
-.license-tip:focus-within .license-tip__popup {
-  opacity: 1;
-  visibility: visible;
+@media (hover: hover) {
+  .license-tip:focus-within .license-tip__popup,
+  .license-tip:hover .license-tip__popup {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .footer__link {
   transition: opacity 0.2s ease;
 }
 
-.footer__link:hover {
-  opacity: 1;
+@media (hover: hover) {
+  .footer__link:hover {
+    opacity: 1;
+  }
 }
 
 .footer__bottom {
@@ -3347,7 +3951,7 @@ a.contact__line:hover {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: 4px;
   width: 100%;
   padding-top: 24px;
   border-top: 1px solid var(--on-dark-rule);
@@ -3363,7 +3967,7 @@ a.contact__line:hover {
 .footer__copyright {
   font-size: 13px;
   color: var(--on-fill);
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 .footer__legal {
@@ -3372,14 +3976,19 @@ a.contact__line:hover {
 }
 
 .footer__legal-link {
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
   color: var(--on-fill);
-  opacity: 0.4;
+  opacity: 0.7;
   cursor: pointer;
 }
 
-.footer__legal-link:hover {
-  opacity: 0.6;
+@media (hover: hover) {
+  .footer__legal-link:hover {
+    opacity: 0.6;
+  }
 }
 
 /* ---------- Privacy policy page ---------- */

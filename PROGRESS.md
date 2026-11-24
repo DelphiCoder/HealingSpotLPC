@@ -59,6 +59,35 @@ Everything below is committed and on `main` (2026-11-04 work in `3515b40`; lates
 
 ### 2026-11-24
 
+**Social share image: checked live; cache refresh** (uncommitted, on branch `redesign`)
+- Checked the live site: `https://www.healingspotlpc.com/` sends full Open Graph and X (`summary_large_image`) tags; `og-image.jpg` returns 200 `image/jpeg` (1200x630, 86 KB) to the Facebook, X, Discord, and LinkedIn crawlers; the bare domain and `http://` redirect to www in one step; `robots.txt` allows all. Nothing on the live site blocks share previews.
+- Why it failed before: no image tag before 2026-11-08; from 11-08 to the 11-09 upload the image pointed at GitHub Pages while healingspotlpc.com did not serve the site. Social sites save the first preview they fetch, so links shared then can keep showing no image.
+- `index.html`: share image address is now `og-image.jpg?v=2` (`og:image`, `twitter:image`), so sites that saved an imageless preview fetch it again. Raise the number whenever the image is replaced. Added `og:image:secure_url` and `og:locale` (`en_US`). Discord also uses the new `theme-color` as the embed's side color.
+- Still to do after upload: refresh saved previews (Facebook Sharing Debugger "Scrape Again", LinkedIn Post Inspector); X and Discord refresh on their own over time.
+
+**Mobile-first redesign for phones and tablets** (uncommitted, on branch `redesign`)
+- Work time: started 02:14:07, finished 02:28 (US Central). No site wording was changed: text is only re-wrapped, resized, or moved. The only changed label is the menu button's screen-reader label ("Toggle menu" → "Open menu" / "Close menu").
+- Sources followed: web.dev responsive basics and accessible tap targets (about 48px targets, 8px apart), MDN viewport meta and `env()` safe areas, MDN `@media (hover)`, WCAG 2.2 target size (24px minimum, 44px AAA).
+- **Main bug fixed:** on phones about 360–400px wide (common Android sizes), the hidden footer license popups (220px, centered on "Texas") stretched the page wider than the screen, so the whole page scrolled sideways and the fixed header pushed the menu button off screen. Hidden popups now use `display: none`, and they only appear with a mouse or keyboard; on touch screens a tap just opens the license page. Closes Open Item 11.
+- `src/styles/styles.css`:
+  - New tokens: `--header-h` (64px phones, 80px from 768px, 56px on phones held sideways), `--gutter-l/r` (20px, or the notch inset if larger), `--pad-l/r` (48px for 768–1023px, 80px desktop), `--tap` (48px).
+  - Touch: all 31 `:hover` rules are now inside `@media (hover: hover)`, so a tap doesn't leave a "stuck" hover color. `touch-action: manipulation` on controls, no grey tap flash, buttons shrink slightly when pressed, reduced-motion setting respected.
+  - Tap targets: buttons are at least 48px tall (small ones 44px); color-mode, menu, and popup close buttons are 44–48px; footer links, the Privacy Policy link, practice-area chips, "Learn More" links, research links, and contact lines are 44px or taller. Checked by script on every page: no target under 44px tall below the desktop header.
+  - Header: brand name scales (17–22px) so the bar fits at 320px.
+  - Phone menu: now a full-height sheet under the header, with 60px rows in the serif font, a chevron on each row, a gold dot on the current page, and the two buttons below. Two columns of links from 600px and on sideways phones.
+  - Hero: on phones, Brian's photo is a smaller rounded portrait (max 300px, 340px from 600px) below the words and buttons, which are full width. Phones held sideways and small landscape tablets put the words left and the photo right, sized to the screen height (before, the photo was cropped to the top of his head). Desktop (1024px+) is unchanged.
+  - About: "Meet Your Therapist" photo max 320px wide on phones (380px from 640px), beside the text on sideways phones; the compass photo also sits beside the text there.
+  - Popups (booking, client portal, contact notice, insurance glossary) rise from the bottom as sheets on phones, with full-width buttons; centered cards from 640px as before. The practice-area drawer keeps its booking buttons stuck to the bottom while the text scrolls. Glossary terms stack above their meanings on phones.
+  - Type: headings use fluid sizes (`clamp`); body and small text 1px larger on phones; form fields 16px (iPhones zoom into smaller fields); the select box has a drawn arrow.
+  - Layout: tighter section spacing on phones; footer links in two even columns; Couples Counseling buttons no longer squeeze; an odd last insurer tile spans the row on phones; hero/CTA buttons full width on phones.
+  - Notched phones: side padding, the footer, the menu, and the sheets keep clear of the notch and home bar (`env(safe-area-inset-*)`).
+- `index.html`: viewport now has `viewport-fit=cover` (zoom still allowed); `theme-color` for the phone browser bar (light `#5e7c83`, dark `#121a1e`).
+- `src/components/Header.jsx`: the menu closes when any link is tapped (before, tapping the current page's link left it open), on Escape, on "Book a Consultation", and if the screen widens to the desktop header. The page behind the open menu doesn't scroll.
+- `src/components/BookingButton.jsx`: optional `onClick`.
+- `src/sections/Hero.jsx`, `MeetTherapist.jsx`: photo `width`/`height` (no layout jump while loading); hero photo `fetchPriority="high"`. `Philosophy.jsx` and footer seals: `loading="lazy"`.
+- Checked with Chrome phone emulation (touch, mobile viewport) at 320x568, 360x740, 390x844, 844x390 (sideways), 768x1024, 820x1180, 1180x800, 1366x900, light and dark: no sideways scrolling on any page; desktop looks as before. Tap tests passed: menu open/close, scroll lock, Escape, current-page link, booking from the menu, concern cards, FAQ items.
+- Not checked: a real iPhone/Android device (notch insets can only be seen on a device), and every popup in landscape.
+
 **Progress log corrected** (uncommitted)
 - `PROGRESS.md`: the 2026-11-09 "Site live" entry now says it was committed in `fd3e832` (it was marked uncommitted); the note at the top of Change History names `fd3e832` as the latest commit; the "Decisions" line about the Formspree endpoint now says that ID was removed and `FORM_ENDPOINT` is empty until a provider is chosen.
 
@@ -565,7 +594,8 @@ Ordered roughly by priority.
 8. **Deployment:** the live site is on an Apache host at www.healingspotlpc.com (2026-11-09). `vite.config.js` builds with a relative base (`./`), which works there and on GitHub Pages. Confirm how `dist/` gets to the Apache host, and that `.htaccess` is uploaded with it. The GitHub Pages copy (`delphicoder.github.io/HealingSpotLPC/`) is a duplicate: turn it off (repo Settings → Pages) once the host deploy is settled, or keep it as a preview. Its canonical links already point to www.
 9. **404 page** is a generic "Page not found" inside the app. Confirm the copy.
 10. **Dark mode check:** Branding Three chosen, tester removed, and a Light/Dark header button added (2026-11-04; two states with device default since 2026-11-08). Still open: check all pages, modals, and drawers in dark mode. (Header widths checked 2026-11-08.)
-11. **Footer license tooltips cause sideways scroll** at some narrow widths (see 2026-11-08). Fix: keep the hidden popup from taking layout space, or keep it inside the screen edge.
+11. ~~**Footer license tooltips cause sideways scroll**~~ closed 2026-11-24 (mobile redesign): hidden popups take no space and show only with a mouse or keyboard.
+17. **Mobile redesign follow-ups** (2026-11-24, branch `redesign`): try it on a real phone and tablet, both ways up; then refine the desktop look (the user plans this as the next step); consider showing the license numbers to touch users some other way, since the footer popups now appear only with a mouse or keyboard.
 12. **Contact form needs a form provider.** Since 2026-11-09 the form sends nothing: submitting shows a "this form isn't working yet" popup with Brian's email and phone, and the old Formspree ID (`xgaejdlw`, the other therapist's) is removed from the code. To turn it back on: pick a provider, put its endpoint in `src/data/forms.js` (`FORM_ENDPOINT`), send from `src/components/ContactForm.jsx`, and show an error unless `response.ok`. Restore the success message (the `.contact-success` styles are still in `styles.css`).
 13. ~~**Insurance wording:**~~ closed 2026-11-08: superbill, UnitedHealthcare, Optum, Quest, UMR, and WebTPA removed; FAQ insurer list matches the Fees page. Re-run `super.?bill|united.?health|uhc` (case-insensitive) after insurance edits.
 14. ~~**Terms of Service:**~~ closed 2026-11-08: removed from the footer; not needed.

@@ -14,7 +14,14 @@ export default function MeetTherapist() {
         <h2 className="display-sans">A steady presence for your journey</h2>
       </div>
       <div className="meet">
-        <img className="meet__photo" alt="Brian Counts, LPC" src={asset("assets/hero_brian_counts_reduced.jpg")} />
+        <img
+          className="meet__photo"
+          alt="Brian Counts, LPC"
+          src={asset("assets/hero_brian_counts_reduced.jpg")}
+          width="800"
+          height="1019"
+          decoding="async"
+        />
         <div className="meet__content">
           <div className="meet__name-block">
             <p className="meet__name">Brian Counts</p>

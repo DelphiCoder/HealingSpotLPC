@@ -2,7 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover: on notched phones the page fills the screen; the CSS
+         keeps text clear of the notch with env(safe-area-inset-*). Zoom stays on. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Phone browser bar color: matches the header in light and dark mode. -->
+    <meta name="theme-color" content="#5e7c83" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121a1e" media="(prefers-color-scheme: dark)" />
 
     <!-- Color mode: apply a saved Light/Dark choice before the page draws, so it
          doesn't flash the other mode. Set by the header button (ColorModeToggle.jsx). -->
@@ -27,9 +32,13 @@
     <meta property="og:title" content="The Healing Spot, LPC | Brian Counts, LPC" />
     <meta property="og:description" content="Individual therapy by telehealth in Michigan and Texas, with in-person sessions in Ludington, MI coming soon. Specializing in trauma, PTSD, depression, and men's issues. Book a free 15-minute consultation." />
     <meta property="og:site_name" content="The Healing Spot, LPC" />
+    <meta property="og:locale" content="en_US" />
     <!-- Share image: 1200x630, made 2026-11-08 (public/assets/og-image.jpg).
-         Social sites need the full address. -->
-    <meta property="og:image" content="https://www.healingspotlpc.com/assets/og-image.jpg" />
+         Social sites need the full address. "?v=2" makes the address new, so
+         sites that saved an old, imageless preview fetch the image again;
+         raise the number whenever og-image.jpg is replaced. -->
+    <meta property="og:image" content="https://www.healingspotlpc.com/assets/og-image.jpg?v=2" />
+    <meta property="og:image:secure_url" content="https://www.healingspotlpc.com/assets/og-image.jpg?v=2" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -39,7 +48,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="The Healing Spot | Brian Counts, LPC" />
     <meta name="twitter:description" content="Individual therapy by telehealth in Michigan and Texas, with in-person sessions in Ludington, MI coming soon. Specializing in trauma, PTSD, depression, and men's issues." />
-    <meta name="twitter:image" content="https://www.healingspotlpc.com/assets/og-image.jpg" />
+    <meta name="twitter:image" content="https://www.healingspotlpc.com/assets/og-image.jpg?v=2" />
     <meta name="twitter:image:alt" content="The Healing Spot, LPC: Brian Counts, LPC, with the words &quot;change is possible.&quot; Individual and couples therapy by telehealth in Michigan and Texas." />
 
     <!-- Local business schema (Google) -->
