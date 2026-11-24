@@ -55,11 +55,16 @@ Routes: `/` (home), `/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privac
 
 ## Change History
 
-Everything below is committed and on `main` (2026-11-04 work in `3515b40`, pushed and deployed). "(uncommitted)" tags on these entries are historical.
+Everything below is committed and on `main` (2026-11-04 work in `3515b40`; latest is `fd3e832`, 2026-11-09). "(uncommitted)" tags on these entries are historical.
+
+### 2026-11-24
+
+**Progress log corrected** (uncommitted)
+- `PROGRESS.md`: the 2026-11-09 "Site live" entry now says it was committed in `fd3e832` (it was marked uncommitted); the note at the top of Change History names `fd3e832` as the latest commit; the "Decisions" line about the Formspree endpoint now says that ID was removed and `FORM_ENDPOINT` is empty until a provider is chosen.
 
 ### 2026-11-09
 
-**Site live at www.healingspotlpc.com: fixes for the new host** (uncommitted)
+**Site live at www.healingspotlpc.com: fixes for the new host** (committed in `fd3e832`)
 - Checked the live site: `https://www.healingspotlpc.com/` is the main address; `https://healingspotlpc.com/` and both `http://` forms redirect to it (301). It is served by **Apache** (not GitHub Pages) and has the same build as GitHub Pages. `https://delphicoder.github.io/HealingSpotLPC/` still serves a second copy.
 - Problem found: on the new host, every page except home (`/about`, `/services`, `/fees`, `/faq`, `/contact`, `/privacy`) returned Apache's "404 Not Found" when opened directly, refreshed, bookmarked, or reached from a search result. Clicking through from home worked because the app changes pages itself.
 - New `public/.htaccess` (copied into `dist/` by the build): sends any address that is not a real file to `index.html` with a 200 status, so the app shows the right page; redirects a trailing slash (`/about/` → `/about`); `FallbackResource` for hosts without mod_rewrite. **It must be uploaded with the rest of `dist/`.** Some FTP programs hide files that start with a dot.
@@ -580,4 +585,4 @@ Ordered roughly by priority.
 - **Static assets live in `public/`** and are referenced through `asset()`, so the base path can change without editing each file.
 - **Data in `src/data/`**, so copy changes (plans, URLs, phone, practice-area text, FAQ, concerns) stay out of the component markup where possible. Note: most section copy currently still lives inside each section file.
 - **Old vanilla code deleted rather than kept beside the new app.** Recover any file from git history if needed.
-- **Formspree endpoint** is the same as before (`xgaejdlw`), in `src/data/forms.js`.
+- **Contact form endpoint:** the old Formspree ID (`xgaejdlw`, the other therapist's) was removed 2026-11-09. `FORM_ENDPOINT` in `src/data/forms.js` is empty until a provider is chosen (Open Item 12).
